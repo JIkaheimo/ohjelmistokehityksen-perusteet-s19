@@ -1,4 +1,4 @@
 <?php
-  $id = $_POST['vaihe-id'];
+  $id = $_POST['harjoitus-id'];
   header('Location: ./../muokkaa_harjoitus.php?id='.$id);
 ?>
