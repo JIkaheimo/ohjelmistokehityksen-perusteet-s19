@@ -1,4 +1,3 @@
-
 <?php 
   require_once(__DIR__.'/Komponentit/Header/header_kirjautunut.php'); 
   HeaderKirjautunut('Käyttäjät');
@@ -15,53 +14,15 @@
     <h2>Suosituimmat</h2>
   </header>
   <div id="suosituimmat" class="sailio">
-    <section class="kayttaja">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Testaaja123"
-      />
-      <div>
-        <h3>Testaaja123</h3>
-        <a class="nappi nappi-p" href="kayttaja.php?id=1">Profiili</a>
-      </div>
-    </section>
+    <?php
+      require_once(__DIR__.'/Komponentit/Kayttajat/kayttaja_section.php');
 
-    <section class="kayttaja">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Salihirmu88"
-      />
-      <div>
-        <h3>Salihirmu88</h3>
-        <a class="nappi nappi-p" href="kayttaja.php?id=2">Profiili</a>
-      </div>
-    </section>
-
-    <section class="kayttaja">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Juoksujäbä"
-      />
-      <div>
-        <h3>Juoksujäbä</h3>
-        <a class="nappi nappi-p" href="kayttaja.php?id=3">Profiili</a>
-      </div>
-    </section>
-
-    <section class="kayttaja">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Tennistyttö"
-      />
-      <div>
-        <h3>Tennistyttö</h3>
-        <a class="nappi nappi-p" href="kayttaja.php?id=4">Profiili</a>
-      </div>
-    </section>
+      // TODO: Korvaa "suosituimpien" käyttäjien (4) haulla tietokannasta ja foreach-loopilla.
+      KayttajaSection('Testaaja123', null, 1);
+      KayttajaSection('Salihirmu88', null, 2);
+      KayttajaSection('Juoksujäbä', null, 3);
+      KayttajaSection('Tennistyttö', null, 4);
+    ?>
   </div>
 </section>
 
@@ -70,53 +31,15 @@
     <h2>Seuratut</h2>
   </header>
   <div id="seuratut" class="sailio">
-    <section class="kayttaja">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Testaaja123"
-      />
-      <div>
-        <h3>Testaaja123</h3>
-        <a class="nappi nappi-p" href="kayttaja.php?id=1">Profiili</a>
-      </div>
-    </section>
+    <?php
+      require_once(__DIR__.'/Komponentit/Kayttajat/kayttaja_section.php');
 
-    <section class="kayttaja">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Salihirmu88"
-      />
-      <div>
-        <h3>Salihirmu88</h3>
-        <a class="nappi nappi-p" href="kayttaja.php?id=2">Profiili</a>
-      </div>
-    </section>
-
-    <section class="kayttaja">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Juoksujäbä"
-      />
-      <div>
-        <h3>Juoksujäbä</h3>
-        <a class="nappi nappi-p" href="kayttaja.php?id=3">Profiili</a>
-      </div>
-    </section>
-
-    <section class="kayttaja">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Tennistyttö"
-      />
-      <div>
-        <h3>Tennistyttö</h3>
-        <a class="nappi nappi-p" href="kayttaja.php?id=4">Profiili</a>
-      </div>
-    </section>
+      // TODO: Korvaa seurattujen käyttäjien (oman ID perusteella) haulla tietokannasta ja foreach-loopilla.
+      KayttajaSection('Testaaja123', null, 1);
+      KayttajaSection('Salihirmu88', null, 2);
+      KayttajaSection('Juoksujäbä', null, 3);
+      KayttajaSection('Tennistyttö', null, 4);
+    ?>
   </div>
 </section>
 
@@ -124,12 +47,12 @@
   <header>
     <h2 class="keskella">Hae käyttäjiä</h2>
   </header>
-
+  
   <!-- TODO: Hae käyttäjät AJAXin avulla kun jokin kenttä muuttuu -->
   <form class="keskita" action="#">
     <div>
       <label for="kayttaja">Nimi</label>
-      <input type="text" name="kayttaja" id="kayttaja" />
+      <input type="text" name="kayttaja" id="kayttaja">
     </div>
     <div>
       <label for="jarjestys">Järjestä</label>
@@ -139,9 +62,9 @@
         <option>nimen mukaan</option>
       </select>
     </div>
+
   </form>
 </section>
-    
 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');
