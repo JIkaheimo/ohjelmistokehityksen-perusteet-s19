@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Etusivu | REENIKIRJA</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./Styles/main.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="kapea">
+        <a href="index.php">REENIKIRJA</a>
+        <form class="oikealle flex" action="./Api/kirjaudu.php" method="POST">
+          <div>
+            <label for="kayttajatunnus">Käyttäjätunnus:</label>
+            <input
+              type="text"
+              name="kayttajatunnus"
+              id="kayttajatunnus"
+              required=""
+            />
+          </div>
+
+          <div>
+            <label for="salasana">Salasana:</label>
+            <input type="password" name="salasana" id="salasana" required="" />
+          </div>
+
+          <button class="nappi-p" type="submit">Kirjaudu</button>
+        </form>
+      </nav>
+    </header>
+
+    <main class="kapea">
+      <div class="keskella focus">
+        <header>
+          <h1>
+            Reenikirjalla pidät treeniohjelmasi ja suorituksesi samassa
+            paikassa...
+          </h1>
+        </header>
+        <a class="nappi nappi-p" href="rekisteroidy.php">Rekisteröidy</a>
+      </div>
+    </main>
+
+    <footer>
+      <div>
+        <p>© REENIKIRJA 2019</p>
+        <p>
+          Sivuston toteutus ja ylläpito:
+          <a href="https://github.com/JIkaheimo">Jaakko Ikäheimo</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
