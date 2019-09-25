@@ -18,21 +18,12 @@
   <!-- TODO: Listan täyttö tietokannasta, käyttäjän omilla ohjelmilla -->
   <ul>
     <li><a href="ohjelma.php?id=1">Kesäkuntoon 2050</a></li>
-    <li>
-      <a href="ohjelma.php?id=2"
-        >3-jakoinen kuntosaliohjelma aloittelijoille</a
-      >
-    </li>
-    <li>
-      <a href="ohjelma.php?id=3"
-        >4-jakoinen kuntosaliohjelma edistyneille</a
-      >
-    </li>
+    <li><a href="ohjelma.php?id=2">3-jakoinen kuntosaliohjelma aloittelijoille</a></li>
+    <li><a href="ohjelma.php?id=3">4-jakoinen kuntosaliohjelma edistyneille</a></li>
     <li><a href="ohjelma.php?id=4">Joulukuntoon 2030</a></li>
     <li><a href="ohjelma.php?id=5">Yleisurheilulla yleiskuntoon</a></li>
   </ul>
-</section>
-<!-- END OMAT OHJELMAT -->
+</section> <!-- END OMAT OHJELMAT -->
 
 <!-- VIIMEAIKAISET SUORITUKSET -->
 <section>
@@ -52,57 +43,20 @@
     </thead>
     <!-- TODO: Taulukon bodyn täyttö tietokannasta haetuista suorituksilla (5 viimeisintä) -->
     <tbody>
-      <tr class="suoritus-tr">
-        <th>21.09.2019</th>
-        <td>Rinta/ojentajat</td>
-        <td>
-          <a href="ohjelma.php?id=12"
-            >4-jakoinen kuntosaliohjelma edistyneille</a
-          >
-        </td>
-        <td>72</td>
-      </tr>
+      <?php 
+        require_once(__DIR__.'/Komponentit/Suoritukset/suoritus_tr_pieni.php');
 
-      <tr class="suoritus-tr">
-        <th>18.09.2019</th>
-        <td>Juoksulenkki</td>
-        <td><a href="ohjelma.php?id=12">Kesäkuntoon 2050</a></td>
-        <td>63</td>
-      </tr>
-
-      <tr class="suoritus-tr">
-        <th>15.09.2019</th>
-        <td>Juoksulenkki</td>
-        <td>
-          <a href="ohjelma.php?id=12">Yleisurheilulla yleiskuntoon</a>
-        </td>
-        <td>63</td>
-      </tr>
-
-      <tr class="suoritus-tr">
-        <th>13.09.2019</th>
-        <td>Juoksulenkki</td>
-        <td>
-          <a href="ohjelma.php?id=12"
-            >4-jakoinen kuntosaliohjelma edistyneille</a
-          >
-        </td>
-        <td>63</td>
-      </tr>
-
-      <tr class="suoritus-tr">
-        <th>11.09.2019</th>
-        <td>Juoksulenkki</td>
-        <td><a href="ohjelma.php?id=12">Kesäkutnoon 2050</a></td>
-        <td>63</td>
-      </tr>
+        SuoritusTRPieni('21.09.2019', 'Rinta/ojentajat', '4-jakoinen kuntosaliohjelma edistyneille', 72, 12);
+        SuoritusTRPieni('18.09.2019', 'Juoksulenkki', 'Kesäkuntoon 2050', 63, 16); 
+        SuoritusTRPieni('15.09.2019', 'Juoksulenkki', 'Yleisurheilulla yleiskuntoon', 63, 15); 
+        SuoritusTRPieni('13.09.2019', 'Juoksulenkki', '4-jakoinen kuntosaliohjelma edistyneille', 63, 90); 
+        SuoritusTRPieni('11.09.2019', 'Juoksulenkki', 'Kesäkutnoon 2050', 63, 7); 
+      ?>
     </tbody>
   </table>
-</section>
+</section> <!-- END VIIMEAIKAISET SUORITUKSET -->
 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');
   Footer();
 ?>
-
-
