@@ -15,57 +15,15 @@
     <h2>Suosituimmat</h2>
   </header>
   <div class="sailio">
-    <section class="ohjelma">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Reeniohjelma jokaiselle"
-      />
-      <div>
-        <h3>Reeniohjelma jokaiselle</h3>
-        <p>aloittelija</p>
-        <a class="nappi nappi-p" href="ohjelma.php?id=12">Tarkastele</a>
-      </div>
-    </section>
+    <?php
+      require_once(__DIR__.'/Komponentit/Ohjelmat/ohjelma_section.php');
 
-    <section class="ohjelma">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="4-jakoinen kuntosaliohjelma edistyneille"
-      />
-      <div>
-        <h3>4-jakoinen kuntosaliohjelma edistyneille</h3>
-        <p>aloittelija</p>
-        <a class="nappi nappi-p" href="ohjelma.php?id=12">Tarkastele</a>
-      </div>
-    </section>
-
-    <section class="ohjelma">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Reeniohjelma jokaiselle"
-      />
-      <div>
-        <h3>Reeniohjelma jokaiselle</h3>
-        <p>aloittelija</p>
-        <a class="nappi nappi-p" href="ohjelma.php?id=12">Tarkastele</a>
-      </div>
-    </section>
-
-    <section class="ohjelma">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Reeniohjelma jokaiselle"
-      />
-      <div>
-        <h3>Reeniohjelma jokaiselle</h3>
-        <p>aloittelija</p>
-        <a class="nappi nappi-p" href="ohjelma.php?id=12">Tarkastele</a>
-      </div>
-    </section>
+      // TODO: Korvaa suosituimpien ohjelmien (4) haulla tietokannasta ja foreach-oopilla.
+      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
+      OhjelmaSection('4-jakoinen kuntosaliohjelma edistyneille', null, 'aloittelija', 12);
+      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
+      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
+    ?>
   </div>
 </section>
 
@@ -74,57 +32,15 @@
     <h2>Uudet</h2>
   </header>
   <div class="sailio">
-    <section class="ohjelma">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Reeniohjelma jokaiselle"
-      />
-      <div>
-        <h3>Reeniohjelma jokaiselle</h3>
-        <p>aloittelija</p>
-        <a class="nappi nappi-p" href="ohjelma.php?id=12">Tarkastele</a>
-      </div>
-    </section>
+    <?php
+      require_once(__DIR__.'/Komponentit/Ohjelmat/ohjelma_section.php');
 
-    <section class="ohjelma">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="4-jakoinen kuntosaliohjelma edistyneille"
-      />
-      <div>
-        <h3>4-jakoinen kuntosaliohjelma edistyneille</h3>
-        <p>aloittelija</p>
-        <a class="nappi nappi-p" href="ohjelma.php?id=12">Tarkastele</a>
-      </div>
-    </section>
-
-    <section class="ohjelma">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Reeniohjelma jokaiselle"
-      />
-      <div>
-        <h3>Reeniohjelma jokaiselle</h3>
-        <p>aloittelija</p>
-        <a class="nappi nappi-p" href="ohjelma.php?id=12">Tarkastele</a>
-      </div>
-    </section>
-
-    <section class="ohjelma">
-      <img
-        class="img img-kehys"
-        src="https://www.placehold.it/300x200/200"
-        alt="Reeniohjelma jokaiselle"
-      />
-      <div>
-        <h3>Reeniohjelma jokaiselle</h3>
-        <p>aloittelija</p>
-        <a class="nappi nappi-p" href="ohjelma.php?id=12">Tarkastele</a>
-      </div>
-    </section>
+      // TODO: Korvaa uusimpien ohjelmien (4) haulla tietokannasta ja foreach-loopilla.
+      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
+      OhjelmaSection('4-jakoinen kuntosaliohjelma edistyneille', null, 'aloittelija', 12);
+      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
+      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
+    ?>
   </div>
 </section>
 
@@ -132,12 +48,12 @@
   <header>
     <h2 class="keskita">Hae ohjelmia</h2>
   </header>
-
+  
   <!-- TODO: Hae ohjelmat AJAXin avulla kun jokin kenttä muuttuu -->
   <form class="keskita" action="#">
     <div>
       <label for="ohjelma">Nimi</label>
-      <input type="text" name="ohjelma" id="ohjelma" />
+      <input type="text" name="ohjelma" id="ohjelma">
     </div>
     <div>
       <label for="jarjestys">Järjestä</label>
@@ -147,6 +63,7 @@
         <option>nimen mukaan</option>
       </select>
     </div>
+
   </form>
 </section>
   
