@@ -17,7 +17,7 @@
 <header>
   <h1>4-jakoinen kuntosaliohjelma aloittelijoille</h1>
   <form action="./Api/lisaa_ohjelma.php" method="POST">
-    <input type="hidden" name="ohjelma-id" id="ohjelma-id" value="12" />
+    <input type="hidden" name="ohjelma-id" id="ohjelma-id" value=<?=$ohjelmaID?>>
     <button type="submit" class="nappi-p">Lisää+</button>
   </form>
 </header>
@@ -27,7 +27,7 @@
 <section>
   <header>
     <h2>Vatsa</h2>
-  </header>
+  </header>  
   <table>
     <thead>
       <tr>
@@ -37,61 +37,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="vaihe-tr">
-        <th>Vatsalihaskone</th>
-        <td>
-          Sed vitae purus nec nulla volutpat gravida vestibulum a purus.
-        </td>
-        <td></td>
-      </tr>
+      <?php
+        require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
 
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Vino vatsalihaspenkki</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td>
-          <a href="https://www.google.fi">Linkki</a>
-        </td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Ilmapyörä</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla
-          volutpat gravida vestibulum a purus. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Jalannosto</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla
-          volutpat gravida vestibulum a purus. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Juoksu</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
+        VaiheTR('Vatsalihaskone', 'Sed vitae purus nec nulla volutpat gravida vestibulum a purus.', null, 1, false);
+        VaiheTR('Vino vatsalihaspenkki', 'Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur ligula, in hendrerit est.', 'https://www.google.fi', 2,  false);
+        VaiheTR('Ilmapyörä', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 3, false);
+        VaiheTR('Jalannosto', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 4, false);
+        VaiheTR('Juoksu', 'Nulla nec quam et mi rhoncus gravida.  Quisque ac consectetur ligula, in hendrerit est.', null, 5, false);
+      ?>
     </tbody>
   </table>
 </section>
@@ -99,7 +53,7 @@
 <section>
   <header>
     <h2>Rinta/Ojentajat</h2>
-  </header>
+  </header>   
   <table>
     <thead>
       <tr>
@@ -109,63 +63,15 @@
       </tr>
     </thead>
     <tbody>
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
+      <?php
+        require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
 
-      <tr class="vaihe-tr">
-        <th>Vatsalihaskone</th>
-        <td>
-          Sed vitae purus nec nulla volutpat gravida vestibulum a purus.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Vino vatsalihaspenkki</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td>
-          <a href="https://www.google.fi">Linkki</a>
-        </td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Ilmapyörä</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla
-          volutpat gravida vestibulum a purus. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Jalannosto</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla
-          volutpat gravida vestibulum a purus. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Juoksu</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
+        VaiheTR('Vatsalihaskone', 'Sed vitae purus nec nulla volutpat gravida vestibulum a purus.', null, 1, false);
+        VaiheTR('Vino vatsalihaspenkki', 'Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur ligula, in hendrerit est.', 'https://www.google.fi', 2,  false);
+        VaiheTR('Ilmapyörä', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 3, false);
+        VaiheTR('Jalannosto', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 4, false);
+        VaiheTR('Juoksu', 'Nulla nec quam et mi rhoncus gravida.  Quisque ac consectetur ligula, in hendrerit est.', null, 5, false);
+      ?>
     </tbody>
   </table>
 </section>
@@ -173,7 +79,7 @@
 <section>
   <header>
     <h2>Selkä/Hauis</h2>
-  </header>
+  </header>  
   <table>
     <thead>
       <tr>
@@ -183,63 +89,15 @@
       </tr>
     </thead>
     <tbody>
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
+      <?php
+        require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
 
-      <tr class="vaihe-tr">
-        <th>Vatsalihaskone</th>
-        <td>
-          Sed vitae purus nec nulla volutpat gravida vestibulum a purus.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Vino vatsalihaspenkki</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td>
-          <a href="https://www.google.fi">Linkki</a>
-        </td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Ilmapyörä</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla
-          volutpat gravida vestibulum a purus. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Jalannosto</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla
-          volutpat gravida vestibulum a purus. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Juoksu</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
+        VaiheTR('Vatsalihaskone', 'Sed vitae purus nec nulla volutpat gravida vestibulum a purus.', null, 1, false);
+        VaiheTR('Vino vatsalihaspenkki', 'Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur ligula, in hendrerit est.', 'https://www.google.fi', 2,  false);
+        VaiheTR('Ilmapyörä', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 3, false);
+        VaiheTR('Jalannosto', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 4, false);
+        VaiheTR('Juoksu', 'Nulla nec quam et mi rhoncus gravida.  Quisque ac consectetur ligula, in hendrerit est.', null, 5, false);
+      ?>
     </tbody>
   </table>
 </section>
@@ -247,7 +105,7 @@
 <section>
   <header>
     <h2>Jalat/Olkapäät</h2>
-  </header>
+  </header>  
   <table>
     <thead>
       <tr>
@@ -257,63 +115,15 @@
       </tr>
     </thead>
     <tbody>
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
+      <?php
+        require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
 
-      <tr class="vaihe-tr">
-        <th>Vatsalihaskone</th>
-        <td>
-          Sed vitae purus nec nulla volutpat gravida vestibulum a purus.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Vino vatsalihaspenkki</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td>
-          <a href="https://www.google.fi">Linkki</a>
-        </td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Ilmapyörä</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla
-          volutpat gravida vestibulum a purus. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Jalannosto</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla
-          volutpat gravida vestibulum a purus. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
-
-      <!-- TODO: Syötä erillisten parametrien sijasta koko vaihe... -->
-
-      <tr class="vaihe-tr">
-        <th>Juoksu</th>
-        <td>
-          Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur
-          ligula, in hendrerit est.
-        </td>
-        <td></td>
-      </tr>
+        VaiheTR('Vatsalihaskone', 'Sed vitae purus nec nulla volutpat gravida vestibulum a purus.', null, 1, false);
+        VaiheTR('Vino vatsalihaspenkki', 'Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur ligula, in hendrerit est.', 'https://www.google.fi', 2,  false);
+        VaiheTR('Ilmapyörä', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 3, false);
+        VaiheTR('Jalannosto', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 4, false);
+        VaiheTR('Juoksu', 'Nulla nec quam et mi rhoncus gravida.  Quisque ac consectetur ligula, in hendrerit est.', null, 5, false);
+      ?>
     </tbody>
   </table>
 </section>
