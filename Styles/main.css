@@ -451,6 +451,7 @@ body > footer {
 
 /* KOMPONENTIT ========================================*/
 
+/* Ohjelma Section */
 section.ohjelma {
   width: 16.5rem;
   margin: 0.5rem;
@@ -464,4 +465,10 @@ section.ohjelma > div {
 
 section.ohjelma > div > p {
   color: #999999;
+}
+
+/* Ohjelma TR */
+.ohjelma-tr button,
+.ohjelma-tr .nappi {
+  margin: 0 0.25rem;
 }
