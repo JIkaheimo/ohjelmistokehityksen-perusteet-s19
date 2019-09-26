@@ -120,6 +120,19 @@ main {
   margin: 7rem 0 12.5rem 0;
 }
 
+/* HEADERIPALKKI */
+body > header {
+  position: fixed;
+  top: 0;
+  height: 60px;
+  width: 100%;
+
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5);
+  background-color: #303030;
+
+  z-index: 3;
+}
+
 /* PÄÄNAVIGOINTI */
 body > header nav {
   display: flex;
