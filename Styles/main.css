@@ -41,6 +41,25 @@ section {
   display: block;
 }
 
+/* LINKIT */
+
+a {
+  color: #df691a;
+  text-decoration: none;
+  background-color: transparent;
+  transition: 0.5s all;
+}
+
+a:hover {
+  color: #9a4912;
+  text-decoration: underline;
+}
+
+a:not([href]),
+img:not([alt]) {
+  border: 1rem solid #ff0000;
+}
+
 /* MAINI */
 main {
   position: relative;
