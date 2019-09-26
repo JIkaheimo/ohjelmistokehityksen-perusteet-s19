@@ -403,6 +403,27 @@ body > footer {
   }
 }
 
+.nappi-p {
+  color: #fff;
+  background-color: #df691a;
+  border-color: #df691a;
+}
+
+.nappi-p:hover {
+  color: #fff;
+  background-color: #bd5916;
+  border-color: #b15315;
+}
+
+.nappi-s {
+  background-color: transparent;
+  border: 0.15rem solid #bd5916;
+}
+
+.nappi-s:hover {
+  background-color: #bd5916;
+}
+
 .nowrap {
   flex-wrap: nowrap;
 }
