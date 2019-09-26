@@ -348,6 +348,10 @@ body > footer {
   flex-wrap: wrap;
 }
 
+.focus h1 {
+  margin: 2rem 0;
+}
+
 .img {
   max-width: 100%;
   height: auto;
