@@ -178,3 +178,22 @@ body > header > nav form > button.nappi-p {
 body > header > nav ul > li > a {
   color: white;
 }
+
+/* PÄÄFOOTERI */
+body > footer {
+  padding: 1rem;
+  margin-top: 3rem;
+
+  /* Kiinnitetään footeri sivun alareunaan */
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100px;
+  width: 100%;
+  overflow: hidden;
+
+  text-align: center;
+
+  background-color: #303030;
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5);
+}
