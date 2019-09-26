@@ -403,6 +403,10 @@ body > footer {
   }
 }
 
+.nowrap {
+  flex-wrap: nowrap;
+}
+
 .sailio {
   display: flex;
   flex-wrap: wrap;
