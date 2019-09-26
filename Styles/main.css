@@ -31,3 +31,12 @@ body {
 
   background-color: #222222;
 }
+
+footer,
+header,
+main,
+nav,
+section {
+  /* Varmistetaan että HTML5-elementit toimii oikein kaikilla selaimilla */
+  display: block;
+}
