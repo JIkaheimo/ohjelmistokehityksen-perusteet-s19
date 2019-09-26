@@ -119,3 +119,49 @@ main {
   height: 100%;
   margin: 7rem 0 12.5rem 0;
 }
+
+/* PÄÄNAVIGOINTI */
+body > header nav {
+  display: flex;
+  align-items: center;
+}
+
+body > header nav ul {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+body > header nav ul > li {
+  margin: 0 0.5rem;
+}
+
+body > header > nav > a {
+  font-size: 1.7rem;
+  margin-right: 0.5rem;
+}
+
+body > header > nav form {
+  display: inline-flex;
+}
+
+body > header > nav form label {
+  display: block;
+  margin-bottom: 0;
+
+  font-size: 0.9rem;
+}
+
+body > header > nav form > div {
+  margin: 0 0.3rem;
+}
+
+body > header > nav form > button.nappi-p {
+  padding: 0 0.5rem;
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+}
+
+body > header > nav ul > li > a {
+  color: white;
+}
