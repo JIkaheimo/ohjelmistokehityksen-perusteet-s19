@@ -120,6 +120,28 @@ main {
   margin: 7rem 0 12.5rem 0;
 }
 
+main header {
+  display: flex;
+  align-items: center;
+  margin: 3rem 0 0.5rem 0;
+}
+
+main header > a,
+main header > button,
+main header > form {
+  margin-left: 1rem;
+}
+
+main p,
+main ol,
+main ul {
+  margin-bottom: 1rem;
+}
+
+main form {
+  max-width: 30rem;
+}
+
 /* HEADERIPALKKI */
 body > header {
   position: fixed;
