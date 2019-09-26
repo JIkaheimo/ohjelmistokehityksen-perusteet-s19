@@ -475,6 +475,8 @@ section.ohjelma > div > p {
 .ohjelma-tr button,
 .ohjelma-tr .nappi,
 .suoritus-tr button,
-.suoritus-tr .nappi {
+.suoritus-tr .nappi,
+.vaihe-tr button,
+.vaihe-tr .nappi {
   margin: 0 0.25rem;
 }
