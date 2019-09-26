@@ -428,10 +428,23 @@ body > footer {
   flex-wrap: nowrap;
 }
 
+.oikealle {
+  margin-left: auto;
+}
+
 .sailio {
   display: flex;
   flex-wrap: wrap;
   margin-right: -10px;
   margin-left: -10px;
   justify-content: space-around;
+}
+
+.valittu {
+  color: #df691a;
+}
+
+.valia {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 }
