@@ -332,3 +332,19 @@ body > footer {
   background-color: #303030;
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5);
 }
+
+/* LUOKAT ==================================================================================*/
+
+.img {
+  max-width: 100%;
+  height: auto;
+}
+
+.img-kehys {
+  padding: 0.25rem;
+  background-color: #2b3e50;
+  border: 1px solid #dee2e6;
+  border-radius: 0px;
+  max-width: 100%;
+  height: auto;
+}
