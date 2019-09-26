@@ -340,6 +340,14 @@ body > footer {
   align-items: center;
 }
 
+.focus {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .img {
   max-width: 100%;
   height: auto;
