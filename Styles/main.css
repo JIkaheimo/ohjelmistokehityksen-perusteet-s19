@@ -60,6 +60,16 @@ img:not([alt]) {
   border: 1rem solid #ff0000;
 }
 
+/* LISTAT YMS */
+
+p,
+ol,
+ul {
+  margin-top: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
 /* MAINI */
 main {
   position: relative;
