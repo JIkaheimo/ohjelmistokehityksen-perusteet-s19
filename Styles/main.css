@@ -90,7 +90,7 @@ a {
   color: #df691a;
   text-decoration: none;
   background-color: transparent;
-  transition: 0.5s all;
+  transition: 0.5s color;
 }
 
 a:hover {
@@ -153,7 +153,8 @@ button,
 
   text-transform: uppercase;
 
-  transition: 1s all;
+  transition: all 0.5s;
+  transition-property: text-decoration, color, background-color;
 }
 
 button:hover,
@@ -172,7 +173,8 @@ textarea {
   color: white;
   background-color: transparent;
   border: 2px solid #df691a;
-  transition: 0.5s all;
+  transition: all 0.5s;
+  transition-property: color, background-color;
   resize: vertical;
 }
 
@@ -191,7 +193,8 @@ select {
   background-color: transparent;
   border: 2px solid #df691a;
   border-radius: 3px;
-  transition: 0.5s all;
+  transition: all 0.5s;
+  transition-property: color, background-color;
 }
 
 main input:focus,
