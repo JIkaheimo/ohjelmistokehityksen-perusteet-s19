@@ -480,3 +480,19 @@ section.ohjelma > div > p {
 .vaihe-tr .nappi {
   margin: 0 0.25rem;
 }
+
+.harjoitus-section {
+  margin: 2rem;
+}
+
+.harjoitus-section img {
+  margin-bottom: -40px;
+  width: 100px;
+  height: 100px;
+}
+
+.harjoitus-section button,
+.harjoitus-section a {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
