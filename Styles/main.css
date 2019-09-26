@@ -373,6 +373,24 @@ body > footer {
   margin-left: auto;
 }
 
+@media (min-width: 800px) {
+  .kapea {
+    max-width: 760px;
+  }
+}
+
+@media (min-width: 1000px) {
+  .kapea {
+    max-width: 950px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .kapea {
+    max-width: 1150px;
+  }
+}
+
 .sailio {
   display: flex;
   flex-wrap: wrap;
