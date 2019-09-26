@@ -2,7 +2,7 @@
   
   // Salli vain POST-pyynnöt 
   if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-    header('Location: ./../401.php');
+    header('Location: ./../400.php');
     exit;
   }
 
