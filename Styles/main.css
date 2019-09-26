@@ -1,0 +1,33 @@
+/* ELEMENTIT ==============================================================*/
+
+*,
+*::after,
+*::before {
+  /* Resetoidaan selainten oletuksia */
+  padding: 0;
+  margin: 0;
+
+  /* Käytetään border-boxia elementtien tilankäytön 
+     määrittelyn helpottamiseksi */
+  box-sizing: border-box;
+}
+
+html {
+  /* Käytetään selainten oletusfonttikokoa */
+  font-size: 100%;
+
+  /* Varmistetaan että täytetään vähintään koko ikkuna */
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Dokumentin oletustyylit fontille */
+  font-family: 'Lato', 'Segoe UI', Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #ebebeb;
+
+  background-color: #222222;
+}
