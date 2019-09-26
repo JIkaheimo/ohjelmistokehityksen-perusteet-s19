@@ -362,3 +362,16 @@ body > footer {
   margin-right: auto;
   margin-left: auto;
 }
+
+.sailio {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -10px;
+  margin-left: -10px;
+  justify-content: space-around;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
