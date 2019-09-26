@@ -1,6 +1,6 @@
 <?php 
   require_once(__DIR__.'/Komponentit/Header/header_vieras.php'); 
-  HeaderVieras('Error 401');
+  HeaderVieras('Error 400');
 ?>
 
 <h1>Virhe 400</h1>
