@@ -178,8 +178,6 @@ textarea {
   color: white;
   background-color: transparent;
   border: 2px solid #df691a;
-  transition: all 0.5s;
-  transition-property: color, background-color;
   resize: vertical;
 }
 
@@ -189,17 +187,20 @@ input[type='file'] {
   width: 100%;
 }
 
+main input:not([type='file']) {
+  transition: all 0.5s;
+  transition-property: color, background-color;
+}
+
 main input:not([type='file']),
 select {
   display: block;
   width: 100%;
   padding: 0.5rem 0.75rem;
   color: white;
-  background-color: transparent;
+  background: rgba(0, 0, 0, 0.3);
   border: 2px solid #df691a;
   border-radius: 3px;
-  transition: all 0.5s;
-  transition-property: color, background-color;
 }
 
 main input:focus,
