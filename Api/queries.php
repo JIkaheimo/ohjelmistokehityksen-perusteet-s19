@@ -36,12 +36,12 @@ function lahetaViesti($viesti)
 
 abstract class Status 
 {
-  public const OK = 200;
-  public const DATABASE_ERROR = 500;
-  public const INVALID = 422;
-  public const NOT_FOUND = 404;
-  public const DELETED = 200;
-  public const CREATED = 201;
+  const OK = 200;
+  const DATABASE_ERROR = 500;
+  const INVALID = 422;
+  const NOT_FOUND = 404;
+  const DELETED = 200;
+  const CREATED = 201;
 }
 
 ?>
