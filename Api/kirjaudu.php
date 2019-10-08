@@ -1,35 +1,34 @@
 <?php
-  
-  // Salli vain POST-pyynnöt 
-  if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-    header('Location: ./../400.php');
-    exit;
-  }
 
-  // Varmista että pyynnön rungossa on tarvittavat tiedot
-  if (!isset($_POST['kayttajatunnus']) || !isset($_POST['salasana'])) {
-    header('Location: ./../400.php');
-    exit;
-  }
+require_once(__DIR__.'/queries.php');
+header("Access-Control-Allow-Origin: *");
 
-  $kayttajatunnus = $_POST['kayttajatunnus'];
-  $salasana = $_POST['salasana'];
+header('Access-Control-Allow-Methods: POST');
+$body = json_decode(file_get_contents('php://input'));
 
-  // TODO: Salasanan hashin haku ja varmistus käyttäjänimen perusteella
-  // $salasanaHash = ?
-  //
-  // if (password_verify($salasana, $salasanaHash, PASSWORD_BCRYPT) {
-  // 
-  // }
+if (!isset($body->kayttajatunnus) || !isset($body->salasana))
+{
+  http_response_code(400);
+  lahetaViesti('Anna kayttajatunnus ja salasana...');
+  exit;
+}
 
-  // TODO: Aseta käyttäjän ID talteen sessioon myöhempiä hakuja ja authorisaatiota varten
+$kayttaja = Kayttajat::kayttajaSalasanalla($db, $body->kayttajatunnus);
 
+if (!empty($kayttaja) && password_verify($body->salasana, $kayttaja->salasanaHash))
+{
   session_start();
-
-  // Sallitaan kaikki kirjautumiset testaamisen nimissä
   $_SESSION['kirjautunut'] = true;
-  $_SESSION['kayttaja'] = $kayttajatunnus;
+  $_SESSION['kayttaja'] = $kayttaja->kayttajatunnus;
 
-  // Ohjataan takaisin kirjautuneen sivulle
-  header('Location: ./../index_kirjautunut.php');
+  http_response_code(200);
+  lahetaViesti('Kirjautuminen onnistui!');
+}
+else
+{
+  http_response_code(404);
+  lahetaViesti('Käyttäjätunnus tai salasana on virheellinen...');
+}
+
+
 ?>
