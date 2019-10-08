@@ -4,72 +4,112 @@
     header('Location: 404.php');
     exit;
   }
-  // TODO: Tähän kirjautumisen varmistus.
-  /*
-   if (!kirjautunut) {
-     header('Loca)
-   }
-  */
 
-  $ohjelmaID = $_GET['id'];
+  require_once(__DIR__.'/Komponentit/Header/header.php'); 
 
-  // TODO: Tähän ohjelman, harjoitusten ja vaiheiden haku tietokannasta.
-  require_once(__DIR__.'/Komponentit/Header/header_kirjautunut.php'); 
-  HeaderKirjautunut('Muokkaa ohjelmaa');
+  if ($kayttaja == null)
+  {
+    header('Location: 401.php');
+  }
+
+  require_once(__DIR__.'/Komponentit/Harjoitukset/harjoitus_section.php');
+
+  Headeri('Muokkaa ohjelmaa');
+
+  $ohjelmaID = (int) $_GET['id'];
+
+  $ohjelma = Ohjelmat::hae($db, $ohjelmaID);
+  $harjoitukset = Harjoitukset::haeOhjelman($db, $ohjelma->ohjelmaId);
+  $vaikeustasot = Vaikeustasot::hae($db);
 ?>
 
+
+<!--==== OHJELMAN TIETOJEN MUOKKAUSLOMAKE ====-->
 <header>
-  <h1 class="keskella">Muokkaa ohjelmaa</h1>
+  <h1 class='keskella'>Muokkaa ohjelmaa</h1>
 </header>
 
-<!-- ITSE OHJELMAN TIETOJEN MUOKKAUSLOMAKE -->
-<form class="keskita" action="./Api/muokkaa_ohjelma.php" method="POST">
-  <input type="hidden" name="ohjelma-id" id="ohjelma-id" value=<?=$ohjelmaID?>>
+<form id='ohjelma-lomake' class='keskita'>
+
+  <!-- Ohjelman ID -->
+  <input type='hidden' name='id'
+     id='ohjelma-id' value=<?= $ohjelma->ohjelmaId; ?>
+  />
+  
+  <!-- Ohjelman käyttäjä -->
+  <input type='hidden' name='kayttaja' 
+    id='ohjelma-kayttaja' value=<?= htmlspecialchars($ohjelma->kayttajatunnus); ?> 
+  />
+
+  <!-- Ohjelman nimi -->
   <div>
-    <label for="ohjelma-nimi">Ohjelman nimi</label>
-    <input type="text" name="ohjelma-nimi" id="ohjelma-nimi" value="4-jakoinen saliohjelma edistyneille">
+    <label for='ohjelma-nimi'>Ohjelman nimi</label>
+    <input type='text' name='nimi' 
+      id='ohjelma-nimi' value='<?= $ohjelma->nimi; ?>'
+    />
   </div>
+
+  <!-- Ohjelman vaikeustaso -->
   <div>
-    <label for="ohjelma-vaikeus">Vaikeustaso</label>
-    <select name="ohjelma-vaikeus" id="ohjelma-vaikeus">
-      <option>Aloittelija</option>
-      <option>Helppo</option>
-      <option>Haastava</option>
-      <option>Vaikea</option>
-      <option>Extreme</option>
+    <label for='ohjelma-vaikeustasoId'>Vaikeustaso</label>
+    <select name='vaikeustaso' id='ohjelma-vaikeustasoId'>
+
+      <?php foreach ($vaikeustasot as $vaikeustaso): ?>
+          <option
+            value=<?= $vaikeustaso->vaikeustasoId; ?> 
+            <?= $vaikeustaso->vaikeustasoId == $ohjelma->vaikeustasoId ? 'selected' : '' ?>>
+              <?= $vaikeustaso->nimi; ?>
+          </option>  
+      <?php endforeach; ?>
+
     </select>
   </div>
-  <button type="submit" class="nappi-p">Päivitä tiedot</button>
-  <a href="ohjelmani.php" class="nappi nappi-s">Peruuta</a>
-</form>
+
+  <!-- Napit -->
+  <button type='submit' class='nappi-p'>Päivitä tiedot</button>
+  <a href='ohjelmani.php' class='nappi nappi-s'>Takaisin</a>
+</form> <!--==== OHJELMAN TIETOJEN MUOKKAUSLOMAKE LOPPU ====-->
 
 
 
-<form class="valia keskita" action="./Api/uusi_harjoitus.php" method="POST">
+<!--==== UUDEN HARJOITUKSEN LISÄYSLOMAKE ====-->
+<form id='harjoitus-lomake' class='valia keskita'>
+  <!-- Ohjelma ID -->
+  <input type='hidden' name='ohjelmaId' 
+    id='harjoitus-ohjelma' value=<?= $ohjelmaID; ?>
+  />
+
+  <!-- Harjoituksen nimi -->
   <div>
-    <label for="uusi-harjoitus">Harjoituksen nimi</label>
-    <input type="text" name="uusi-harjoitus" id="uusi-harjoitus">
+    <label for='harjoitus-nimi'>Harjoituksen nimi</label>
+    <input type='text' name='nimi' id='harjoitus-nimi'/>
   </div>
-  <button type="submit" class="nappi-p">Lisää harjoitus +</button>
-</form>
+  <!-- Nappi -->
+  <button type='submit' class='nappi-p'>Lisää harjoitus +</button>
+</form> <!--==== UUDEN HARJOITUKSEN LISÄYSLOMAKE LOPPU ====-->
   
 
-<section class="keskita">
+<!--==== LISTA OHJELMAN HARJOITUKSISTA ====-->
+<section class='keskita'>
   <header>
-    <h2 class="keskella">Harjoitukset</h2>
+    <h2 class='keskella'>Harjoitukset</h2>
   </header>
 
-  <div class="sailio keskita">
-    <?php require_once(__DIR__.'/Komponentit/Harjoitukset/harjoitus_section.php');
-      HarjoitusSection('Vatsa', 1);
-      HarjoitusSection('Selkä/Hauis', 2);
-      HarjoitusSection('Jalat/Olkapäät', 3);
-      HarjoitusSection('Rinta/Ojentajat', 4);
+  <div id='harjoitukset' class='sailio sailio-keskita'>
+    
+    <?php 
+      // Listataan kaikki harjoitukset ja niille kontrollit
+      foreach ($harjoitukset as $harjoitus) 
+      {
+        HarjoitusSection($harjoitus);
+      } 
     ?> 
+  
   </div>
 </section>
- 
 
+<script src='./Scripts/muokkaa_ohjelma.js'></script>
+ 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');
   Footer();
