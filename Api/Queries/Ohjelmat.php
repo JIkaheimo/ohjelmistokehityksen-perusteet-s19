@@ -82,10 +82,10 @@ abstract class Ohjelmat {
   // HAE ==================================================================================
   static function hae(
     PDO $db,
-    int $ohjelmaId = 0
+    int $ohjelmaId = NULL
   )
   {
-    if ($ohjelmaId == 0)
+    if ($ohjelmaId == NULL)
     {
       return $db->query(Ohjelmat::HAE_KAIKKI)->fetchAll(PDO::FETCH_OBJ);
     }
@@ -126,7 +126,7 @@ abstract class Ohjelmat {
   static function haeKayttajanHarjoitukselliset(
     PDO $db, 
     string $kayttajatunnus
-  ) : Array
+  ) 
   {
     $ohjelmat = Ohjelmat::haeKayttajan($db, $kayttajatunnus);
     return array_filter($ohjelmat, function ($ohjelma) {
@@ -139,7 +139,7 @@ abstract class Ohjelmat {
   static function haeKayttajanLisaamat(
     PDO $db,
     string $kayttajatunnus
-  ) : Array
+  ) 
   {
     $stmt = $db->prepare(Ohjelmat::HAE_KAYTTAJAN_LISAAMAT);
     $stmt->bindValue(':kayttajatunnus', $kayttajatunnus);
@@ -152,7 +152,7 @@ abstract class Ohjelmat {
   // HAE_UUSIMMAT ========================================================================
   static function haeUusimmat(
     PDO $db
-  ) : Array
+  ) 
   /**
    * Hakee uusimmat ohjelmat tietokannasta (4kpl).
    * 
@@ -172,7 +172,7 @@ abstract class Ohjelmat {
   // HAE_SUOSITUIMMAT ===================================================================
   static function haeSuosituimmat(
     PDO $db
-  ) : Array
+  ) 
   {
     return $db->query(Ohjelmat::HAE_SUOSITUIMMAT)->fetchAll(PDO::FETCH_OBJ);
   } // HAE_SUOSITUIMMAT_END
@@ -185,7 +185,7 @@ abstract class Ohjelmat {
     string $nimi,
     int $vaikeustasoId,
     string $kuva
-  ) : int
+  ) 
   /**
    * Lisää annetun ohjelman tietokantaan.
    * 

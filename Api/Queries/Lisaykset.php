@@ -23,7 +23,7 @@ abstract class Lisaykset
 
 
   // HAE =============================================================
-  static function hae(PDO $db) : Array
+  static function hae(PDO $db) 
   {
     return $db->query(Lisaykset::HAE_KAIKKI)->fetchAll(PDO::FETCH_OBJ);
   } // HAE_END

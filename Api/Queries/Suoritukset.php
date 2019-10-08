@@ -86,7 +86,7 @@ abstract class Suoritukset
   static function haeKayttajan(
     PDO $db,
     string $kayttajatunnus
-  ) : Array
+  ) 
   {
     $stmt = $db->prepare(Suoritukset::HAE_KAYTTAJAN_P);
     $stmt->bindValue(':kayttajatunnus', $kayttajatunnus);
@@ -99,7 +99,7 @@ abstract class Suoritukset
   static function haeKayttajanViimeisimmat(
     PDO $db,
     string $kayttajatunnus
-  ) : Array
+  ) 
   {
     $stmt = $db->prepare(Suoritukset::HAE_KAYTTAJAN_VIIMEISIMMAT_P);
     $stmt->bindValue(':kayttajatunnus', $kayttajatunnus);
@@ -116,7 +116,7 @@ abstract class Suoritukset
     $suoritusPvm,
     int $kesto,
     int $harjoitusId
-  ) : int
+  ) 
   {
     // Lisätään suoritus tietokantaan.
     $stmt = $db->prepare(Suoritukset::LISAA_UUSI_P);

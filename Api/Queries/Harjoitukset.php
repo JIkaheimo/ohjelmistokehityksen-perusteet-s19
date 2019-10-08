@@ -23,7 +23,7 @@ abstract class Harjoitukset
   // HAE =========================================================
   static function hae(
     PDO $db,
-    int $harjoitusId = 0
+    int $harjoitusId = NULL
   ) 
   /**
    * Hakee kaikki tai yhden harjoituksen tietokannasta.
@@ -33,7 +33,7 @@ abstract class Harjoitukset
    * - $harjoitusId (int) haettavan harjoituksen id
    */
   {
-    if ($harjoitusId == 0) {
+    if ($harjoitusId == NULL) {
       return $db->query(Harjoitukset::HAE_KAIKKI)->fetchAll(PDO::FETCH_OBJ);
     }
 
@@ -55,7 +55,7 @@ abstract class Harjoitukset
   static function haeOhjelman(
     PDO $db, 
     int $ohjelmaId
-  ) : Array
+  ) 
   /**
    * Hakee kaikki ohjelman harjoitukset.
    * 
@@ -76,7 +76,7 @@ abstract class Harjoitukset
     PDO $db,
     string $nimi,
     int $ohjelmaId
-  ) : int
+  ) 
    /**
    * Lisää harjoituksen tiedot tietokantaan.
    * 
@@ -103,7 +103,7 @@ abstract class Harjoitukset
     PDO $db,
     string $nimi,
     int $ohjelmaId
-  ) : int
+  ) 
   /**
    * Lisää harjoituksen tiedot tietokantaan.
    * 
@@ -121,7 +121,7 @@ abstract class Harjoitukset
   static function poista(
     PDO $db,
     int $harjoitusId
-  ) : boolean
+  ) 
   /**
    * Poistaa harjoituksen tietokannasta annetun id:n perusteella.
    * 
