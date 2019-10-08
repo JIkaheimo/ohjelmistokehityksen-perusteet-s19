@@ -1,43 +1,53 @@
 <?php 
-  // TODO: Tähän kirjautumisen varmistus.
-  /*
-   if (!kirjautunut) {
-     header('Loca)
-   }
-  */
 
+  require_once(__DIR__.'/Komponentit/Header/header.php');
+  
+  if ($kayttaja == null)
+  {
+    header('Location: 401.php');
+  }
+  
+  Headeri('Uusi ohjelma');
 
-
-  // TODO: Tähän ohjelman, harjoitusten ja vaiheiden haku tietokannasta.
-  require_once(__DIR__.'/Komponentit/Header/header_kirjautunut.php'); 
-  HeaderKirjautunut('Uusi ohjelma');
+  $vaikeustasot = Vaikeustasot::hae($db);
 ?>
 
 <header>
-  <h1 class="keskella">Uusi ohjelma</h1>
+  <h1 class='keskella'>Uusi ohjelma</h1>
 </header>
 
 <!-- ITSE OHJELMAN TIETOJEN MUOKKAUSLOMAKE -->
-<form class="keskita" action="./Api/uusi_ohjelma.php" method="POST">
+<form id='ohjelma-lomake' class='keskita'>
+  
+  <input type='hidden' name='kayttaja' 
+    id='ohjelma-kayttaja' value=<?= $kayttaja; ?> 
+  />   
+  
   <div>
-    <label for="ohjelma-nimi">Nimi</label>
-    <input type="text" name="ohjelma-nimi" id="ohjelma-nimi" value="4-jakoinen saliohjelma edistyneille">
+    <label for='ohjelma-nimi'>Nimi</label>
+    <input type='text' name='nimi' 
+      id='ohjelma-nimi' placeholder='Reeniohjelma' 
+    />
   </div>
+
   <div>
-    <label for="ohjelma-vaikeus">Vaikeustaso</label>
-    <select name="ohjelma-vaikeus" id="ohjelma-vaikeus">
-      <option>Aloittelija</option>
-      <option>Helppo</option>
-      <option>Haastava</option>
-      <option>Vaikea</option>
-      <option>Extreme</option>
+    <label for='ohjelma-vaikeus'>Vaikeustaso</label>
+    <select name='vaikeus' id='ohjelma-vaikeus'>
+      <?php foreach ($vaikeustasot as $vaikeustaso) { ?>
+        <option value=<?=$vaikeustaso->vaikeustasoId?>>
+          <?= $vaikeustaso->nimi; ?>
+        </option>
+      <?php } ?>
     </select>
   </div>
-  <button type="submit" class="nappi-p">Luo ohjelma</button>
+  
+  <button type='submit' class='nappi-p'>Luo ohjelma</button>
 </form>
 
+<script src='./Scripts/uusi_ohjelma.js'></script>
 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');
   Footer();
 ?>
+
