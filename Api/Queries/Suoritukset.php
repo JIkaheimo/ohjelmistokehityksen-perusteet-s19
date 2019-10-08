@@ -56,20 +56,20 @@ abstract class Suoritukset
   // HAE ===========================================================================
   static function hae(
     PDO $db,
-    int $suoritusId = 0
+    int $suoritusId = NULL
   )
   /**
    * Hakee tietokannassa olevat suoritukset tai suoritukset.
    * 
    * PARAMS:
    * - $db (PDO)
-   * - $suoritusId (int) haettavan suorituksen id. Jos $suoritusId == 0, haetaan kaikki suoritukset.
+   * - $suoritusId (int) haettavan suorituksen id. Jos $suoritusId == NULL, haetaan kaikki suoritukset.
    * 
    * RETURNS:
    * - haetut suoritukset tai suoritus (Array/stdCkass)
    */
   {
-    if ($suoritusId == 0)
+    if ($suoritusId == NULL)
     {
       return $db->query(Suoritukset::HAE_KAIKKI)->fetchAll(PDO::FETCH_OBJ);
     }
