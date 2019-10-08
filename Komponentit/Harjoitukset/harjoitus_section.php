@@ -1,18 +1,20 @@
-<?php function HarjoitusSection($nimi, $id) { ?>
+<?php function HarjoitusSection($harjoitus) { ?>
 
-  <section class="harjoitus-section">
-    <img class="keskita img" src="./Assets/barbell.png" alt="harjoitus" />
+  <section id='<?= $harjoitus->harjoitusId; ?>' class='harjoitus keskita'>
+    <img class='keskita img' src='./Assets/barbell.png' alt='harjoitus' />
     <div>
       <header>
-        <h3 class="keskella"><?=$nimi?></h3>
+        <h3 class='keskella'><?= htmlspecialchars($harjoitus->nimi); ?></h3>
       </header>
 
-      <a class="nappi nappi-p" href="muokkaa_harjoitus.php?id=<?=$id?>">Muokkaa</a>
+      <div class="controls">
+          <a class='nappi nappi-p' href='muokkaa_harjoitus.php?id=<?= $harjoitus->harjoitusId; ?>'>Muokkaa</a>
 
-      <form action="./Api/poista_harjoitus.php">
-        <input type="hidden" name="harjoitus-id" value="123">
-        <button class="nappi-s" type="submit">Poista x</button>
-      </form>
+          <form data-id=<?= $harjoitus->harjoitusId; ?> class='poista-harjoitus-form'>
+            <input type='hidden' name='harjoitus' value=<?= $harjoitus->harjoitusId; ?>>
+            <button class='nappi-s'>Poista x</button>
+          </form>
+      </div>
     </div>
   </section>
 
