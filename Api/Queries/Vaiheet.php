@@ -26,7 +26,7 @@ abstract class Vaiheet
   // HAE ============================================================
   static function hae(
     PDO $db,
-    int $vaiheId = NULL)
+    int $vaiheId = NULL
   )
   /**
    * Hakee käyttäjät tai käyttäjän tietokannasta.
