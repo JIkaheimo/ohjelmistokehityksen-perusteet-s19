@@ -1,21 +1,22 @@
-<?php function OhjelmaTR($nimi, $harjoitusLkm, $vaikeustaso, $id, $kontrollit = true) { ?>
+<?php function OhjelmaTR($ohjelma) { 
+    
+?>
 
-  <tr class="ohjelma-tr">
-    <th><?=$nimi?></th>
-    <td><?=$harjoitusLkm?></td>
-    <td><?=$vaikeustaso?></td>
-  
-    <?php if ($kontrollit) { ?>
-      <td>
-        <div class="sailio">
-          <a class="nappi nappi-p" href="muokkaa_ohjelma.php?id=<?=$id?>">Muokkaa</a>
-          <form action="./Api/poista_ohjelma.php">
-            <input type="hidden" name="id" id="ohjelma-<?=$id?>" value=<?=$id?>>
-            <button class="nappi-s" type="submit">Poista x</button>
-          </form>
-        </div>
-      </td>
-    <?php } ?>
+  <tr id='ohjelma-<?= $ohjelma->ohjelmaId; ?>' class='ohjelma-tr'>
+    <th><?= htmlspecialchars($ohjelma->nimi); ?></th>
+    <td><?= $ohjelma->harjoituksia; ?></td>
+    <td><?= $ohjelma->vaikeustaso; ?></td>
+
+    <td>
+      <div class='sailio'>
+        <a class='nappi nappi-p' href='muokkaa_ohjelma.php?id=<?= $ohjelma->ohjelmaId; ?>'>Muokkaa</a>
+        <form data-id=<?= $ohjelma->ohjelmaId; ?> class='poista-ohjelma-lomake'>
+          <input type='hidden' name='id' id='ohjelma-<?= $ohjelma->ohjelmaId; ?>' value=<?= $ohjelma->ohjelmaId; ?>>
+          <button class='nappi-r' type='submit'>Poista x</button>
+        </form>
+      </div>
+    </td>
   </tr>
+
 
 <?php } ?>
