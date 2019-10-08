@@ -33,7 +33,7 @@ abstract class Kayttajat
 
 
   // HAE ===================================================================
-  static function hae(PDO $db) : Array
+  static function hae(PDO $db) 
   { 
     $stmt = $db->query(Kayttajat::HAE_KAIKKI);
     if ($stmt->execute()) return $stmt->fetchAll(PDO::FETCH_OBJ);
