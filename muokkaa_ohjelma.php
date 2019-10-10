@@ -1,4 +1,5 @@
 <?php 
+  //
   if (!isset($_GET['id'])) {
     http_response_code(404);
     header('Location: 404.php');
@@ -10,15 +11,23 @@
   if ($kayttaja == null)
   {
     header('Location: 401.php');
+    exit;
   }
 
-  require_once(__DIR__.'/Komponentit/Harjoitukset/harjoitus_section.php');
+  require_once(__DIR__.'/Komponentit/Harjoitukset/harjoitus_tr.php');
 
   Headeri('Muokkaa ohjelmaa');
 
   $ohjelmaID = (int) $_GET['id'];
-
   $ohjelma = Ohjelmat::hae($db, $ohjelmaID);
+
+  // Sallitaan vain ohjelman luonut käyttäjä sivulle.
+  if ($kayttaja !== $ohjelma->kayttajatunnus)
+  {
+    header('Location: 401.php');
+    exit;
+  }
+
   $harjoitukset = Harjoitukset::haeOhjelman($db, $ohjelma->ohjelmaId);
   $vaikeustasot = Vaikeustasot::hae($db);
 ?>
@@ -71,22 +80,6 @@
 </form> <!--==== OHJELMAN TIETOJEN MUOKKAUSLOMAKE LOPPU ====-->
 
 
-
-<!--==== UUDEN HARJOITUKSEN LISÄYSLOMAKE ====-->
-<form id='harjoitus-lomake' class='valia keskita'>
-  <!-- Ohjelma ID -->
-  <input type='hidden' name='ohjelmaId' 
-    id='harjoitus-ohjelma' value=<?= $ohjelmaID; ?>
-  />
-
-  <!-- Harjoituksen nimi -->
-  <div>
-    <label for='harjoitus-nimi'>Harjoituksen nimi</label>
-    <input type='text' name='nimi' id='harjoitus-nimi'/>
-  </div>
-  <!-- Nappi -->
-  <button type='submit' class='nappi-p'>Lisää harjoitus +</button>
-</form> <!--==== UUDEN HARJOITUKSEN LISÄYSLOMAKE LOPPU ====-->
   
 
 <!--==== LISTA OHJELMAN HARJOITUKSISTA ====-->
@@ -95,16 +88,40 @@
     <h2 class='keskella'>Harjoitukset</h2>
   </header>
 
+  <!--==== UUDEN HARJOITUKSEN LISÄYSLOMAKE ====-->
+  <form id='harjoitus-lomake' class='keskita'>
+    <!-- Ohjelma ID -->
+    <input type='hidden' name='ohjelmaId' 
+      id='harjoitus-ohjelma' value=<?= $ohjelmaID; ?>
+    />
+
+    <!-- Harjoituksen nimi -->
+    <div>
+      <label for='harjoitus-nimi'>Harjoituksen nimi</label>
+      <input type='text' name='nimi' id='harjoitus-nimi'/>
+    </div>
+    <!-- Nappi -->
+    <button type='submit' class='nappi-p'>Lisää harjoitus +</button>
+  </form> <!--==== UUDEN HARJOITUKSEN LISÄYSLOMAKE LOPPU ====-->
+
   <div id='harjoitukset' class='sailio sailio-keskita'>
-    
-    <?php 
-      // Listataan kaikki harjoitukset ja niille kontrollit
-      foreach ($harjoitukset as $harjoitus) 
-      {
-        HarjoitusSection($harjoitus);
-      } 
-    ?> 
-  
+    <table>
+      <thead>
+        <tr>
+          <th>Harjoitus</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php 
+          // Listataan kaikki harjoitukset ja niille kontrollit
+          foreach ($harjoitukset as $harjoitus) 
+          {
+            HarjoitusTR($harjoitus);
+          } 
+        ?> 
+      </tbody>
+    </table>
   </div>
 </section>
 

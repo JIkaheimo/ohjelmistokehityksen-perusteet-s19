@@ -37,13 +37,13 @@
 
     <!-- PÄIVÄYKSEN VALINTA -->
     <div>
-      <label for='paivays'>Päiväys:</label>
+      <label for='paivays'>Päiväys</label>
       <input type='date' name='paivays' id='paivays' required>
     </div>
 
     <!-- OHJELMAN VALINTA -->
     <div>
-      <label for='ohjelma'>Reeniohjelma:</label>
+      <label for='ohjelma'>Reeniohjelma</label>
       <select name='ohjelma' id='ohjelma'>   
         <?php foreach ($ohjelmat as $ohjelma) : ?>
           <option value='<?= $ohjelma->ohjelmaId; ?>'>
@@ -55,7 +55,7 @@
 
     <!-- HARJOITUKSEN VALINTA -->
     <div>
-      <label for='harjoitus'>Harjoitus:</label>
+      <label for='harjoitus'>Harjoitus</label>
       <select name='harjoitus' id='harjoitus'>   
         <?php foreach ($harjoitukset as $harjoitus) : ?>
           <option value=<?= $harjoitus->harjoitusId; ?>>
@@ -67,7 +67,7 @@
 
     <!-- KESTON VALINTA -->
     <div>
-      <label for='kesto'>Kesto:</label>
+      <label for='kesto'>Kesto (min)</label>
       <input type='number' name='kesto' id='kesto' placeholder=60 required>
     </div>
 

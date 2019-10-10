@@ -27,6 +27,8 @@
       <title><?= $otsikko; ?> | REENIKIRJA</title>
       <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'>
       <link rel='stylesheet' href='./Styles/main.css'>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
       <script src='./Scripts/request.js'></script>
     </head>
     <body>

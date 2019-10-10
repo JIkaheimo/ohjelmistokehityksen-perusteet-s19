@@ -55,9 +55,12 @@ function haeKayttajat()
 // PAIVITA_KAYTTAJA ============================================================
 function paivitaKayttaja()
 {
+  header('Access-Control-Allow-Methods: PUT')
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   global $db;
 
-  print_r($_FILES);
   if (isset($_FILES['kuva']) && $_FILES['kuva']['size'] > 0)
   {
     $tiedostoNimi = $_POST['kayttajatunnus'];
@@ -72,9 +75,10 @@ function paivitaKayttaja()
     }
   }
 
-  $_POST['etunimi'] ?? null;
-  $_POST['sukunimi'] ?? null;
-  $_POST['kuvaus'] ?? null;
+  $_POST['etunimi'] = isset($_POST['etunimi']) ? $_POST['etunimi'] : null;
+  $_POST['sukunimi'] = isset($_POST['sukunimi']) ? $_POST['sukunimi'] : null;
+  $_POST['kuvaus'] = isset($_POST['kuvaus']) ? $_POST['kuvaus'] : null;
+  $tiedostoNimi = isset($tiedostoNimi) ? $tiedostoNimi : 'kayttaja-placeholder.png';
 
 
   $onnistuiko = Kayttajat::paivita(
@@ -82,13 +86,13 @@ function paivitaKayttaja()
     $_POST['kayttajatunnus'],
     $_POST['etunimi'],
     $_POST['sukunimi'],
-    $tiedostoNimi ?? 'kayttaja-placeholder.png',
+    $tiedostoNimi,
     $_POST['kuvaus']
   );
 
   if ($onnistuiko)
   {
-   header('Location: '.__DIR__.'/../profiili.php');
+    header('Location: ./../profiili.php');
   }
 } // PAIVITA_KAYTTAJA_END
 
@@ -99,24 +103,27 @@ function paivitaKayttajaJSON()
  * Päivittää käyttäjän tiedot tietokantaan.
  */
 {
-  header('Access-Control-Allow-Methods: PUT');
+  header('Access-Control-Allow-Methods: PUT')
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+  
   $body = json_decode(file_get_contents('php://input'));
   
   global $db;
 
-  $body->etunimi = $body->etunimi ?? null;
-  $body->kuva = $body->kuva ?? null;
-  $body->sukunimi = $body->sukunimi ?? null;
-  $body->kuvaus = $body->kuvaus ?? null;
+  $etunimi = isset($body->etunimi) ? poistaTagit($body->etunimi) : null;
+  $kuva = isset($body->kuva) ? poistaTagit($body->kuva) : null;
+  $sukunimi = isset($body->sukunimi) ? poistaTagit($body->sukunimi) : null;
+  $kuvaus = isset($body->kuvaus) ? poistaTagit($body->kuvaus) : null;
 
   
   $onnistuiko = Kayttajat::paivita(
     $db,
     $body->kayttajatunnus, 
-    $body->etunimi, 
-    $body->sukunimi, 
-    $body->kuva,
-    $body->kuvaus
+    $etunimi, 
+    $sukunimi, 
+    $kuva,
+    $kuvaus
   );
 
   if ($onnistuiko) {

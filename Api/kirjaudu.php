@@ -4,6 +4,9 @@ require_once(__DIR__.'/queries.php');
 header("Access-Control-Allow-Origin: *");
 
 header('Access-Control-Allow-Methods: POST');
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
 $body = json_decode(file_get_contents('php://input'));
 
 if (!isset($body->kayttajatunnus) || !isset($body->salasana))

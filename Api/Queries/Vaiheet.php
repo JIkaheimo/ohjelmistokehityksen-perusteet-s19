@@ -25,8 +25,8 @@ abstract class Vaiheet
 
   // HAE ============================================================
   static function hae(
-    PDO $db,
-    int $vaiheId = NULL
+    $db,
+    $vaiheId = NULL
   )
   /**
    * Hakee käyttäjät tai käyttäjän tietokannasta.
@@ -53,8 +53,8 @@ abstract class Vaiheet
 
   // HAE_HARJOITUKSEN =================================================
   static function haeHarjoituksen(
-    PDO $db, 
-    int $harjoitusId
+    $db, 
+    $harjoitusId
   ) 
   {
     $stmt = $db->prepare(Vaiheet::HAE_HARJOITUKSEN);
@@ -68,11 +68,11 @@ abstract class Vaiheet
 
   // LISAA ===========================================================
   static function lisaa(
-    PDO $db,
-    int $harjoitusId,
-    string $nimi,
-    string $ohjelinkki,
-    string $kuvaus
+    $db,
+    $harjoitusId,
+    $nimi,
+    $ohjelinkki,
+    $kuvaus
   ) 
   {
     $stmt = $db->prepare(Vaiheet::LISAA_UUSI);
@@ -88,11 +88,11 @@ abstract class Vaiheet
 
   // UUSI =============================================================
   static function uusi(
-    PDO $db,
-    int $harjoitusId,
-    string $nimi,
-    string $ohjelinkki,
-    string $kuvaus
+    $db,
+    $harjoitusId,
+    $nimi,
+    $ohjelinkki,
+    $kuvaus
   ) 
   {
     return Vaiheet::lisaa($db, $harjoitusId, $nimi, $ohjelinkki, $kuvaus);

@@ -13,7 +13,6 @@ if ($kayttaja == null)
 Headeri('Lisätyt ohjelmat');
 
 $ohjelmat = Ohjelmat::haeKayttajanLisaamat($db, $kayttaja);
-print_r($ohjelmat);
 
 ?>
 
@@ -29,13 +28,12 @@ print_r($ohjelmat);
         <th>Nimi</th>
         <th>Harjoituksia</th>
         <th>Vaikeustaso</th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
       <?php
         foreach ($ohjelmat as $ohjelma) { 
-          OhjelmaTR($ohjelma);
+          OhjelmaTR($ohjelma, false);
         } 
       ?>
     </tbody>

@@ -33,6 +33,9 @@ function haeSeuraukset()
 function lisaaSeuraus()
 {
   header('Access-Control-Allow-Methods: POST');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   $body = json_decode(file_get_contents('php://input'));
   
   global $db;
@@ -49,7 +52,10 @@ function lisaaSeuraus()
 // POISTA_SEURAUS ============================================
 function poistaSeuraus()
 {
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
   header('Access-Control-Allow-Methods: DELETE');
+
   $body = json_decode(file_get_contents('php://input'));
 
   global $db;

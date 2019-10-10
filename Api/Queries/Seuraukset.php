@@ -26,9 +26,9 @@ abstract class Seuraukset
 
   // LISAA ================================================
   static function lisaa(
-    PDO $db, 
-    string $seuraaja,
-    string $seurattava 
+    $db, 
+    $seuraaja,
+    $seurattava 
   ) 
   {
     $stmt = $db->prepare(Suoritukse::LISAA_UUSI);
@@ -41,9 +41,9 @@ abstract class Seuraukset
 
   // POISTA ==================================================
   static function poista(
-    PDO $db,
-    string $seuraaja,
-    string $seurattava
+    $db,
+    $seuraaja,
+    $seurattava
   ) 
   {
     $stmt = $db->prepare(Seuraukset::POISTA);

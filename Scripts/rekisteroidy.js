@@ -1,4 +1,4 @@
-(function() {
+(function () {
   // DOM-ELEMENTIT ================================================
   const $lomake = document.querySelector('#rek-lomake');
   const $kayttajatunnus = document.querySelector('#rek-kayttajatunnus');

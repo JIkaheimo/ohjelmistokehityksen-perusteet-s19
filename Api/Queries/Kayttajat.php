@@ -3,9 +3,11 @@
 abstract class Kayttajat
 {
   // QUERYT ================================================================
-  const HAE_KAIKKI = '
+  const HAE_KAIKKI_JULKINEN = '
   SELECT 
-    * 
+    kayttajatunnus,
+    kuvaus,
+    kuva
   FROM 
     Kayttajat';
 
@@ -33,9 +35,9 @@ abstract class Kayttajat
 
 
   // HAE ===================================================================
-  static function hae(PDO $db) 
+  static function hae($db) 
   { 
-    $stmt = $db->query(Kayttajat::HAE_KAIKKI);
+    $stmt = $db->query(Kayttajat::HAE_KAIKKI_JULKINEN);
     if ($stmt->execute()) return $stmt->fetchAll(PDO::FETCH_OBJ);
     return false;
   } // HAE_END
@@ -43,8 +45,8 @@ abstract class Kayttajat
   
   // KAYTTAJA_SALASANALLA ==================================================
   static function kayttajaSalasanalla(
-    PDO $db,
-    string $kayttajatunnus
+    $db,
+    $kayttajatunnus
   )
   {
     $stmt = $db->prepare('SELECT * FROM Kayttajat WHERE kayttajatunnus = :kayttajatunnus');
@@ -54,11 +56,21 @@ abstract class Kayttajat
   } // KAYTTAJA_SALASANALLA_END
 
 
-  // KAYTTAJA =============================================================
+  // KAYTTAJA =============================================================-
   static function kayttaja(
-    PDO $db,
-    string $kayttajatunnus
+    $db,
+    $kayttajatunnus
   )
+  /**
+   * Hakee käyttäjän tiedot tietokannasta annetun käyttäjätunnuksen perusteella.
+   * 
+   * PARAMS:
+   * - $db (PDO)
+   * - $kayttajatunnus (string) haettavan käyttäjän tunnus
+   * 
+   * RETURNS:
+   * - $kaytta - Tietokannasta haettu käyttäjä tai null, jos käyttäjää ei löydy.
+   */
   {
     $stmt = $db->prepare(Kayttajat::HAE_YKSI_P);
     $stmt->bindValue(':kayttajatunnus', $kayttajatunnus);
@@ -78,9 +90,9 @@ abstract class Kayttajat
 
   // UUSI_KAYTTAJA ========================================================
   static function uusiKayttaja(
-    PDO $db,
-    string $kayttajatunnus,
-    string $salasanaHash
+    $db,
+    $kayttajatunnus,
+    $salasanaHash
   ) 
   /**
    * Lisää uuden käyttäjän tietokantaan.
@@ -101,19 +113,19 @@ abstract class Kayttajat
 
   // PAIVITA ==========================================================
   static function paivita(
-    PDO $db,
-    string $kayttajatunnus, 
-    string $etunimi, 
-    string $sukunimi, 
-    string $kuva, 
-    string $kuvaus
+    $db,
+    $kayttajatunnus, 
+    $etunimi, 
+    $sukunimi, 
+    $kuva, 
+    $kuvaus
   ) 
   {
     $stmt = $db->prepare(Kayttajat::PAIVITA_P);
     $stmt->bindValue(':kayttajatunnus', puhdistaTagit($kayttajatunnus));
     $stmt->bindValue(':etunimi', puhdistaTagit($etunimi));
     $stmt->bindValue(':sukunimi', puhdistaTagit($sukunimi));
-    $stmt->bindValue(':kuva', $kuva);
+    $stmt->bindValue(':kuva', puhdistaTagit($kuva));
     $stmt->bindValue(':kuvaus', puhdistaTagit($kuvaus));
 
     return $stmt->execute();
@@ -122,9 +134,9 @@ abstract class Kayttajat
 
   // ONKO_SEURATTU ======================================================
   static function onkoSeurattu(
-    PDO $db,
-    string $seuraaja,
-    string $seurattava
+    $db,
+    $seuraaja,
+    $seurattava
   )
   {
 

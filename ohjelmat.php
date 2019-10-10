@@ -10,8 +10,9 @@
 
   Headeri('Ohjelmat');
 
-  $suosituimmat = Ohjelmat::haeSuosituimmat($db);
-  $uusimmat = Ohjelmat::haeUusimmat($db);
+  $suosituimmat = Ohjelmat::hae($db);
+
+  $uusimmat = $suosituimmat
 ?>
 
 

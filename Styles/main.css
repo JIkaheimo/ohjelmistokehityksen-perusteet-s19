@@ -14,11 +14,12 @@
 
 html {
   /* Käytetään selainten oletusfonttikokoa */
-  font-size: 100%;
+  font-size: 90%;
 
   /* Varmistetaan että täytetään vähintään koko ikkuna */
   position: relative;
   min-height: 100%;
+
 }
 
 body {
@@ -110,23 +111,26 @@ img:not([alt]) {
 /* TAULUKOT */
 
 table {
+  border-collapse: collapse;
+  font-size: 0.875rem;
   margin-top: 2rem;
   margin-bottom: 1rem;
   color: #ebebeb;
   background-color: #303030;
-  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5);
+ box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5);
 }
 
-table thead {
-  background-color: #df691a;
+table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.15);
 }
 
-table th,
-table td {
+table th, table td {
   padding: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  text-align: left;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+    text-align: left;
 }
+
 
 table tbody tr:nth-of-type(odd) {
   background-color: rgba(255, 255, 255, 0.05);
@@ -354,6 +358,10 @@ body > footer {
   align-items: center;
 }
 
+.flex-oikea {
+  justify-content: flex-end;
+}
+
 .focus {
   height: 100%;
   display: flex;
@@ -404,6 +412,7 @@ body > footer {
 }
 
 @media (min-width: 800px) {
+
   .kapea {
     max-width: 760px;
   }
@@ -416,6 +425,9 @@ body > footer {
 }
 
 @media (min-width: 1200px) {
+  html {
+    font-size: 100%;
+  }
   .kapea {
     max-width: 1150px;
   }
@@ -494,9 +506,25 @@ section.harjoitus {
   justify-content: space-between;
 }
 
-section.ohjelma > div,
-section.kayttaja > div {
+section.ohjelma:hover, 
+section.kayttaja:hover {
+  box-shadow: 0.1rem 0.1rem 1rem #000000;
+  background-color: rgb(59, 58, 58);
+}
+
+section.ohjelma > a > div,
+section.kayttaja > a > div {
   padding: 0.75rem;
+}
+
+section.ohjelma > a,
+section.kayttaja > a {
+  text-decoration: none;
+  color: inherit;
+}
+
+section.ohjelma > a > div > h3 {
+  color: #df691a;
 }
 
 section.harjoitus > div {

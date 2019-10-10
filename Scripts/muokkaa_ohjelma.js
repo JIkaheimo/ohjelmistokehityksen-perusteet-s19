@@ -2,7 +2,7 @@
  * MUOKKAA_OHJELMA (muokkaa_ohjelma.php)
  */
 
-(function() {
+(function () {
   //======= DOM-ELEMENTIT ====================================================
 
   const $ohjelmalomake = document.querySelector('form#ohjelma-lomake');
@@ -82,7 +82,7 @@
       function onSuccess(res) {
         sessionStorage.setItem('viesti', 'Harjoituksen lisäys onnistui!');
         window.location.href = '#harjoitukset';
-        location.reload(true);
+        //location.reload(true);
       },
       function onFail(res) {
         ilmoitus.naytaVirhe(res.viesti);
@@ -100,7 +100,7 @@
     /**
      * poistaHarjoitus - Palauttaa 'räätälöidyn' funktion tietyn harjoituksen poistamiseksi.
      */
-    return function(event) {
+    return function (event) {
       // Estetään lomakkeen submitointi.
       event.preventDefault();
       const body = {

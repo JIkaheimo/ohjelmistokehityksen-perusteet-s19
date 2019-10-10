@@ -5,51 +5,65 @@ abstract class Ohjelmat {
   // QUERYT ====================================================================================
   const HAE_KAIKKI = '
   SELECT 
-    * 
+    Ohjelmat.*,
+    Vaikeustasot.nimi AS vaikeustaso
   FROM 
-    OhjelmatPitka';
+    Ohjelmat
+  LEFT JOIN
+    Vaikeustasot
+  ON 
+    Ohjelmat.vaikeustasoId = Vaikeustasot.vaikeustasoId';
 
-  const HAE_YKSI = Ohjelmat::HAE_KAIKKI . '
+  const HAE_YKSI = Ohjelmat::HAE_KAIKKI . ' WHERE Ohjelmat.ohjelmaId = :ohjelmaId';
+
+  const HAE_KAYTTAJAN = '
+  SELECT
+    Ohjelmat.*,
+    Vaikeustasot.nimi AS vaikeustaso,
+    COUNT(Harjoitukset.ohjelmaId) AS harjoituksia
+  FROM
+    Ohjelmat
+  LEFT JOIN
+    Vaikeustasot
+  ON 
+    Ohjelmat.vaikeustasoId = Vaikeustasot.vaikeustasoId
+  LEFT JOIN
+    Harjoitukset
+  ON 
+    Ohjelmat.ohjelmaId = Harjoitukset.ohjelmaId
   WHERE 
-    ohjelmaId = :ohjelmaId';
-
-  const HAE_KAYTTAJAN = Ohjelmat::HAE_KAIKKI . '
-  WHERE
-    kayttajatunnus = :kayttajatunnus';
-
-  const HAE_UUSIMMAT = Ohjelmat::HAE_KAIKKI . '
-  ORDER BY 
-    luotu DESC
-  LIMIT
-    4';
+    Ohjelmat.kayttajatunnus = :kayttajatunnus
+  GROUP BY 
+    Ohjelmat.ohjelmaId';
 
   const HAE_KAYTTAJAN_LISAAMAT = '
   SELECT
-    OhjelmatPitka.*
-  FROM 
-    OhjelmatPitka
+    Ohjelmat.*,
+    Vaikeustasot.nimi AS vaikeustaso,
+    COUNT(Harjoitukset.ohjelmaId) AS harjoituksia
+  FROM
+    Ohjelmat
+  LEFT JOIN
+    Vaikeustasot
+  ON 
+    Ohjelmat.vaikeustasoId = Vaikeustasot.vaikeustasoId
+  LEFT JOIN
+    Harjoitukset
+  ON 
+    Ohjelmat.ohjelmaId = Harjoitukset.ohjelmaId
   JOIN
     Lisaykset
   ON
-    OhjelmatPitka.ohjelmaId = Lisaykset.ohjelmaId
+    Ohjelmat.ohjelmaId = Lisaykset.ohjelmaId
   WHERE 
-    Lisaykset.kayttajatunnus = :kayttajatunnus';
-
-  const HAE_SUOSITUIMMAT = '
-  SELECT 
-    OhjelmatPitka.*, COUNT(Lisaykset.ohjelmaId) AS Lisayksia 
-  FROM 
-    OhjelmatPitka
-  JOIN 
-    Lisaykset
-  ON
-    OhjelmatPitka.ohjelmaId = Lisaykset.ohjelmaId
+    Lisaykset.kayttajatunnus = :kayttajatunnus
   GROUP BY 
-    Lisaykset.ohjelmaId
-  ORDER BY 
-    Lisayksia DESC
-  LIMIT
-    4';
+    Harjoitukset.ohjelmaId';
+
+  const HAE_SUOSITUIMMAT = Ohjelmat::HAE_KAIKKI;
+
+  const HAE_UUSIMMAT = Ohjelmat::HAE_KAIKKI;
+
 
   const LISAA_UUSI = '
   INSERT INTO 
@@ -62,7 +76,7 @@ abstract class Ohjelmat {
   SET 
     kayttajatunnus = :kayttajatunnus, 
     nimi = :nimi, 
-    vaikeustasoId = :vaikeustasoId,
+    vaikeustasoId = :vaikeustasoId
   WHERE 
     ohjelmaId = :ohjelmaId';
 
@@ -81,13 +95,15 @@ abstract class Ohjelmat {
 
   // HAE ==================================================================================
   static function hae(
-    PDO $db,
-    int $ohjelmaId = NULL
+    $db,
+    $ohjelmaId = NULL
   )
   {
     if ($ohjelmaId == NULL)
     {
-      return $db->query(Ohjelmat::HAE_KAIKKI)->fetchAll(PDO::FETCH_OBJ);
+      return 
+        $db->query(Ohjelmat::HAE_KAIKKI)
+          ->fetchAll(PDO::FETCH_OBJ);
     }
     
     $stmt = $db->prepare(Ohjelmat::HAE_YKSI);
@@ -110,11 +126,11 @@ abstract class Ohjelmat {
 
   // HAE_KAYTTAJAN ========================================================================
   static function haeKayttajan(
-    PDO $db, 
-    string $kayttajatunnus
+    $db, 
+    $kayttajatunnus
   )
   {
-    $stmt = $db->prepare(Ohjelmat::HAE_KAYTTAJAN_P);
+    $stmt = $db->prepare(Ohjelmat::HAE_KAYTTAJAN);
     $stmt->bindValue(':kayttajatunnus', $kayttajatunnus);
     
     if ($stmt->execute()) return $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -124,8 +140,8 @@ abstract class Ohjelmat {
 
   // HAE_KAYTTAJAN_HARJOITUKSELLISET ======================================================
   static function haeKayttajanHarjoitukselliset(
-    PDO $db, 
-    string $kayttajatunnus
+    $db, 
+    $kayttajatunnus
   ) 
   {
     $ohjelmat = Ohjelmat::haeKayttajan($db, $kayttajatunnus);
@@ -137,8 +153,8 @@ abstract class Ohjelmat {
 
   // HAE_KAYTTAJAN_LISAAMAT ==============================================================
   static function haeKayttajanLisaamat(
-    PDO $db,
-    string $kayttajatunnus
+    $db,
+    $kayttajatunnus
   ) 
   {
     $stmt = $db->prepare(Ohjelmat::HAE_KAYTTAJAN_LISAAMAT);
@@ -151,7 +167,7 @@ abstract class Ohjelmat {
 
   // HAE_UUSIMMAT ========================================================================
   static function haeUusimmat(
-    PDO $db
+    $db
   ) 
   /**
    * Hakee uusimmat ohjelmat tietokannasta (4kpl).
@@ -163,9 +179,10 @@ abstract class Ohjelmat {
    * - uusimmat ohjelmat (Array)
    */
   {
-    return $db
-      ->query(Ohjelmat::HAE_UUSIMMAT)
-      ->fetchAll(PDO::FETCH_OBJ);
+    $stmt = $db->prepare(Ohjelmat::HAE_UUSIMMAT);
+
+    if ($stmt->execute()) return $stmt->fetchAll(PDO::FETCH_OBJ);
+    return false;
   } // HAE_UUSIMMAT_END
 
 
@@ -174,17 +191,20 @@ abstract class Ohjelmat {
     PDO $db
   ) 
   {
-    return $db->query(Ohjelmat::HAE_SUOSITUIMMAT)->fetchAll(PDO::FETCH_OBJ);
+    $stmt = $db->prepare(Ohjelmat::HAE_SUOSITUIMMAT);
+
+    if ($stmt->execute()) return $stmt->fetchAll(PDO::FETCH_OBJ);
+    return false;
   } // HAE_SUOSITUIMMAT_END
 
 
   // LISAA ===============================================================================
   static function lisaa(
-    PDO $db,
-    string $kayttajatunnus,
-    string $nimi,
-    int $vaikeustasoId,
-    string $kuva
+    $db,
+    $kayttajatunnus,
+    $nimi,
+    $vaikeustasoId,
+    $kuva
   ) 
   /**
    * Lisää annetun ohjelman tietokantaan.
@@ -213,11 +233,11 @@ abstract class Ohjelmat {
 
   // PAIVITA ==============================================================================
   static function paivita(
-    PDO $db, 
-    int $ohjelmaId,
-    string $kayttajatunnus,
-    string $nimi,
-    int $vaikeustasoId
+    $db, 
+    $ohjelmaId,
+    $kayttajatunnus,
+    $nimi,
+    $vaikeustasoId
   ) 
   /**
    * Päivittää annetun ohjelman tiedot tietokantaan.
@@ -268,9 +288,9 @@ abstract class Ohjelmat {
 
   // ONKO_LISATTY ==========================================================================
   static function onkoLisatty(
-    PDO $db,
-    string $kayttajatunnus,
-    int $ohjelmaId
+    $db,
+    $kayttajatunnus,
+    $ohjelmaId
   )
   /**
    * Tarkistaa tietokannasta onko käyttäjä lisännyt ohjelman.

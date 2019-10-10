@@ -20,10 +20,15 @@ abstract class Harjoitukset
     harjoitusId = :harjoitusId';
 
 
+  // PROSEDUURIT ================================================
+  const LISAA_UUSI_P = '
+  CALL UusiHarjoitus(:nimi, :ohjelmaId)';
+
+
   // HAE =========================================================
   static function hae(
-    PDO $db,
-    int $harjoitusId = NULL
+    $db,
+    $harjoitusId = NULL
   ) 
   /**
    * Hakee kaikki tai yhden harjoituksen tietokannasta.
@@ -34,7 +39,10 @@ abstract class Harjoitukset
    */
   {
     if ($harjoitusId == NULL) {
-      return $db->query(Harjoitukset::HAE_KAIKKI)->fetchAll(PDO::FETCH_OBJ);
+      $stmt = $db->prepare(Harjoitukset::HAE_KAIKKI);
+      
+      if ($stmt->execute()) return $stmt->fetchAll(PDO::FETCH_OBJ);
+      return false;
     }
 
     $stmt = $db->prepare(Harjoitukset::HAE_YKSI);
@@ -53,8 +61,8 @@ abstract class Harjoitukset
 
   // HAE_OHJELMAN ==================================================
   static function haeOhjelman(
-    PDO $db, 
-    int $ohjelmaId
+    $db, 
+    $ohjelmaId
   ) 
   /**
    * Hakee kaikki ohjelman harjoitukset.
@@ -73,9 +81,9 @@ abstract class Harjoitukset
 
   // UUSI =========================================================
   static function uusi(
-    PDO $db,
-    string $nimi,
-    int $ohjelmaId
+    $db,
+    $nimi,
+    $ohjelmaId
   ) 
    /**
    * Lisää harjoituksen tiedot tietokantaan.
@@ -89,20 +97,17 @@ abstract class Harjoitukset
     $stmt = $db->prepare(Harjoitukset::LISAA_UUSI);
     $stmt->bindValue(':nimi', $nimi);
     $stmt->bindValue(':ohjelmaId', $ohjelmaId);
-    
-    if ($stmt->execute())
-    {
-      return $db->lastInsertId();
-    }
+
+    if ($stmt->execute()) return $db->lastInsertId();
     return false;
   } // UUSI END
 
 
   // LISAA =======================================================
   static function lisaa(
-    PDO $db,
-    string $nimi,
-    int $ohjelmaId
+    $db,
+    $nimi,
+    $ohjelmaId
   ) 
   /**
    * Lisää harjoituksen tiedot tietokantaan.
@@ -119,8 +124,8 @@ abstract class Harjoitukset
 
   // POISTA ======================================================
   static function poista(
-    PDO $db,
-    int $harjoitusId
+    $db,
+    $harjoitusId
   ) 
   /**
    * Poistaa harjoituksen tietokannasta annetun id:n perusteella.

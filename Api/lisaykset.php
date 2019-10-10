@@ -33,6 +33,9 @@ function haeLisaykset()
 function lisaaLisays()
 {
   header('Access-Control-Allow-Methods: POST');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   $body = json_decode(file_get_contents('php://input'));
   
   global $db;
@@ -50,7 +53,9 @@ function lisaaLisays()
 
 // POISTA_LISAYS ============================================
 function poistaLisays()
-{
+{   
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
   header('Access-Control-Allow-Methods: DELETE');
   $body = json_decode(file_get_contents('php://input'));
 

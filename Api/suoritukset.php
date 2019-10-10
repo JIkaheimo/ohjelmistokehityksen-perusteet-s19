@@ -27,6 +27,7 @@ switch ($_SERVER['REQUEST_METHOD'])
 function haeSuoritukset()
 {
   header('Access-Control-Allow-Methods: GET');
+
   $body = json_decode(file_get_contents('php://input'));
 
   global $db;
@@ -41,6 +42,9 @@ function haeSuoritukset()
 function lisaaSuoritus() 
 {
   header('Access-Control-Allow-Methods: POST');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   $body = json_decode(file_get_contents('php://input'));
 
   global $db;
@@ -94,7 +98,11 @@ function lisaaSuoritus()
 function paivitaSuoritus()
 {
   header('Access-Control-Allow-Methods: PUT');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+  
   $body = json_decode(file_get_contents('php://input'));
+
   global $db;
 
   if (
@@ -126,7 +134,11 @@ function paivitaSuoritus()
 function poistaSuoritus()
 {
   header('Access-Control-Allow-Methods: DELETE');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   $body = json_decode(file_get_contents('php://input'));
+  
   global $db;
 
   // Tarkistetaan että poistettavan suorituksen id on annettu.
@@ -141,6 +153,6 @@ function poistaSuoritus()
   {
     lahetaViesti('Suoritus poistettiin onnistuneesti!');
   }
-}
+} // POISTA_SUORITUS_END
 
 ?>

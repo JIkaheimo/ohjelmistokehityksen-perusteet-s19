@@ -8,9 +8,17 @@
 
   <td>
     <div class='sailio'>
-      <a class='nappi nappi-p' href='muokkaa_suoritus.php?id=<?= $suoritus->suoritusId; ?>'>Muokkaa</a>
+      <a class='nappi nappi-p' href='muokkaa_suoritus.php?id=<?= $suoritus->suoritusId; ?>'>
+        <i class="material-icons">
+          edit
+        </i>
+      </a>
       <form data-id=<?= $suoritus->suoritusId; ?> class='poista-suoritus'>
-        <button class='nappi-s' type='submit'>Poista X</button>
+        <button class='nappi-s' type='submit'>
+          <i class="material-icons">
+            delete_forever
+          </i>
+        </button>
       </form>
     </div>
   </td>

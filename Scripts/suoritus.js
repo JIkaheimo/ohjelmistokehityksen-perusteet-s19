@@ -1,4 +1,4 @@
-const asetaPyynto = (function() {
+const asetaPyynto = (function () {
   let pyyntotyyppi = 'post';
   const $suorituslomake = document.querySelector('form#suorituslomake');
   const $suoritus = document.querySelector('input#suoritus');
@@ -11,7 +11,7 @@ const asetaPyynto = (function() {
   $suorituslomake.addEventListener('submit', lisaaSuoritus);
   $ohjelma.addEventListener('change', paivitaHarjoitukset);
 
-  return function(tyyppi) {
+  return function (tyyppi) {
     pyyntotyyppi = tyyppi;
   };
 
@@ -36,7 +36,7 @@ const asetaPyynto = (function() {
       body,
       function naytaOnnistuminen(res) {
         if (pyyntotyyppi == 'post') {
-          sessionStorage.setItem('viesti', res.viesti);
+          sessionStorage.setItem('viesti', 'Uusi suoritus lisättiin onnistuneesti!');
           window.location.href = 'suoritukset.php';
         } else {
           ilmoitus.naytaOnnistunut('Suoritus päivitettiin onnistuneesti!');

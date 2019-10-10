@@ -42,34 +42,43 @@
   <a href='muokkaa_ohjelma.php?id=<?= $harjoitus->ohjelmaId ?>' class='nappi nappi-s'>Takaisin</a>
 </form>
 
-<!-- VAIHEIDEN LISÄYSLOMAKE -->
-<form id='vaihelomake' class='valia keskita'>
-  <input type='hidden' id="vaihe-harjoitus" value=<?= $harjoitus->harjoitusId ?> name='harjoitusId'>
-  <div>
-    <label for='vaihe-nimi'>Vaiheen nimi</label>
-    <input type='text' name='nimi' id='vaihe-nimi'>
-  </div>
-  <button type='submit' class='nappi-p'>Lisää vaihe +</button>
-</form>
 
-<table>   
- <thead>
-  <tr>
-    <th>Vaihe</th>
-    <th>Kuvaus</th>
-    <th>Ohjelinkki</th>
-    <th></th>
-  </tr>
-</thead>
-  <tbody>
-    <?php 
-      foreach ($harjoitus->vaiheet as $vaihe)
-      {
-        VaiheTR($vaihe, true);
-      }
-    ?>
-  </tbody>
-</table>
+<section>
+  <header>
+    <h2 class="keskita">Vaiheet</h2>
+  </header>
+
+  <!-- VAIHEIDEN LISÄYSLOMAKE -->
+
+  <form id='vaihelomake' class='keskita'>
+    <input type='hidden' id="vaihe-harjoitus" value=<?= $harjoitus->harjoitusId ?> name='harjoitusId'>
+    <div>
+      <label for='vaihe-nimi'>Vaiheen nimi</label>
+      <input type='text' name='nimi' id='vaihe-nimi'>
+    </div>
+    <button type='submit' class='nappi-p'>Lisää vaihe +</button>
+  </form>
+  <div id='vaiheet' class='sailio sailio-keskita'>
+    <table>   
+    <thead>
+      <tr>
+        <th>Vaihe</th>
+        <th>Kuvaus</th>
+        <th>Ohjelinkki</th>
+        <th></th>
+      </tr>
+    </thead>
+      <tbody>
+        <?php 
+          foreach ($harjoitus->vaiheet as $vaihe)
+          {
+            VaiheTR($vaihe, true);
+          }
+        ?>
+      </tbody>
+    </table>
+  </div>
+</section>
 
 <script src='./Scripts/muokkaa_harjoitus.js'></script>
  

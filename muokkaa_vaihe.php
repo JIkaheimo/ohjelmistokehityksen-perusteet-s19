@@ -14,10 +14,17 @@
   <h1 class='keskella'>Muokkaa vaihetta</h1>
 </header>
 
-<form class='keskita' action='./Api/muokkaa_vaihe.php' method='POST'>
+<form class='keskita' id='muokkauslomake'>
+
+  <input type="hidden" name="vaihe" 
+    id="vaihe" value=<?= $vaihe->vaiheId; ?>
+  />
+
   <div>
     <label for='nimi'>Nimi</label>
-    <input type='text' name='nimi' id='nimi' value=<?= $vaihe->nimi ?> />
+    <input type='text' name='nimi' 
+      id='nimi' value=<?= $vaihe->nimi ?> 
+    />
   </div>
 
   <div>
@@ -48,6 +55,8 @@
     >
   </div>
 </form>
+
+<script src='./Scripts/muokkaa_vaihe.js'></script>
     
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');

@@ -31,7 +31,10 @@ function haeOhjelma()
  * Hakee tietokannassa olevan yksittäisen ohjelman ja palauttaa sen json_formaatissa
  */
 {
+  header("Access-Control-Allow-Headers: access");
+  header("Access-Control-Allow-Credentials: true");
   header('Access-Control-Allow-Methods: GET');
+
   $body = json_decode(file_get_contents('php://input'));
 
   global $db;
@@ -44,7 +47,7 @@ function haeOhjelma()
   }
 
   // Haetaan ohjelma joko parametrina tai pyynnön rungossa välitetyn id:n avulla.
-  $id =  $_GET['id'] ?? $body->id;
+  $id = isset($_GET['id']) ? $_GET['id'] : $body->id;
   
   $ohjelma = Ohjelmat::hae($db, $id);
 
@@ -84,6 +87,9 @@ function lisaaOhjelma()
  */
 {
   header('Access-Control-Allow-Methods: POST');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   $body = json_decode(file_get_contents('php://input'));
 
   global $db;
@@ -100,13 +106,15 @@ function lisaaOhjelma()
     exit;
   }
 
+  $kuva = isset($body->kuva) ? $body->kuva : 'ohjelma-placeholder.png';
+
   // Yritetään lisätä ohjelma tietokantaan.
   $id = Ohjelmat::lisaa(
     $db,
     $body->kayttajatunnus,
     $body->nimi,
     $body->vaikeustasoId,
-    $body->kuva ?? 'ohjelma-placeholder.png'
+    $kuva
   );
 
   if ($id)
@@ -135,7 +143,11 @@ function paivitaOhjelma()
  */
 {
   header('Access-Control-Allow-Methods: PUT');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   $body = json_decode(file_get_contents('php://input'));
+  
   global $db;
 
   // Tarkistetaan pyynnön runko.
@@ -151,6 +163,8 @@ function paivitaOhjelma()
     exit;
   }
 
+  $kuva = isset($body->kuva) ? $body->kuva : 'ohjelma-placeholder.png';
+
   // Suoritetaan ja tarkistetaan ohjelman päivitys.
   if (!Ohjelmat::paivita(
     $db,
@@ -158,7 +172,7 @@ function paivitaOhjelma()
     $body->kayttajatunnus,
     $body->nimi,
     $body->vaikeustasoId,
-    $body->kuva ?? 'ohjelma-placeholder.png'
+    $kuva
   ))
   {
     http_response_code(Status::DATABASE_ERROR);
@@ -173,11 +187,15 @@ function poistaOhjelma()
  * Hoitaa ohjelman poiston tietokannasta annetun id:n perusteella.
  * 
  * Tarvittava data:
- * - id
+ * - id (int)
  */
 {
   header('Access-Control-Allow-Methods: DELETE');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   $body = json_decode(file_get_contents('php://input'));
+  
   global $db;
 
   // Suoritetaan ja tarkistetaan ohjelman poisto.

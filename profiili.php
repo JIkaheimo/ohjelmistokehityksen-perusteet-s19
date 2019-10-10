@@ -35,6 +35,9 @@
   <div>
     <label for='kuva'>Profiilikuva</label>
     <input type='file' name='kuva' id='kuva'>
+    <?php if (isset($kayttaja->kuva)): ?>
+      <img alt=<?= $kayttaja->kayttajatunnus; ?> src=<?= $kayttaja->kuva ?>>
+    <?php endif; ?>
   </div>
 
   <div>

@@ -1,14 +1,21 @@
 <?php 
+
+  // Varmistetaan että suoritukselle on id.
   if (!isset($_GET['id']) || $_GET['id'] == null)
   {
     header('Location: 404.php');
+    exit;
   }
   
   require_once(__DIR__.'/Komponentit/Header/header.php'); 
 
-  if ($kayttaja == null)
+  $suoritus = Suoritukset::hae($db, $_GET['id']);
+
+  // Sallitaan vain suorituksen luonut käyttäjä.
+  if ($kayttaja == null || $kayttaja !== $suoritus->kayttajatunnus)
   {
     header('Location: 401.php');
+    exit;
   }
 
   Headeri('Muokkaa suoritusta');
@@ -22,7 +29,7 @@
   }
 
   $harjoitukset = Harjoitukset::haeOhjelman($db, $ohjelmat[0]->ohjelmaId);
-  $suoritus = Suoritukset::hae($db, $_GET['id']);
+  
 ?>
 
 <header>
@@ -36,13 +43,13 @@
 
   <!-- PÄIVÄYKSEN VALINTA -->
   <div>
-    <label for='paivays'>Päiväys:</label>
+    <label for='paivays'>Päiväys</label>
     <input type='date' name='paivays' id='paivays' value=<?=$suoritus->suoritusPvm?> required>
   </div>
 
   <!-- OHJELMAN VALINTA -->
   <div>
-    <label for='ohjelma'>Reeniohjelma:</label>
+    <label for='ohjelma'>Reeniohjelma</label>
     <select name='ohjelma' id='ohjelma'>   
       <?php foreach ($ohjelmat as $ohjelma) { ?>
         <option value='<?=$ohjelma->ohjelmaId?>'><?=$ohjelma->nimi?></option>
@@ -52,7 +59,7 @@
 
   <!-- HARJOITUKSEN VALINTA -->
   <div>
-    <label for='harjoitus'>Harjoitus:</label>
+    <label for='harjoitus'>Harjoitus</label>
     <select name='harjoitus' id='harjoitus'>   
       <?php foreach ($harjoitukset as $harjoitus) { ?>
         <option value='<?=$harjoitus->harjoitusId?>'><?=$harjoitus->nimi?></option>
@@ -62,7 +69,7 @@
 
   <!-- KESTON VALINTA -->
   <div>
-    <label for='kesto'>Kesto:</label>
+    <label for='kesto'>Kesto (min)</label>
     <input type='number' name='kesto' id='kesto' placeholder=60 value=<?=$suoritus->kesto?> required>
   </div>
 

@@ -1,4 +1,4 @@
-(function() {
+(function () {
   const $lomake = document.querySelector('#ohjelma-lomake');
   const $kayttaja = document.querySelector('#ohjelma-kayttaja');
   const $nimi = document.querySelector('#ohjelma-nimi');
@@ -19,7 +19,7 @@
       body,
       function onSuccess(res) {
         sessionStorage.setItem('viesti', res.viesti);
-        //window.location.href = 'muokkaa_ohjelma.php?id=' + res.id;
+        window.location.href = 'muokkaa_ohjelma.php?id=' + res.id;
       },
       function onFail(res) {
         ilmoitus.naytaVirhe(res.viesti);

@@ -38,7 +38,10 @@ switch ($_SERVER['REQUEST_METHOD'])
 // HAE_HARJOITUS =========================================================
 function haeHarjoitus()
 {
+  header("Access-Control-Allow-Headers: access");
+  header("Access-Control-Allow-Credentials: true");
   header('Access-Control-Allow-Methods: GET');
+
   global $db;
 
   if (!isset($body->id) && !isset($_GET['id']))
@@ -107,6 +110,9 @@ function haeOhjelmanHarjoitukset()
 function lisaaHarjoitus() 
 {
   header('Access-Control-Allow-Methods: POST');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+ 
   $body = json_decode(file_get_contents('php://input'));
 
   global $db;
@@ -125,7 +131,7 @@ function lisaaHarjoitus()
 
   if ($id)
   {
-    
+    lahetaViesti('Harjoitus lisättiin onnistuneesti!');
   }
   else
   {
@@ -137,6 +143,9 @@ function lisaaHarjoitus()
 // PAIVITA_HARJOITUS =====================================================
 function paivitaHarjoitus() 
 {
+  header('Access-Control-Allow-Methods: PUT');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 } // PAIVITA_HARJOITUS_END
 
@@ -144,7 +153,10 @@ function paivitaHarjoitus()
 // POISTA_HARJOITUS ======================================================
 function poistaHarjoitus() 
 {
-  header('Access-Control-Allow-Methods:DELETE');
+  header('Access-Control-Allow-Methods: DELETE');
+  header("Access-Control-Max-Age: 3600");
+  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
   $body = json_decode(file_get_contents('php://input'));
 
   global $db;

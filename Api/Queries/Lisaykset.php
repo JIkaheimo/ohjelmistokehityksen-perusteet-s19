@@ -23,7 +23,7 @@ abstract class Lisaykset
 
 
   // HAE =============================================================
-  static function hae(PDO $db) 
+  static function hae($db) 
   {
     return $db->query(Lisaykset::HAE_KAIKKI)->fetchAll(PDO::FETCH_OBJ);
   } // HAE_END
@@ -31,9 +31,9 @@ abstract class Lisaykset
 
   // LISAA ============================================================
   static function lisaa(
-    PDO $db,
-    string $kayttajatunnus,
-    int $ohjelmaId
+    $db,
+    $kayttajatunnus,
+    $ohjelmaId
   )
   {
     $stmt = $db->prepare(Lisaykset::LISAA_UUSI);
@@ -45,9 +45,9 @@ abstract class Lisaykset
 
   // UUSI =============================================================
   static function uusi(
-    PDO $db,
-    string $kayttajatunnus,
-    int $ohjelmaId
+    $db,
+    $kayttajatunnus,
+    $ohjelmaId
   )
   {
     return Lisaykset::lisaa($db, $kayttajatunnus, $ohjelmaId);
@@ -56,9 +56,9 @@ abstract class Lisaykset
 
   // POISTA =============================================================
   static function poista(
-    PDO $db,
-    string $kayttajatunnus,
-    int $ohjelmaId
+    $db,
+    $kayttajatunnus,
+    $ohjelmaId
   )
   {
     $stmt = $db->prepare(Lisaykset::POISTA);

@@ -55,8 +55,8 @@ abstract class Suoritukset
 
   // HAE ===========================================================================
   static function hae(
-    PDO $db,
-    int $suoritusId = NULL
+    $db,
+    $suoritusId = NULL
   )
   /**
    * Hakee tietokannassa olevat suoritukset tai suoritukset.
@@ -84,8 +84,8 @@ abstract class Suoritukset
 
   // HAE_KAYTTAJAN =================================================================
   static function haeKayttajan(
-    PDO $db,
-    string $kayttajatunnus
+    $db,
+    $kayttajatunnus
   ) 
   {
     $stmt = $db->prepare(Suoritukset::HAE_KAYTTAJAN_P);
@@ -97,8 +97,8 @@ abstract class Suoritukset
 
   // HAE_KAYTTAJAN_VIIMEISIMMAT ===================================================
   static function haeKayttajanViimeisimmat(
-    PDO $db,
-    string $kayttajatunnus
+    $db,
+    $kayttajatunnus
   ) 
   {
     $stmt = $db->prepare(Suoritukset::HAE_KAYTTAJAN_VIIMEISIMMAT_P);
@@ -111,11 +111,11 @@ abstract class Suoritukset
 
   // UUSI ==========================================================================
   static function uusi(
-    PDO $db,
-    string $kayttajatunnus,
+    $db,
+    $kayttajatunnus,
     $suoritusPvm,
-    int $kesto,
-    int $harjoitusId
+    $kesto,
+    $harjoitusId
   ) 
   {
     // Lisätään suoritus tietokantaan.
@@ -141,12 +141,12 @@ abstract class Suoritukset
 
   // PAIVITA ======================================================================
   static function paivita(
-    PDO $db,
-    int $suoritusId,
-    string $kayttajatunnus,
+    $db,
+    $suoritusId,
+    $kayttajatunnus,
     $suoritusPvm,
-    int $kesto,
-    int $harjoitusId
+    $kesto,
+    $harjoitusId
   ) 
   /**
    * Päivittää annetun suorituksen tiedot tietokantaan.
@@ -172,8 +172,8 @@ abstract class Suoritukset
 
   // POISTA ========================================================================
   static function poista(
-    PDO $db,
-    int $suoritusId
+    $db,
+    $suoritusId
   ) 
   /**
    * Poistaa annetun suorituksen tiedot tietokannasta.
