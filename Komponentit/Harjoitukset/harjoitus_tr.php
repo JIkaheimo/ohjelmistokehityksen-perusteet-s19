@@ -2,7 +2,7 @@
     
 ?>
 
-  <tr id='harjoitus-<?= $harjoitus->harjoitusId; ?>' class='ohjelma-tr'>
+  <tr id='harjoitus-<?= $harjoitus->harjoitusId; ?>' class='harjoitus-tr'>
     <td><?= htmlspecialchars($harjoitus->nimi); ?></td>
 
     <?php if ($kontrollit): ?>
@@ -14,7 +14,6 @@
             </i>
           </a>
           <form data-id=<?= $harjoitus->harjoitusId; ?> class='poista-harjoitus-lomake'>
-            <input type='hidden' name='id' id='harjoitus-<?= $hatjoitus->harjoitusId; ?>' value=<?= $harjoitus->harjoitusId; ?>>
             <button class='nappi-r' type='submit'>
               <i class="material-icons">
                 delete_forever

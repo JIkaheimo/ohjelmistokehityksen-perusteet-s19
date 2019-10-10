@@ -59,6 +59,6 @@ const alustaSeurauslomake = (function() {
         $lomakenappi.textContent = 'Lisää +';
       }
     }
-
+  }
 })();
 

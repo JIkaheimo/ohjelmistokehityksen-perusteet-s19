@@ -40,11 +40,21 @@ function lisaaSeuraus()
   
   global $db;
 
-  Seuraukset::uusi(
+  $id = Seuraukset::uusi(
     $db,
     $body->seuraaja,
     $body->seurattava
   );
+
+  if ($id)
+  {
+    http_response_code(Status::CREATED);
+  }
+  else
+  {
+    lahetaViesti('Tapahtui virhe pyynnön käsittelyssä...');
+    http_response_code(Status::DATABASE_ERROR);
+  }
 
 } // LISAA_SEURAUS_END
 
@@ -60,11 +70,21 @@ function poistaSeuraus()
 
   global $db;
 
-  Seuraukset::poista(
+  $onnistuiko = Seuraukset::poista(
     $db,
     $body->seuraaja,
     $body->seurattava
   );
+
+  if ($onnistuiko)
+  {
+    http_response_code(Status::DELETED);
+  }
+  else
+  {
+    lahetaViesti('Tapahtui virhe pyynnön käsittelyssä...');
+    http_response_code(Status::DATABASE_ERROR);
+  }
 
 } // POISTA_SEURAUS_END
 

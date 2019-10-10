@@ -55,7 +55,7 @@ function haeKayttajat()
 // PAIVITA_KAYTTAJA ============================================================
 function paivitaKayttaja()
 {
-  header('Access-Control-Allow-Methods: PUT')
+  header('Access-Control-Allow-Methods: PUT');
   header("Access-Control-Max-Age: 3600");
   header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -103,10 +103,10 @@ function paivitaKayttajaJSON()
  * Päivittää käyttäjän tiedot tietokantaan.
  */
 {
-  header('Access-Control-Allow-Methods: PUT')
+  header('Access-Control-Allow-Methods: PUT');
   header("Access-Control-Max-Age: 3600");
   header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-  
+
   $body = json_decode(file_get_contents('php://input'));
   
   global $db;

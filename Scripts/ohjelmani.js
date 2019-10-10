@@ -1,14 +1,16 @@
-(function() {
+(function () {
   const $poistolomakkeet = document.querySelectorAll('.poista-ohjelma-lomake');
 
-  Array.from($poistolomakkeet).map(lisaaPoistaja);
+  for (let i = 0; i < $poistolomakkeet.length; i++) {
+    lisaaPoistaja($poistolomakkeet[i]);
+  }
 
   function lisaaPoistaja($lomake) {
     $lomake.addEventListener('submit', poistaOhjelma($lomake.dataset.id));
   }
 
   function poistaOhjelma(id) {
-    return function(event) {
+    return function (event) {
       event.preventDefault();
 
       const body = {
@@ -20,10 +22,10 @@
         function onSuccess(res) {
           const $ohjelma = document.querySelector('#ohjelma-' + id);
           $ohjelma.parentNode.removeChild($ohjelma);
-          ilmoitus.naytaOnnistunut(res.viesti);
+          ilmoitus.naytaOnnistunut('Ohjelma poistettiin onnistuneesti!');
         },
         function onFail(res) {
-          ilmoitus.naytaVirhe(res.viesti);
+          ilmoitus.naytaVirhe('Ohjelmaa ei pystytty poistamaan...');
         }
       );
     };

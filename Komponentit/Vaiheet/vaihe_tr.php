@@ -19,10 +19,19 @@
     <?php if ($kontrollit) { ?>
       <td>
         <div class='sailio'>
-          <a class='nappi nappi-p' href='muokkaa_vaihe.php?id=<?= $vaihe->vaiheId; ?>'>Muokkaa</a>
-          <form action='./Api/poista_vaihe.php' method='POST'>
-            <input type='hidden' name='id' id='vaihe-<?= $vaihe->vaiheId; ?>' value=<?= $vaihe->vaiheId; ?> />
-            <button class='nappi-s' type='submit'>Poista x</button>
+          <a class='nappi nappi-p' href='muokkaa_vaihe.php?id=<?= $vaihe->vaiheId; ?>'>
+            <i class="material-icons">
+              edit
+            </i>
+          </a>
+          <form data-id=<?= $vaihe->vaiheId; ?>>
+            <input type='hidden' name='id' 
+                value=<?= $vaihe->vaiheId; ?> />
+            <button type='submit'>
+              <i class="material-icons">
+                delete_forever
+              </i>
+            </button>
           </form>
         </div>
       </td>

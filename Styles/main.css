@@ -359,7 +359,7 @@ body > footer {
 }
 
 .flex-oikea {
-  justify-content: flex-end;
+  justify-content: flex-end !important;
 }
 
 .focus {
@@ -498,12 +498,8 @@ section.harjoitus {
   margin: 0.5rem;
   background-color: #303030;
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 1);
-  opacity: 1;
   border-radius: 0.5rem 0.5rem 0.2rem 0.2rem;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 section.ohjelma:hover, 
@@ -572,6 +568,10 @@ tr.suoritus-tr {
   padding: 0.25rem;
   transition: 0.5s all;
   transition-property: top, background-color, color;
+}
+
+#harjoitukset {
+  min-width: 500px;
 }
 
 #ilmoittaja.onnistunut,

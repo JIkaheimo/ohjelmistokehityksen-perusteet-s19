@@ -1,11 +1,12 @@
 /**
- * MUOKKAA_OHJELMA (muokkaa_ohjelma.php)
+ * muokkaa_ohjelma.js (muokkaa_ohjelma.php)
  */
 
 (function () {
-  //======= DOM-ELEMENTIT ====================================================
+  // DOM-ELEMENTIT ============================================================
 
-  const $ohjelmalomake = document.querySelector('form#ohjelma-lomake');
+  // Ohjelman tietojen muokkaus
+  const $ohjelmalomake = document.querySelector('form#ohjelmalomake');
   const $ohjelmaKayttaja = document.querySelector('input#ohjelma-kayttaja');
   const $ohjelmaId = document.querySelector('input#ohjelma-id');
   const $ohjelmaNimi = document.querySelector('input#ohjelma-nimi');
@@ -13,24 +14,28 @@
     'select#ohjelma-vaikeustasoId'
   );
 
-  const $harjoituslomake = document.querySelector('form#harjoitus-lomake');
+  // Harjoituksen lisäys
+  const $harjoituslomake = document.querySelector('form#harjoituslomake');
   const $harjoitusOhjelma = document.querySelector('input#harjoitus-ohjelma');
   const $harjoitusNimi = document.querySelector('input#harjoitus-nimi');
 
+  // Harjoitukset
+  const $harjoitukset = document.querySelector('tbody#harjoitukset-body');
+
+  // Harjoitusten poistaminen
   const $poistolomakkeet = document.querySelectorAll(
-    'form.poista-harjoitus-form'
+    'form.poista-harjoitus-lomake'
   );
 
-  // Toteutetaan muokkaa_ohjelma.php-sivun funktionaalisuus listenereillä.
-  $ohjelmalomake.addEventListener('submit', muokkaaOhjelma);
+  $ohjelmalomake.addEventListener('submit', paivitaOhjelma);
   $harjoituslomake.addEventListener('submit', lisaaHarjoitus);
 
   for (let i = 0; i < $poistolomakkeet.length; i++) {
     lisaaPoistaja($poistolomakkeet[i]);
   }
 
-  //======== OHJELMAN TIETOJEN MUOKKAUS ======================================
-  function muokkaaOhjelma(event) {
+  // MUOKKAA_OHJELMA ===============================================================
+  function paivitaOhjelma(event) {
     /**
      * muokkaaOhjelma - Huolehtii muokatun ohjelman tietojen lähetyksestä APIin,
      * sekä tulostaa pyynnön onnistumisen/epäonnistumisen.
@@ -38,6 +43,20 @@
 
     // Estetään lomakkeen submitointi.
     event.preventDefault();
+
+    // Tarkistetaan että ohjelmalla on sopiva nimi.
+    const nimi = $ohjelmaNimi.value;
+    if (nimi.length < 10) {
+      ilmoitus.naytaVirhe('Ohjelman nimessä tulee olla vähintään 10 merkkiä.');
+      ilmoitus.naytaLomakevirhe($ohjelmaNimi);
+      return;
+    }
+
+    if (!nimi.onkoSallitutMerkit()) {
+      ilmoitus.naytaVirhe('Ohjelman nimi sisältää ei sallittuja merkkejä.');
+      ilmoitus.naytaLomakevirhe($ohjelmaNimi);
+      return;
+    }
 
     // Haetaan ja muodostetaan tarvittava pyynnön runko ohjelman muokkaamiseksi.
     const body = {
@@ -48,7 +67,7 @@
         $ohjelmaVaikeustasoId.options[$ohjelmaVaikeustasoId.selectedIndex].value
     };
 
-    // Lähetetään PUT-pyyntö Apille, joka suorittaa ohjelman muokkaamisen.
+    // Lähetetään PUT-pyyntö Apille, joka suorittaa ohjelman päivittämisen.
     request('./Api/ohjelmat.php').put(
       body,
       function onSuccess(res) {
@@ -58,9 +77,10 @@
         ilmoitus.naytaVirhe(res.viesti);
       }
     );
-  } // END
+  } // MUOKKAA_OHJELMA_END
 
-  //======== UUDEN HARJOITUKSEN LISÄYS =======================================
+
+  // LISAA_HARJOITUS ===========================================================
   function lisaaHarjoitus(event) {
     /**
      * lisaaHarjoitus - Huolehtii harjoituksen lisäämisestä tietokantaan Apin kautta.
@@ -79,18 +99,71 @@
     // Lähetetään POST-pyyntö Apille harjoituksen lisäämiseksi.
     request('./Api/harjoitukset.php').post(
       body,
-      function onSuccess(res) {
-        sessionStorage.setItem('viesti', 'Harjoituksen lisäys onnistui!');
-        window.location.href = '#harjoitukset';
-        //location.reload(true);
+      function lisaaSivulle(res) {
+        ilmoitus.naytaOnnistunut('Harjoituksen lisääminen onnistui!');
+        lisaaHarjoitusElementti(res);
       },
-      function onFail(res) {
+      function naytaVirhe(res) {
         ilmoitus.naytaVirhe(res.viesti);
       }
     );
-  } // END
+  } // LISAA_HARJOITUS_END
 
-  //========= HARJOITUSTEN POISTO =============================================
+
+  // LISAA_HARJOITUS_ELEMENTTI =====================================================
+  function lisaaHarjoitusElementti(harjoitus) {
+    // Tämän olisi periaatteessa voinut hakea serveriltä siistimmässä muodossa.
+
+    const $harjoitusTr = document.createElement('tr');
+    $harjoitusTr.id = 'harjoitus-' + harjoitus.harjoitusId;
+    $harjoitusTr.classList.add('harjoitus-tr');
+
+    const $nimiTd = document.createElement('td');
+    $nimiTd.textContent = harjoitus.nimi;
+
+    const $kontrollitTd = document.createElement('td');
+
+    const $kontrollitDiv = document.createElement('div');
+    $kontrollitDiv.classList.add('sailio', 'flex-oikea');
+
+    const $muokkauslinkki = document.createElement('a');
+    $muokkauslinkki.classList.add('nappi', 'nappi-p');
+    $muokkauslinkki.href = 'muokkaa_harjoitus.php?id=' + harjoitus.harjoitusId;
+
+    const $muokkausikoni = document.createElement('i');
+    $muokkausikoni.classList.add('material-icons');
+    $muokkausikoni.textContent = 'edit';
+
+    const $poistolomake = document.createElement('form');
+    $poistolomake.dataset.id = harjoitus.harjoitusId;
+    $poistolomake.classList.add('poista-harjoitus-lomake');
+    lisaaPoistaja($poistolomake);
+
+    const $poistonappi = document.createElement('button');
+    $poistonappi.type = 'submit';
+    $poistonappi.classList.add('nappi-r');
+
+    const $poistoikoni = document.createElement('i');
+    $poistoikoni.classList.add('material-icons');
+    $poistoikoni.textContent = 'delete_forever';
+
+    $poistonappi.appendChild($poistoikoni);
+    $poistolomake.appendChild($poistonappi)
+
+    $muokkauslinkki.appendChild($muokkausikoni);
+
+    $kontrollitDiv.appendChild($muokkauslinkki);
+    $kontrollitDiv.appendChild($poistolomake);
+    $kontrollitTd.appendChild($kontrollitDiv);
+
+    $harjoitusTr.appendChild($nimiTd);
+    $harjoitusTr.appendChild($kontrollitTd);
+
+    $harjoitukset.appendChild($harjoitusTr);
+  } // LISAA_HARJOITUS_ELEMENTTI_END
+
+
+  // HARJOITUSTEN POISTO ===========================================================
 
   function lisaaPoistaja($lomake) {
     $lomake.addEventListener('submit', poistaHarjoitus($lomake.dataset.id));
@@ -110,10 +183,14 @@
       // Lähetetään DELETE-pyyntö Apille harjoituksen poistamiseksi.
       request('./Api/harjoitukset.php').delete(
         body,
-        function onSuccess(res) {
-          ilmoitus.naytaOnnistunut('Harjoitus poistettu onnistuneesti!');
+        function poistaSivulta(res) {
+          ilmoitus.naytaOnnistunut('Harjoitus poistettiin onnistuneesti.');
+          const $harjoitus = document.querySelector('#harjoitus-' + id);
+          $harjoitus.parentNode.removeChild($harjoitus);
         },
-        ilmoitus.naytaVirhe
+        function naytaVirhe(res) {
+          ilmoitus.naytaVirhe(res.viesti);
+        }
       );
     };
   } // END

@@ -16,8 +16,9 @@
 </header>
 
 <form id='kayttajalomake' class='keskita' 
-      action='./Api/kayttajat.php' method='POST'
-      enctype='multipart/form-data'>
+    action='./Api/kayttajat.php' method='POST'
+    enctype='multipart/form-data'>
+  
   <input type='hidden' name='kayttajatunnus' id='kayttajatunnus' value=<?=$kayttaja->kayttajatunnus?>>
 
   <div>

@@ -38,7 +38,7 @@
   <h1 class='keskella'>Muokkaa ohjelmaa</h1>
 </header>
 
-<form id='ohjelma-lomake' class='keskita'>
+<form id='ohjelmalomake' class='keskita'>
 
   <!-- Ohjelman ID -->
   <input type='hidden' name='id'
@@ -80,16 +80,13 @@
 </form> <!--==== OHJELMAN TIETOJEN MUOKKAUSLOMAKE LOPPU ====-->
 
 
-  
-
-<!--==== LISTA OHJELMAN HARJOITUKSISTA ====-->
 <section class='keskita'>
   <header>
     <h2 class='keskella'>Harjoitukset</h2>
   </header>
 
   <!--==== UUDEN HARJOITUKSEN LISÄYSLOMAKE ====-->
-  <form id='harjoitus-lomake' class='keskita'>
+  <form id='harjoituslomake' class='keskita'>
     <!-- Ohjelma ID -->
     <input type='hidden' name='ohjelmaId' 
       id='harjoitus-ohjelma' value=<?= $ohjelmaID; ?>
@@ -104,15 +101,15 @@
     <button type='submit' class='nappi-p'>Lisää harjoitus +</button>
   </form> <!--==== UUDEN HARJOITUKSEN LISÄYSLOMAKE LOPPU ====-->
 
-  <div id='harjoitukset' class='sailio sailio-keskita'>
-    <table>
+  <div class='sailio sailio-keskita'>
+    <table id='harjoitukset'>
       <thead>
         <tr>
           <th>Harjoitus</th>
           <th></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id='harjoitukset-body'>
         <?php 
           // Listataan kaikki harjoitukset ja niille kontrollit
           foreach ($harjoitukset as $harjoitus) 

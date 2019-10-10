@@ -16,9 +16,9 @@
 
   require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
 
-  Headeri('Ohjelman nimi tähän');
-
   $ohjelma = Ohjelmat::hae($db, $ohjelmaId);
+  Headeri($ohjelma->nimi);
+
   $onkoLisatty = Ohjelmat::onkoLisatty($db, $kayttaja, $ohjelma->ohjelmaId);
 ?>
       
@@ -36,9 +36,10 @@
         id='ohjelma' value=<?= $ohjelma->ohjelmaId; ?>
       />
       
-      <button type='submit' name='submit' 
-        id='laheta' class='nappi-p'>
-          <?= $onkoLisatty ? 'Poista lisäys' : 'Lisää+'; ?>
+      <button type='submit' name='submit' id='laheta' class='nappi-p'>
+        <i class="material-icons">
+          <?= $onkoLisatty ? 'remove' : 'add'; ?> 
+        </i>
       </button>
     </form>
 

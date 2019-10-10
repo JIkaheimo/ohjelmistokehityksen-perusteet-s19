@@ -82,6 +82,7 @@ function lisaaVaihe()
   $ohjelinkki = isset($body->ohjelinkki) ? $body->ohjelinkki : null;
   $kuvaus = isset($body->kuvaus) ? $body->kuvaus : null;
 
+  // Luodaan uusi vaihe
   $id= Vaiheet::uusi(
     $db,
     $body->harjoitusId,
@@ -90,9 +91,11 @@ function lisaaVaihe()
     $kuvaus
   );
 
+  // Jos vaiheen lisääminen onnistuu, palautetaan luotu tietue.
   if ($id) 
   {
-    echo(json_encode(array('id' => $id))); 
+    $vaihe = Vaiheet::hae($db, $id);
+    echo(json_encode($vaihe)); 
   } 
   else 
   {
@@ -125,7 +128,7 @@ function paivitaVaihe()
 
   global $db;
 
-  $vaiheId = tarkastaId($body);
+  $vaiheId = tarkistaId($body, 'vaiheId');
 
   // Tarkistetaan onko vaihe olemassa.
   $vaihe = Vaiheet::hae($db, $vaiheId);
@@ -180,7 +183,7 @@ function poistaVaihe()
 
   global $db;
   
-  $vaiheId = tarkistaId($body);
+  $vaiheId = tarkistaId($body, 'vaiheId');
 
   // Tarkistetaan onko vaihe olemassa.
   $vaihe = Vaiheet::hae($db, $vaiheId);
@@ -190,24 +193,5 @@ function poistaVaihe()
   }
 } // POISTA_VAIHE_END
 
-
-// TARKISTA_ID ===========================================================
-function tarkistaId($body)
-/**
- * Tarkistaa onko id annettu JSON-rungossa.
- */
-{
-  // Jos id:tä ei ole, annetaan INVALI-status vastauksena.
-  if (!isset($body->vaiheId) && !isset($body->id))
-  {
-    http_response_code(Status::INVALID);
-    exit;
-  }
-
-  // Palautetaan se vaihtoehto kummassa on id annettuna.
-  $vaiheId = isset($body->vaiheId) ? $body->vaiheId : $body->id;
-  return $vaiheId;
-
-} // TARKASTA_ID END
 
 ?>

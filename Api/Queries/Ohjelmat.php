@@ -76,7 +76,8 @@ abstract class Ohjelmat {
   SET 
     kayttajatunnus = :kayttajatunnus, 
     nimi = :nimi, 
-    vaikeustasoId = :vaikeustasoId
+    vaikeustasoId = :vaikeustasoId,
+    kuva = :kuva
   WHERE 
     ohjelmaId = :ohjelmaId';
 
@@ -113,6 +114,9 @@ abstract class Ohjelmat {
 
     // Haetaan ohjelman suoritukset ja vaiheet.
     $ohjelma = $stmt->fetch(PDO::FETCH_OBJ);
+
+    // Tarkistetaan että ohjelma on olemassa.
+    if (!isset($ohjelma->kayttajatunnus)) return false;
 
     $ohjelma->harjoitukset = Harjoitukset::haeOhjelman($db, $ohjelma->ohjelmaId);
     
@@ -180,7 +184,6 @@ abstract class Ohjelmat {
    */
   {
     $stmt = $db->prepare(Ohjelmat::HAE_UUSIMMAT);
-
     if ($stmt->execute()) return $stmt->fetchAll(PDO::FETCH_OBJ);
     return false;
   } // HAE_UUSIMMAT_END
@@ -192,7 +195,6 @@ abstract class Ohjelmat {
   ) 
   {
     $stmt = $db->prepare(Ohjelmat::HAE_SUOSITUIMMAT);
-
     if ($stmt->execute()) return $stmt->fetchAll(PDO::FETCH_OBJ);
     return false;
   } // HAE_SUOSITUIMMAT_END
@@ -237,7 +239,8 @@ abstract class Ohjelmat {
     $ohjelmaId,
     $kayttajatunnus,
     $nimi,
-    $vaikeustasoId
+    $vaikeustasoId,
+    $kuva
   ) 
   /**
    * Päivittää annetun ohjelman tiedot tietokantaan.
@@ -248,6 +251,7 @@ abstract class Ohjelmat {
    * - $kayttajatunnus (string) ohjelman luonut käyttäjä
    * - $nimi (string) ohjelman nimi
    * - $vaikeustasoId (int) ohjelman vaikeustason id
+   * - $kuva (string) lisättävän ohjelman kuvan nimi
    * 
    * RETURNS:
    * - onnistuiko päivitys (boolean)
@@ -257,7 +261,8 @@ abstract class Ohjelmat {
     $stmt->bindValue(':kayttajatunnus', $kayttajatunnus);
     $stmt->bindValue(':nimi', $nimi);
     $stmt->bindValue(':vaikeustasoId', $vaikeustasoId);
-    $stmt->bindValue(':ohjelmaId', $ohjelmaId);
+    $stmt->bindValue(':kuva', $kuva);
+    $stmt->bindValue(':ohjelmaId', $ohjelmaId);  
 
     return $stmt->execute();
   } // PAIVITA_END
@@ -265,8 +270,8 @@ abstract class Ohjelmat {
 
   // POISTA =================================================================================
   static function poista(
-    PDO $db,
-    int $ohjelmaId
+    $db,
+    $ohjelmaId
   ) 
   /**
    * Poistaa annetun ohjelman tietokannasta.

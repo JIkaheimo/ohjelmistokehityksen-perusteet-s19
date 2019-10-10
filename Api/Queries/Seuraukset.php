@@ -31,12 +31,23 @@ abstract class Seuraukset
     $seurattava 
   ) 
   {
-    $stmt = $db->prepare(Suoritukse::LISAA_UUSI);
+    $stmt = $db->prepare(Seuraukset::LISAA_UUSI);
     $stmt->bindValue(':seuraaja', $seuraaja);
     $stmt->bindValue(':seurattava', $seurattava);
 
     return $stmt->execute();
   } // LISAA_END
+
+
+  // UUSI ===================================================
+  static function uusi(
+    $db,
+    $seuraaja,
+    $seurattava
+  )
+  {
+    return Seuraukset::lisaa($db, $seuraaja, $seurattava);
+  } // UUSI_END
 
 
   // POISTA ==================================================

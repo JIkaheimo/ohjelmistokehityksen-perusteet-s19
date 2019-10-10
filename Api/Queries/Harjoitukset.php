@@ -7,11 +7,32 @@ abstract class Harjoitukset
   const HAE_YKSI = Harjoitukset::HAE_KAIKKI . ' WHERE harjoitusId = :harjoitusId';
   const HAE_OHJELMAN = Harjoitukset::HAE_KAIKKI . ' WHERE ohjelmaId = :ohjelmaId';
 
+  const HAE_KAYTTAJA = '
+  SELECT
+    Ohjelmat.kayttajatunnus
+  FROM
+    Harjoitukset
+  LEFT JOIN
+    Ohjelmat 
+  ON
+    Harjoitukset.ohjelmaId = Ohjelmat.ohjelmaId
+  WHERE
+    Harjoitukset.harjoitusId = :harjoitusId';
+
   const LISAA_UUSI = '
   INSERT INTO 
     Harjoitukset (nimi, ohjelmaId)
   VALUES
     (:nimi, :ohjelmaId)';
+
+  const PAIVITA = '
+  UPDATE 
+    Harjoitukset
+  SET
+    nimi = :nimi,
+    ohjelmaId = :ohjelmaId
+  WHERE
+    harjoitusId = :harjoitusId';
 
   const POISTA = '
   DELETE FROM
@@ -79,6 +100,27 @@ abstract class Harjoitukset
   } // HAE_OHJELMAN_END
 
 
+  // HAE_KAYTTAJA =================================================
+  static function haeKayttaja(
+    $db,
+    $harjoitusId
+  )
+  /**
+   * Hakee harjoituksen ohjelman luoneen käyttäjän.
+   * 
+   * PARAMS:
+   * - $db (PDO)
+   * - $harjoitusId (int)
+   */
+  {
+    $stmt = $db->prepare(Harjoitukset::HAE_KAYTTAJA);
+    $stmt->bindValue(':harjoitusId', $harjoitusId);
+
+    if ($stmt->execute()) return $stmt->fetch(PDO::FETCH_OBJ);
+    return false;
+  } // HAE_KAYTTAJA_END
+
+
   // UUSI =========================================================
   static function uusi(
     $db,
@@ -120,6 +162,23 @@ abstract class Harjoitukset
   {
     return Harjoitukset::uusi($db, $nimi, $ohjelmaId);
   } // LISAA END
+
+  
+  // PAIVITA =====================================================
+  static function paivita(
+    $db,
+    $harjoitusId,
+    $nimi,
+    $ohjelmaId
+  )
+  {
+    $stmt = $db->prepare(Harjoitukset::PAIVITA);
+    $stmt->bindValue(':nimi', $nimi);
+    $stmt->bindValue(':ohjelmaId', $ohjelmaId);
+    $stmt->bindValue(':harjoitusId', $harjoitusId);
+
+    return $stmt->execute();
+  } // PAIVITA_END
 
 
   // POISTA ======================================================

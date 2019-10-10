@@ -12,7 +12,7 @@
         <div class='sailio flex-oikea'>
           <a class='nappi nappi-p' href='muokkaa_ohjelma.php?id=<?= $ohjelma->ohjelmaId; ?>'>
             <i class="material-icons">
-            edit
+              edit
             </i>
           </a>
           <form data-id=<?= $ohjelma->ohjelmaId; ?> class='poista-ohjelma-lomake'>
