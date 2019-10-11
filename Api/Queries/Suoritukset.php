@@ -7,7 +7,32 @@ abstract class Suoritukset
   SELECT * FROM 
     Suoritukset ';
 
+  const HAE_KAIKKI_PITKA = '
+  SELECT 
+    Suoritukset.suoritusId AS suoritusId,
+    Suoritukset.kayttajatunnus AS kayttajatunnus,
+    Suoritukset.suoritusPvm AS suoritusPvm,
+    Suoritukset.kesto AS kesto,
+    Suoritukset.harjoitusId AS harjoitusId,
+    Ohjelmat.ohjelmaId AS ohjelmaId,
+    Ohjelmat.nimi AS ohjelma,
+    Harjoitukset.nimi AS harjoitus
+  FROM
+    Suoritukset
+  LEFT JOIN 
+    Harjoitukset 
+  ON 
+    Harjoitukset.harjoitusId = Suoritukset.harjoitusId
+  LEFT JOIN 
+    Ohjelmat 
+  ON 
+    Harjoitukset.ohjelmaId = Ohjelmat.ohjelmaId';
+
   const HAE_YKSI = Suoritukset::HAE_KAIKKI . ' 
+  WHERE 
+    suoritusId = :suoritusId';
+
+  const HAE_YKSI_PITKA = Suoritukset::HAE_KAIKKI_PITKA . '
   WHERE 
     suoritusId = :suoritusId';
 
@@ -74,7 +99,7 @@ abstract class Suoritukset
       return $db->query(Suoritukset::HAE_KAIKKI)->fetchAll(PDO::FETCH_OBJ);
     }
 
-    $stmt = $db->prepare(Suoritukset::HAE_YKSI);
+    $stmt = $db->prepare(Suoritukset::HAE_YKSI_PITKA);
     $stmt->bindValue(':suoritusId', $suoritusId);
 
     if ($stmt->execute()) return $stmt->fetch(PDO::FETCH_OBJ);

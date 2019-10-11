@@ -3,7 +3,6 @@
 require_once(__DIR__.'/queries.php');
 header("Access-Control-Allow-Origin: *");
 
-// Mahdollistaa kuvien lisäämisen.
 $palautaJSON = !isset($_POST['kayttajatunnus']);
 if ($palautaJSON)
 {
@@ -15,9 +14,6 @@ switch ($_SERVER['REQUEST_METHOD'])
 {
   case 'GET':
     haeKayttajat();
-    break;
-  case 'PUT':
-    paivitaKayttajaJSON();
     break;
   case 'POST':
     paivitaKayttaja();
@@ -54,87 +50,76 @@ function haeKayttajat()
 
 // PAIVITA_KAYTTAJA ============================================================
 function paivitaKayttaja()
-{
-  header('Access-Control-Allow-Methods: PUT');
-  header("Access-Control-Max-Age: 3600");
-  header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
-  global $db;
-
-  if (isset($_FILES['kuva']) && $_FILES['kuva']['size'] > 0)
-  {
-    $tiedostoNimi = $_POST['kayttajatunnus'];
-    $tallennuskohde = __DIR__.'/../Assets/Kayttajat/';
-    $reitti = $tallennuskohde . basename($_FILES['kuva']['name']);
-    $kuvatyyppi = strtolower(pathinfo($reitti, PATHINFO_EXTENSION));
-    $tiedostoNimi .= '.';
-    $tiedostoNimi .= $kuvatyyppi;
-    $sallitutTyypit = array('jpg', 'jpeg', 'png', 'gif');
-    if (in_array($kuvatyyppi, $sallitutTyypit)){
-      move_uploaded_file($_FILES['kuva']['tmp_name'], $tallennuskohde.$tiedostoNimi);
-    }
-  }
-
-  $_POST['etunimi'] = isset($_POST['etunimi']) ? $_POST['etunimi'] : null;
-  $_POST['sukunimi'] = isset($_POST['sukunimi']) ? $_POST['sukunimi'] : null;
-  $_POST['kuvaus'] = isset($_POST['kuvaus']) ? $_POST['kuvaus'] : null;
-  $tiedostoNimi = isset($tiedostoNimi) ? $tiedostoNimi : 'kayttaja-placeholder.png';
-
-
-  $onnistuiko = Kayttajat::paivita(
-    $db,
-    $_POST['kayttajatunnus'],
-    $_POST['etunimi'],
-    $_POST['sukunimi'],
-    $tiedostoNimi,
-    $_POST['kuvaus']
-  );
-
-  if ($onnistuiko)
-  {
-    header('Location: ./../profiili.php');
-  }
-} // PAIVITA_KAYTTAJA_END
-
-
-// PAIVITA_KAYTTAJA_JSON ========================================================
-function paivitaKayttajaJSON()
 /**
- * Päivittää käyttäjän tiedot tietokantaan.
+ * Hoitaa POST-parametreina olevan ohjelman tietojen päivityksen tietokantaan,
+ * ( Mahdollistaa kuvien lisäyksen )
+ * 
+ * !HOX! Jos annetaan pelkkä käyttäjätunnus, data ei muutu tietokannassa ollenkaan...
+ * 
+ * TARVITTAVA DATA:
+ * - kayttajatunnus päivitettävän käyttäjän tunnus
+ * 
+ * VAIHTOEHTOINEN DATA:
+ * - etunimi
+ * - sukunimi
+ * - kuvaus
+ * - kuva
  */
 {
   header('Access-Control-Allow-Methods: PUT');
   header("Access-Control-Max-Age: 3600");
   header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-  $body = json_decode(file_get_contents('php://input'));
-  
   global $db;
 
-  $etunimi = isset($body->etunimi) ? poistaTagit($body->etunimi) : null;
-  $kuva = isset($body->kuva) ? poistaTagit($body->kuva) : null;
-  $sukunimi = isset($body->sukunimi) ? poistaTagit($body->sukunimi) : null;
-  $kuvaus = isset($body->kuvaus) ? poistaTagit($body->kuvaus) : null;
+  // Tarkistetaan että käyttäjätunnus on annettu ja se on olemassa.
+  $kayttajatunnus = tarkistaId($_POST, 'kayttajatunnus');
+  $kayttaja = Kayttajat::kayttaja($db, $kayttajatunnus);
 
-  
+  if (!isset($kayttaja->kayttajatunnus))
+  {
+    http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Päivitettävää käyttäjää ei pystytty löytämään...');
+    exit;
+  }
+
+  // Sallitaan vain käyttäjän itse päivittää omia tietojaan.
+  tarkistaOikeus($kayttaja->kayttajatunnus);
+
+  // Tarkistetaan päivitettävä data.
+  $kayttaja->etunimi = tarkistaData($_POST, 'etunimi', $kayttaja->etunimi);
+  $kayttaja->sukunimi = tarkistaData($_POST, 'sukunimi', $kayttaja->sukunimi);
+  $kayttaja->kuvaus = tarkistaData($_POST, 'kuvaus', $kayttaja->kuvaus);
+
+  // Tallennetaan käyttäjän kuva.
+  if (tarkistaData($_FILES['kuva'], 'name'))
+  {  
+    $polku = __DIR__.'/../Assets/Kayttajat/';
+    $kayttaja->kuva = tallennaKuva($_FILES['kuva'], $kayttaja->kayttajatunnus, $polku);
+  }
+
+
+  // Suoritetaan päivitys.
   $onnistuiko = Kayttajat::paivita(
     $db,
-    $body->kayttajatunnus, 
-    $etunimi, 
-    $sukunimi, 
-    $kuva,
-    $kuvaus
+    $kayttaja->kayttajatunnus,
+    puhdistaTagit($kayttaja->etunimi),
+    puhdistaTagit($kayttaja->sukunimi),
+    $kayttaja->kuva,
+    puhdistaTagit($kayttaja->kuvaus)
   );
 
-  if ($onnistuiko) {
-    http_response_code(200);
-    lahetaViesti('Käyttäjän päivitys onnistui!');
-  } else {
-    http_response_code(503);
-    lahetaViesti('Käyttäjän päivitys epäonnistui...');
+  // Tarkistetaan voelä että päivitys onnistui.
+  if ($onnistuiko)
+  {
+    //http_response_code(Status::UPDATED);
   }
-} // PAIVITA_KAYTTAJA_JSON_END
-
+  else
+  {
+    lahetaViesti('Tapahtui virhe pyynnön käsittelyssä...');
+    http_response_code(Status::DATABASE_ERROR);
+  }
+} // PAIVITA_KAYTTAJA_END
 
 
 ?>

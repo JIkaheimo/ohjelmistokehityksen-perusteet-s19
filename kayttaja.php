@@ -39,7 +39,7 @@ $onkoSeurattu = Kayttajat::onkoSeurattu($db, $kayttaja, $kayttajatunnus);
 </header>
 
 <div class='sailio'>
-<img class='img valia kayttaja-kuva' src=<?= $kayttajatiedot->kuva ?:'./Assets/kayttaja-placeholder.png'; ?> alt=<?= $kayttajatunnus; ?>>
+<img class='img valia kayttaja-kuva' src=<?= './Assets/Kayttajat/' . $kayttajatiedot->kuva; ?> alt=<?= $kayttajatunnus; ?>>
 
 <section>
   <header>

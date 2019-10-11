@@ -20,11 +20,21 @@ switch ($_SERVER['REQUEST_METHOD'])
   case 'DELETE':
     poistaVaihe();
     exit;
+  default:
+    http_response_code(Statis::INVALID);
+    lahetaViesti('Palvelin ei tunnistanut pyyntöä.');
 }
 
 
 // HAE_VAIHE ==================================================
 function haeVaihe()
+/**
+ * Hakee tietokannassa olevan yksittäusen vaiheen
+ * ja lähettää sen JSON-formaatissa.
+ * 
+ * TARVITTAVA DATA:
+ * - id
+ */
 {
   header("Access-Control-Allow-Headers: access");
   header("Access-Control-Allow-Credentials: true");
@@ -34,15 +44,52 @@ function haeVaihe()
 
   global $db;
 
+  // Vaiheen pystyy hakemaan joko pyynnön rungon tai hakukentän parametrillä.
+  if (!isset($body->id) && !isset($_GET['id']))
+  {
+    http_response_code(Status::INVALID);
+    lahetaViesti('Pyynnösssä tulee olla id.');
+    exit;
+  }
+
+  // Haetaan ohjelma joko parametrina tai pyynnön rungossa välitetyn id:n avulla.
+  $id = isset($_GET['id']) ? $_GET['id'] : $body->id;
+
+  $vaihe = Vaiheet::hae($db, $id);
+
+  if (!isset($vaihe->ojelmaId))
+  {
+    http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Vaihetta ei löydetty.');
+  }
+  else
+  {
+    echo(json_encode($ohjelma));
+  }
 } // HAE_VAIHE_END
 
 
 // HAE_VAIHEET ===============================================
 function haeVaiheet()
+/**
+ * Hakee tietokannassa olevat vaiheet ja lähettää ne JSON-formaatissa.
+ */
 {
   header('Access-Control-Allow-Methods: GET');
 
   global $db;
+
+  $vaiheet = Vaiheet::hae($db);
+
+  if (empty($vaiheet))
+  {
+    http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Vaiheitaa ei löydetty.');
+  }
+  else
+  {
+    echo(json_encode(array('vaiheet' => $vaiheet)));
+  }
 } // HAE_VAIHEET_END
 
 
@@ -68,37 +115,40 @@ function lisaaVaihe()
 
   global $db;
 
+
   // Tarkistetaan että tarvittava data on annettu.
   if (
-    !isset($body->harjoitusId) ||
-    !isset($body->nimi)
+    !tarkistaData($body, 'harjoitusId') ||
+    !tarkistaData($body, 'nimi')
   )
   {
     http_response_code(Status::INVALID);
+    lahetaViesti('Vaihetta ei pystytty lisäämään. Annettu data on epäkelpo.');
     exit;
   }
 
-  // Täytetään tyhjä data nulleilla.
-  $ohjelinkki = isset($body->ohjelinkki) ? $body->ohjelinkki : null;
-  $kuvaus = isset($body->kuvaus) ? $body->kuvaus : null;
+  $ohjelinkki = tarkistaData($body, 'ohjelinkki', null);
+  $kuvaus = tarkistaData($body, 'kuvaus', null);
 
-  // Luodaan uusi vaihe
-  $id= Vaiheet::uusi(
+  // Yritetään lisätä vaihe tietokantaan.
+  $id = Vaiheet::uusi(
     $db,
-    $body->harjoitusId,
-    $body->nimi,
-    $ohjelinkki,
-    $kuvaus
+    puhdistaTagit($body->harjoitusId),
+    puhdistaTagit($body->nimi),
+    puhdistaTagit($ohjelinkki),
+    puhdistaTagit($kuvaus)
   );
 
   // Jos vaiheen lisääminen onnistuu, palautetaan luotu tietue.
   if ($id) 
   {
     $vaihe = Vaiheet::hae($db, $id);
+    http_response_code(Status::CREATED);
     echo(json_encode($vaihe)); 
   } 
   else 
   {
+    lahetaViesti('Tapahtui virhe pyynnön käsittelyssä...');
     http_response_code(Status::DATABASE_ERROR);
   }
 
@@ -132,35 +182,39 @@ function paivitaVaihe()
 
   // Tarkistetaan onko vaihe olemassa.
   $vaihe = Vaiheet::hae($db, $vaiheId);
-  if (empty($vaihe))
+  if (!isset($vaihe->harjoitusId))
   {
     http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Päivitettävää vaihetta ei pystytty löytämään...');
+    exit;
   }
 
   // Pidetään huoli että päivitetään vain annettu data.
-  $nimi = isset($body->nimi) ? $body->nimi : $vaihe->nimi;
-  $kuvaus = isset($body->kuvaus) ? $body->kuvaus : $vaihe->kuvaus;
-  $harjoitusId = isset($body->harjoitusId) ? $body->harjoitusId : $vaihe->harjoitusId;
-  $ohjelinkki = isset($body->ohjelinkki) ? $body->ohjelinkki : $vaihe->ohjelinkki;
+  $vaihe->nimi = tarkistaData($body, 'nimi', $vaihe->nimi);
+  $vaihe->kuvaus = tarkistaData($body, 'kuvaus', $vaihe->kuvaus);
+  $vaihe->harjoitusId = tarkistaData($body, 'harjoitusId', $vaihe->harjoitusId);
+  $vaihe->ohjelinkki = tarkistaData($body, 'ohjelinkki', $vaihe->ohjelinkki);
+
 
   // Suoritetaan päivitys.
   $onnistuiko = Vaiheet::paivita(
     $db,
-    $vaiheId,
-    $harjoitusId,
-    $nimi,
-    $ohjelinkki,
-    $kuvaus
+    puhdistaTagit($vaihe->vaiheId),
+    puhdistaTagit($vaihe->harjoitusId),
+    puhdistaTagit($vaihe->nimi),
+    puhdistaTagit($vaihe->ohjelinkki),
+    puhdistaTagit($vaihe->kuvaus)
   );
 
   // Testataan onnistuminen.
-  if (!$onnistuiko) 
+  if ($onnistuiko) 
   {
-    http_response_code(Status::DATABASE_ERROR);
+    http_response_code(Status::OK);
   }
   else
   {
-    http_response_code(Status::UPDATED);
+    lahetaViesti('Tapahtui virhe pyynnön käsittelyssä...');
+    http_response_code(Status::DATABASE_ERROR);
   }
 
 } // PAIVITA_VAIHE_END
@@ -181,15 +235,28 @@ function poistaVaihe()
 
   $body = json_decode(file_get_contents('php://input'));
 
-  global $db;
-  
   $vaiheId = tarkistaId($body, 'vaiheId');
+
+  global $db;
 
   // Tarkistetaan onko vaihe olemassa.
   $vaihe = Vaiheet::hae($db, $vaiheId);
-  if (empty($vaihe))
+
+  if (!isset($vaihe->harjoitusId))
   {
     http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Poistettavaa vaihetta ei pystytty löytämään...');
+    exit;
+  }
+
+  if (Vaiheet::poista($db, $vaiheId))
+  {
+    http_response_code(Status::DELETED);
+  }
+  else
+  {
+    lahetaViesti('Tapahtui virhe pyynnön käsittelyssä...');
+    http_response_code(Status::DATABASE_ERROR);
   }
 } // POISTA_VAIHE_END
 

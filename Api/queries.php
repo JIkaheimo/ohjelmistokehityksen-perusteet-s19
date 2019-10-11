@@ -14,12 +14,20 @@ require_once(__DIR__.'/Queries/Seuraukset.php');
 
 
 // TARKISTA_DATA ==========================================================
-function tarkistaData($data, $kentta, $dataJosTyhja = true) 
+function tarkistaData($data, $kentta, $dataJosTyhja = null) 
 /**
  * Tarkistaa onko annettu data asetettu, jos ei niin käytetään placeholderia.
  */
 {
-  return (isset($data->$kentta) && !empty($data->$kentta)) ? $data->$kentta : $dataJosTyhja;
+  if (is_object($data))
+  {
+    return (isset($data->$kentta) && !empty(trim($data->$kentta))) ? $data->$kentta : $dataJosTyhja;
+  }
+  else
+  {
+
+    return (isset($data[$kentta]) && !empty(trim($data[$kentta]))) ? $data[$kentta] : $dataJosTyhja;  
+  }
 } // TARKISTA_DATA_END
 
 
@@ -30,15 +38,35 @@ function tarkistaId($body, $idKentta)
  */
 {
   // Jos id:tä ei ole, annetaan INVALID-status vastauksena.
-  if (!isset($body->$idKentta) && empty($body->$idKentta) && 
-    !isset($body->id) && empty($body->id))
-  {
-    http_response_code(Status::INVALID);
-    exit;
-  }
 
-  // Palautetaan se vaihtoehto kummassa on id annettuna.
-  return isset($body->$idKentta) ? $body->$idKentta : $body->id;
+  // Tarkista objekti.
+  if (is_object($body))
+  {
+    if 
+    (
+      !isset($body->$idKentta) && empty($body->$idKentta) && 
+      !isset($body->id) && empty($body->id)
+    )
+    {
+      http_response_code(Status::INVALID);
+      exit;
+    }
+    return isset($body->$idKentta) ? $body->$idKentta : $body->id;
+  }
+  // Tarkista array.
+  else
+  {
+    if 
+    (
+      !isset($body[$idKentta]) && empty($body[$idKentta]) && 
+      !isset($body['id']) && empty($body['id'])
+    )
+    {
+      http_response_code(Status::INVALID);
+      exit;
+    }
+    return isset($body[$idKentta]) ? $body[$idKentta] : $body['id'];
+  }
 
 } // TARKISTA_ID_END
 
@@ -71,6 +99,30 @@ function lahetaViesti($viesti)
 {
   echo(json_encode(array('viesti' => $viesti)));
 } // LAHETA_VIESTI_END
+
+
+// TALLENNA_KUVA ============================================================
+function tallennaKuva($kuva, $nimi, $kohde)
+{
+  if (isset($kuva) && $kuva['size'] > 0)
+  {
+    $tiedosto = $nimi;
+    $reitti = $kohde . basename($kuva['name']);
+    $kuvatyyppi = strtolower(pathinfo($reitti, PATHINFO_EXTENSION));
+    $tiedosto .= ".{$kuvatyyppi}";
+
+    $sallitut = array('jpg', 'jpeg', 'png', 'gif');
+
+    if (in_array($kuvatyyppi, $sallitut))
+    {
+      move_uploaded_file($kuva['tmp_name'], $kohde.$tiedosto);
+    }
+
+    return $tiedosto;
+  }
+
+  return false;
+} // TALLENNA_KUVA_END
 
 
 abstract class Status 

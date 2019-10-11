@@ -98,7 +98,7 @@ function haeOhjelmat()
 function lisaaOhjelma() 
 /**
  * Hoitaa JSON-formaatissa olevan ohjelman lisäyksen tietokantaan.
- * Lähettää käyttälle luodun ohjelman takaisin.
+ * Lähettää vastauksena luodun ohjelman takaisin.
  * 
  * TARVITTAVA DATA:
  * - nimi
@@ -167,7 +167,7 @@ function paivitaOhjelma()
  * TARVITTAVA DATA:
  * - id / ohjelmaId päivitettävän ohjelman id
  * 
- * VAIHTOEHTOINEN DATA
+ * VAIHTOEHTOINEN DATA:
  * - nimi
  * - vaikeustasoId
  * - kayttajatunnus
@@ -182,7 +182,7 @@ function paivitaOhjelma()
   
   global $db;
 
-  // Haetaan päivitettävä ohjelma
+  // Haetaan päivitettävä ohjelma.
   $ohjelmaId = tarkistaId($body, 'ohjelmaId');
   $ohjelma = Ohjelmat::hae($db, $ohjelmaId);
 
@@ -196,17 +196,17 @@ function paivitaOhjelma()
   // Sallitaan vain ohjelman luoneen käyttäjän päivittää ohjelma...
   tarkistaOikeus($ohjelma->kayttajatunnus);
 
-  // Tarkistetaan päivitettävä data
+  // Tarkistetaan päivitettävä data.
   $ohjelma->kuva = tarkistaData($body, 'kuva', $ohjelma->kuva);
 
-  // (laita ohjelmalle placeholder-kuva jos kuvaa ei ole)
+  // (laita ohjelmalle placeholder-kuva jos kuvaa ei ole).
   $ohjelma->kuva = empty($ohjelma->kuva) ? 'ohjelma-placeholder.png' : $ohjelma->kuva;
   
   $ohjelma->vaikeustasoId = tarkistaData($body, 'vaikeustasoId', $ohjelma->vaikeustasoId);
   $ohjelma->nimi = tarkistaData($body, 'nimi', $ohjelma->nimi);
   $ohjelma->kayttajatunnus = tarkistaData($body, 'kayttajatunnus', $ohjelma->kayttajatunnus);
 
-  // Suoritetaan päivitys
+  // Suoritetaan päivitys.
   $onnistuiko = Ohjelmat::paivita(
     $db,
     puhdistaTagit($ohjelma->ohjelmaId),
@@ -217,7 +217,6 @@ function paivitaOhjelma()
   );  
   
   // Tarkistetaan vielä että päivitys onnistui.
-
   if ($onnistuiko)
   {
     http_response_code(Status::UPDATED);

@@ -8,7 +8,9 @@ header("Access-Control-Allow-Origin: *");
 switch ($_SERVER['REQUEST_METHOD'])
 {
   case 'GET':
-    haeSuoritukset();
+    if (isset($_GET['tr'])) haeSuoritusTr();
+    elseif (isset($_GET['id'])) haeSuoritus();
+    else haeSuoritukset();
     exit;
   case 'POST':
     lisaaSuoritus();
@@ -23,8 +25,56 @@ switch ($_SERVER['REQUEST_METHOD'])
     http_response_code(403);
 }
 
+
+// HAE_SUORITUS ===============================================================
+function haeSuoritus()
+/**
+ * Hakee tietokannassa olevan yksittäisen suorituksen
+ * ja lähettää sen JSON-formaatissa.
+ * 
+ * TARVITTAVA DATA:
+ * - id
+ */
+{
+  header("Access-Control-Allow-Headers: access");
+  header("Access-Control-Allow-Credentials: true");
+  header('Access-Control-Allow-Methods: GET');
+
+  $body = json_decode(file_get_contents('php://input'));
+
+  global $db;
+
+  // Suorituksen pystyy hakemaan joko pyynnön rungon tai hakukentän parametrillä.
+  if (!isset($body->id) && !isset($_GET['id']))
+  {
+    http_response_code(Status::INVALID);
+    lahetaViesti('Pyynnösssä tulee olla id.');
+    exit;
+  }
+
+  // Haetaan suoritus joko parametrina tai pyynnön rungossa välitetyn id:n avulla.
+  $id = isset($_GET['id']) ? $_GET['id'] : $body->id;
+  
+  $suoritus = Suoritukset::hae($db, $id);
+
+  if (!isset($suoritus->suoritusId))
+  {
+    http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Suoritusta ei löydetty.');
+  }
+  else
+  {
+    echo(json_encode($suoritus));
+  }
+
+} // HAE_SUORITUS_END
+
+
 // HAE_SUORITUKSET =============================================================
 function haeSuoritukset()
+/**
+ * Hakee tietokannassa olevat suoritukset ja lähettää ne JSON-formaatissa.
+ */
 {
   header('Access-Control-Allow-Methods: GET');
 
@@ -33,9 +83,33 @@ function haeSuoritukset()
   global $db;
 
   $suoritukset = Suoritukset::hae($db);
-  echo(json_encode(array('suoritukset' => $suoritukset)));
+
+  if (empty($suoritukset))
+  {
+    http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Suorituksia ei löydetty.');
+  }
+  else
+  {
+    echo(json_encode(array('suoritukset' => $suoritukset)));
+  }
 
 } // HAE_SUORITUKSET_END
+
+
+// HAE_SUORITUS_TR ============================================================
+function haeSuoritusTr()
+{
+  header('Content-Type: text/html; charset=UTF-8');
+
+  global $db;
+
+  require_once(__DIR__.'/../Komponentit/Suoritukset/suoritus_tr.php');
+  $suoritusId = tarkistaId($_GET, 'suoritusId');
+  $suoritus = Suoritukset::hae($db, $suoritusId);
+
+  json_encode(array('suoritus' => SuoritusTR($suoritus)));
+}
 
 
 // LISAA_SUORITUS ===============================================================
@@ -141,13 +215,9 @@ function poistaSuoritus()
   
   global $db;
 
-  // Tarkistetaan että poistettavan suorituksen id on annettu.
-  if (!isset($body->id)) 
-  {
-    http_response_code(Status::INVALID);
-    lahetaViesti('Anna poistettavan suorituksen id.');
-    exit;
-  }
+  $suoritusId = tarkistaId($body, 'suoritusId');
+
+
 
   if (Suoritukset::poista($db, $body->id))
   {

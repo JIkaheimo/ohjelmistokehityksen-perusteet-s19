@@ -1,16 +1,21 @@
-(function() {
-  const $kayttajalomake = document.querySelector('#kayttajalomake');
-  const $kayttajatunnus = document.querySelector('#kayttajatunnus');
-  const $etunimi = document.querySelector('#etunimi');
-  const $sukunimi = document.querySelector('#sukunimi');
-  const $kuva = document.querySelector('#kuva');
-  const $kuvaus = document.querySelector('#kuvaus');
+(function () {
+  const $kayttajalomake = document.querySelector('form#kayttajalomake');
 
-  $kayttajalomake.addEventListener('submit', paivitaKayttaja);
+  $kayttajalomake.addEventListener('submit', paivitaKayttaja, false);
 
   function paivitaKayttaja(event) {
     event.preventDefault();
 
-    $kayttajalomake.submit();
+    const data = new FormData($kayttajalomake);
+
+    request('./Api/kayttajat.php').post(
+      data,
+      function naytaOnnistunut(res) {
+        ilmoitus.naytaOnnistunut('Tiedot päivitettiin onnistuneesti!');
+      },
+      function naytaVirhe(res) {
+        ilmoitus.naytaVirhe(res.viesti);
+      }, false
+    )
   }
 })();

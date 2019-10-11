@@ -11,6 +11,15 @@
   $harjoituslomake.addEventListener('submit', paivitaHarjoitus);
   $vaihelomake.addEventListener('submit', uusiVaihe);
 
+  // Lisätään poistonappeihin poisto-funktionaalisuus.
+  const $poistolomakkeet = document.querySelectorAll(
+    'form.poistolomake'
+  );
+
+  for (let i = 0; i < $poistolomakkeet.length; i++) {
+    lisaaPoistaja($poistolomakkeet[i]);
+  }
+
   function paivitaHarjoitus(event) {
     event.preventDefault();
 
@@ -49,4 +58,36 @@
       }
     );
   }
+
+
+  // VAIHEIDEN POISTO ===========================================================
+
+  function lisaaPoistaja($lomake) {
+    $lomake.addEventListener('submit', poistaVaihe($lomake.dataset.id));
+  }
+
+  function poistaVaihe(id) {
+    /**
+     * poistaHarjoitus - Palauttaa 'räätälöidyn' funktion tietyn harjoituksen poistamiseksi.
+     */
+    return function (event) {
+      // Estetään lomakkeen submitointi.
+      event.preventDefault();
+      const body = {
+        id: id
+      };
+
+      // Lähetetään DELETE-pyyntö Apille harjoituksen poistamiseksi.
+      request('./Api/vaiheet.php').delete(
+        body,
+        function poistaSivulta(res) {
+          ilmoitus.naytaOnnistunut('Vaihe poistettiin onnistuneesti.');
+
+        },
+        function naytaVirhe(res) {
+          ilmoitus.naytaVirhe(res.viesti);
+        }
+      );
+    };
+  } // END
 })();

@@ -8,6 +8,7 @@
   Headeri('Muokkaa vaihetta');
 
   $vaihe = Vaiheet::hae($db, $_GET['id']);
+
 ?>
 
 <header>
@@ -23,7 +24,7 @@
   <div>
     <label for='nimi'>Nimi</label>
     <input type='text' name='nimi' 
-      id='nimi' value=<?= $vaihe->nimi ?> 
+      id='nimi' value='<?= $vaihe->nimi; ?>'
     />
   </div>
 
@@ -33,9 +34,8 @@
       name='kuvaus'
       id='kuvaus'
       cols='30'
-      rows='10'
-      value=<?= $vaihe->kuvaus ?>
-    ></textarea>
+      rows='10'><?= $vaihe->kuvaus; ?>
+    </textarea>
   </div>
 
   <div>
@@ -44,7 +44,7 @@
       type='text'
       name='linkki'
       id='linkki'
-      value=<?= $vaihe->ohjelinkki ?>
+      value=<?= $vaihe->ohjelinkki; ?>
     />
   </div>
 

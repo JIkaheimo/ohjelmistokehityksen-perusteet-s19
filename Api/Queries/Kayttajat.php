@@ -82,7 +82,6 @@ abstract class Kayttajat
     // Palautetaan null jos käyttäjää ei ole olemassa.
     if (!isset($kayttaja->kayttajatunnus)) return null;
 
-    $kayttaja->kuva = './Assets/Kayttajat/'.$kayttaja->kuva;
     return $kayttaja;
 
   } // KAYTTAJA_END

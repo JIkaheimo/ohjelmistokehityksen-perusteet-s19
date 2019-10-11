@@ -1,4 +1,12 @@
-<?php function VaiheTR($vaihe, $kontrollit = false) { ?>
+<?php function VaiheTR($vaihe, $kontrollit = false) { 
+  if ($kontrollit)
+  {
+    if (strlen($vaihe->kuvaus) > 50)
+    {
+      $vaihe->kuvaus = substr($vaihe->kuvaus, 0, 50).'...';
+    }
+  }  
+?>
 
   <tr class='vaihe-tr'>
 
@@ -24,7 +32,7 @@
               edit
             </i>
           </a>
-          <form data-id=<?= $vaihe->vaiheId; ?>>
+          <form data-id=<?= $vaihe->vaiheId; ?> class='poistolomake'>
             <input type='hidden' name='id' 
                 value=<?= $vaihe->vaiheId; ?> />
             <button type='submit'>

@@ -1,4 +1,4 @@
-const request = (function() {
+const request = (function () {
   return function request(url) {
     return {
       get: ajax('GET', url),
@@ -9,7 +9,7 @@ const request = (function() {
   };
 
   function ajax(method, url) {
-    return function(content, onSuccess, onFail) {
+    return function (content, onSuccess, onFail, onkoJSON = true) {
       if (method == 'GET') {
         if (content != null) {
           url = url + '?' + content;
@@ -18,7 +18,10 @@ const request = (function() {
 
       const xhr = new XMLHttpRequest();
       xhr.open(method, url, true);
-      xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+      if (onkoJSON) {
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      }
 
       xhr.onreadystatechange = function onStateChange() {
         // Onnistuessa kutsu onSuccess-callbackia
@@ -29,7 +32,7 @@ const request = (function() {
           let res = xhr.responseText;
           try {
             res = JSON.parse(res);
-          } catch (err) {}
+          } catch (err) { }
 
           onSuccess && onSuccess(res);
 
@@ -41,7 +44,10 @@ const request = (function() {
 
       // Muutetaan POST, PUT, DELETE body data JSONiksi
       if (method == 'POST' || method == 'PUT' || method == 'DELETE') {
-        xhr.send(JSON.stringify(content));
+        if (onkoJSON) {
+          content = JSON.stringify(content);
+        }
+        xhr.send(content)
       } else {
         xhr.send();
       }

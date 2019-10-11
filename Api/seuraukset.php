@@ -70,6 +70,18 @@ function poistaSeuraus()
 
   global $db;
 
+  if (
+    !tarkistaData($body, 'seuraaja') ||
+    !tarkistaData($body, 'seurattava')
+  )
+  {
+    http_response_code(Status::INVALID);
+    lahetaViesti('Seurausta ei pystytty poistamaan. Annettu data on epäkelpo.');
+    exit;
+  }
+
+  tarkistaOikeus($body->seuraaja);
+
   $onnistuiko = Seuraukset::poista(
     $db,
     $body->seuraaja,

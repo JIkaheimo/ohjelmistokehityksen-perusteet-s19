@@ -22,6 +22,22 @@ abstract class Vaiheet
   VALUES
     (:harjoitusId, :nimi, :ohjelinkki, :kuvaus)';
 
+  const PAIVITA = '
+  UPDATE Vaiheet
+  SET
+    harjoitusId = :harjoitusId,
+    nimi = :nimi,
+    ohjelinkki = :ohjelinkki,
+    kuvaus = :kuvaus
+  WHERE
+    vaiheId = :vaiheId';
+
+  const POISTA = '
+  DELETE FROM 
+    Vaiheet
+  WHERE 
+    vaiheId = :vaiheId';
+
 
   // HAE ============================================================
   static function hae(
@@ -86,6 +102,27 @@ abstract class Vaiheet
   } // LISAA_END
 
 
+  // PAIVITA =========================================================
+  static function paivita(
+    $db,
+    $vaiheId,
+    $harjoitusId,
+    $nimi,
+    $ohjelinkki,
+    $kuvaus
+  )
+  {
+    $stmt = $db->prepare(Vaiheet::PAIVITA);
+    $stmt->bindValue(':harjoitusId', $harjoitusId);
+    $stmt->bindValue(':nimi', $nimi);
+    $stmt->bindValue(':ohjelinkki', $ohjelinkki);
+    $stmt->bindValue(':kuvaus', $kuvaus);
+    $stmt->bindValue(':vaiheId', $vaiheId);
+
+    return $stmt->execute();
+  }
+
+
   // UUSI =============================================================
   static function uusi(
     $db,
@@ -97,6 +134,29 @@ abstract class Vaiheet
   {
     return Vaiheet::lisaa($db, $harjoitusId, $nimi, $ohjelinkki, $kuvaus);
   }// UUSI END 
+
+
+  // POISTA =================================================================================
+  static function poista(
+    $db,
+    $vaiheId
+  ) 
+  /**
+   * Poistaa annetun vaiheen tietokannasta.
+   * 
+   * PARAMS:
+   * - $db (PDO)
+   * - $ohjelmaId (int) poistettavan vaiheen id
+   * 
+   * RETURNS:
+   * - onnistuiko poisto (boolean)
+   */
+  {
+    $stmt = $db->prepare(Vaiheet::POISTA);
+    $stmt->bindValue(':vaiheId', $vaiheId);
+    
+    return $stmt->execute();
+  } // POISTA_END
 }
 
 ?>
