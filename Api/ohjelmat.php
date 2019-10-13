@@ -48,7 +48,7 @@ function haeOhjelma()
   if (!isset($body->id) && !isset($_GET['id']))
   {
     http_response_code(Status::INVALID);
-    lahetaViesti('Pyynnösssä tulee olla id.');
+    lahetaViesti('Pyynnössä tulee olla id.');
     exit;
   }
 

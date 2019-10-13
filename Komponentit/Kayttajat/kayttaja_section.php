@@ -3,7 +3,7 @@
   
 ?>
 
-  <section class='kayttaja'>
+  <section class='kayttaja' id=<?= $ktunnus ?>>
     <a href='kayttaja.php?id=<?=$ktunnus?>'>
       <img class='img' src=<?= './Assets/Kayttajat/' . $kayttaja->kuva ?: 'kayttaja-placeholder.png'?> alt=<?= $ktunnus ?> />
       <div>

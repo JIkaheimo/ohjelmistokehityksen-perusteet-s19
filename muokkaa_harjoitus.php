@@ -68,7 +68,7 @@
         <th></th>
       </tr>
     </thead>
-      <tbody>
+      <tbody id='vaiheet-body'>
         <?php 
           foreach ($harjoitus->vaiheet as $vaihe)
           {

@@ -48,7 +48,7 @@ function haeSuoritus()
   if (!isset($body->id) && !isset($_GET['id']))
   {
     http_response_code(Status::INVALID);
-    lahetaViesti('Pyynnösssä tulee olla id.');
+    lahetaViesti('Pyynnössä tulee olla id.');
     exit;
   }
 
@@ -127,44 +127,40 @@ function lisaaSuoritus()
   
   // Tarkistetaan onko tarvittava data pyynnön rungossa
   if (
-    !empty($body->kayttajatunnus) &&
-    !empty($body->paivays) &&
-    !empty($body->harjoitusId) &&
-    !empty($body->kesto) &&
-    isset($_SESSION['kayttaja']) && 
-    ($_SESSION['kayttaja'] == $body->kayttajatunnus)
+    !tarkistaData($body, 'kayttajatunnus') ||
+    !tarkistaData($body, 'paivays') ||
+    !tarkistaData($body, 'harjoitusId') ||
+    !tarkistaData($body, 'kesto')
   )
   {
+    http_response_code(Status::INVALID);
+    lahetaViesti('Suoritustaa ei pystytty lisäämään. Annettu data on epäkelpo.');
+    exit;
+  }
 
-    $id = Suoritukset::uusi(
-      $db,
-      $body->kayttajatunnus,
-      $body->paivays,
-      $body->kesto,
-      $body->harjoitusId
-    );
+  tarkistaOikeus($body->kayttajatunnus);
+  
+  $id = Suoritukset::uusi(
+    $db,
+    puhdistaTagit($body->kayttajatunnus),
+    puhdistaTagit($body->paivays),
+    puhdistaTagit($body->kesto),
+    puhdistaTagit($body->harjoitusId)
+  );
 
-    print_r($id);
-
-    if ($id)
-    {
-      http_response_code(201);
-      echo(json_encode(array('viesti' => 'Suoritus lisättiin onnistuneesti.', 'id' => $id)));
-    }
-    else
-    // Tämä käsittelee pyynnössä tapahtuneen errorin.
-    {
-      http_response_code(503);
-      lahetaViesti('Suoritusta ei pystytty lisäämään.');
-    }
+  if ($id)
+  {
+    $suoritus = Suoritukset::hae($db, $id);
+    http_response_code(Status::CREATED);
+    echo(json_encode($suoritus));
   }
   else
-  // Jos kaikki tarvittava data ei ole pyynnössä.
+  // Tämä käsittelee pyynnössä tapahtuneen errorin.
   {
-    http_response_code(400);
-    lahetaViesti('Suoritustaa ei pystytty lisäämään. Annettu data on epäkelpo.');
-  }
-  exit;
+    lahetaViesti('Tapahtui virhe pyynnön käsittelyssä...');
+    http_response_code(Status::DATABASE_ERROR);
+  } 
+
 } // LISAA_SUORITUS_END 
 
 
@@ -179,28 +175,42 @@ function paivitaSuoritus()
 
   global $db;
 
-  if (
-    Suoritukset::paivita(
-      $db,
-      $body->id,
-      $body->kayttajatunnus,
-      $body->paivays,
-      $body->kesto,
-      $body->harjoitusId
-    )
-  )
-  // Onnistunut päivitys (200)
+  $suoritusId = tarkistaId($body, 'suoritusId');
+  $suoritus = Suoritukset::hae($db, $suoritusId);
+
+  if (!isset($suoritus->kayttajatunnus))
   {
-    http_response_code(200);
-    lahetaViesti('Suoritus päivitettiin onnistuneesti.');
+    http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Päivitettävää suoritusta ei pystytty löytämään...');
+    exit;
+  }
+
+  tarkistaOikeus($suoritus->kayttajatunnus);
+
+  $suoritus->kayttajatunnus = tarkistaData($body, 'kayttajatunnus', $suoritus->kayttajatunnus);
+  $suoritus->paivays = tarkistaData($body, 'paivays', $suoritus->paivays);
+  $suoritus->kesto = tarkistaData($body, 'kesto', $suoritus->kesto);
+  $suoritus->harjoitusId = tarkistaData($body, 'harjoitusId', $suoritus->harjoitusId);
+
+  $onnistuiko = Suoritukset::paivita(
+    $db,
+    puhdistaTagit($suoritus->suoritusId),
+    puhdistaTagit($suoritus->kayttajatunnus),
+    puhdistaTagit($suoritus->paivays),
+    puhdistaTagit($suoritus->kesto),
+    puhdistaTagit($suoritus->harjoitusId)
+  );
+
+  if ($onnistuiko)
+  {
+    http_response_code(Status::UPDATED);
   }
   else
-  // Epäonnistunut päivitys (503) 
   {
-    http_response_code(503);
-    echo(json_encode(array('viesti' => 'Suoritustaa ei pystytty päivittää.')));
+    lahetaViesti('Tapahtui virhe pyynnön käsittelyssä...');
+    http_response_code(Status::DATABASE_ERROR);
   }
-  exit;
+
 } // PAIVITA_SUORITUS_END 
 
 
@@ -217,11 +227,26 @@ function poistaSuoritus()
 
   $suoritusId = tarkistaId($body, 'suoritusId');
 
+  $suoritus = Suoritukset::hae($db, $suoritusId);
 
-
-  if (Suoritukset::poista($db, $body->id))
+  if (!isset($suoritus->kayttajatunnus))
   {
-    lahetaViesti('Suoritus poistettiin onnistuneesti!');
+    http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Poistettavaa suoritusta ei pystytty löytämään...');
+    exit;
+  }
+
+  tarkistaOikeus($suoritus->kayttajatunnus);
+
+  // Suoritetaan ja tarkistetaan suorituksen poisto.
+  if (Suoritukset::poista($db, $suoritusId))
+  {
+    http_response_code(Status::DELETED);
+  }
+  else
+  {
+    lahetaViesti('Tapahtui virhe pyynnön käsittelyssä...');
+    http_response_code(Status::DATABASE_ERROR);
   }
 } // POISTA_SUORITUS_END
 

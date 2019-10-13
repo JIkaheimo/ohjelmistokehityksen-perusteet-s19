@@ -3,6 +3,7 @@ const alustaLomake = (function () {
   const $lisayslomake = document.querySelector('form#lisayslomake');
   const $kayttajatunnus = document.querySelector('input#kayttaja');
   const $ohjelma = document.querySelector('input#ohjelma');
+  const $lomakenappi = document.querySelector('button#laheta');
   const $lomakenappiTeksti = document.querySelector('button#laheta > i');
 
   // LISTENERIT =====================================================
@@ -22,7 +23,7 @@ const alustaLomake = (function () {
         ilmoitus.naytaOnnistunut('Ohjelma lisättiin onnistuneesti!');
       },
       function (res) {
-        ilmoitus.naytaVirhe('Ohjelmaa ei pystytty lisäämään...');
+        ilmoitus.naytaVirhe(res.viesti);
       }
     );
   }
@@ -37,7 +38,7 @@ const alustaLomake = (function () {
         ilmoitus.naytaOnnistunut('Lisäys poistettiin onnistuneesti!');
       },
       function (res) {
-        ilmoitus.naytaVirhe('Lisäystä ei pystytty poistamaan...');
+        ilmoitus.naytaVirhe(res.viesti);
       }
     );
   }
@@ -50,16 +51,22 @@ const alustaLomake = (function () {
     };
   }
 
-  function muokkaaLomake($lomake, poistava = false) {
+  function muokkaaLomake($lomake, poistava) {
+
+    poistava = poistava === undefined ? false : poistava;
+
     if (poistava) {
       $lomake.removeEventListener('submit', lisaaLisays);
       $lomake.addEventListener('submit', poistaLisays);
+      $lomakenappi.textContent = 'Poista lisäys';
       $lomakenappiTeksti.textContent = 'remove';
     } else {
       $lomake.removeEventListener('submit', poistaLisays);
       $lomake.addEventListener('submit', lisaaLisays);
+      $lomakenappi.textContent = 'Lisää';
       $lomakenappiTeksti.textContent = 'add';
     }
-
+    $lomakenappi.classList.toggle('nappi-d');
+    $lomakenappi.appendChild($lomakenappiTeksti);
   }
 })();

@@ -12,7 +12,7 @@ $body = json_decode(file_get_contents('php://input'));
 if (!isset($body->kayttajatunnus) || !isset($body->salasana))
 {
   http_response_code(400);
-  lahetaViesti('Anna kayttajatunnus ja salasana...');
+  lahetaViesti('Anna käyttäjätunnus ja salasana...');
   exit;
 }
 

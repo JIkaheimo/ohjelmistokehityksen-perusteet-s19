@@ -1,9 +1,11 @@
-(function() {
+(function () {
   const $suoritustaulu = document.querySelector('table#suoritustaulu');
   const $suoritusContainer = document.querySelector('tbody#suoritukset');
   const $poistolomakkeet = document.querySelectorAll('form.poista-suoritus');
 
-  Array.from($poistolomakkeet).forEach(lisaaPoistaja);
+  for (let i = 0; i < $poistolomakkeet.length; i++) {
+    lisaaPoistaja($poistolomakkeet[i]);
+  }
 
   function lisaaPoistaja($poistolomake) {
     const id = $poistolomake.dataset.id;
@@ -16,12 +18,11 @@
       request('./Api/suoritukset.php').delete(
         { id: id },
         function poistaSuoritusTr(res) {
-          ilmoitus.naytaOnnistunut(res.viesti);
+          ilmoitus.naytaOnnistunut('Suoritus poistettiin onnistuneesti!');
           const $suoritus = document.querySelector('#suoritus-' + id);
           $suoritus.classList.add('piilotettu');
-          setTimeout(function poistaSuoritus() {
-            $suoritusContainer.removeChild($suoritus);
-          }, 1000);
+
+          $suoritusContainer.removeChild($suoritus);
 
           // Poista itse taulu jos suorituksia ei ole jäljellä.
           if (document.querySelector('.suoritus-tr') == null) {

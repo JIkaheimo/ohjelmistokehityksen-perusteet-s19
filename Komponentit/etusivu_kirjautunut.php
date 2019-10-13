@@ -16,7 +16,7 @@
 </header>
 
 <!-- OMAT OHJELMAT -->
-<section>
+<section id='omat-ohjelmat'>
   <header>
     <h2>Omat ohjelmat</h2>
     <a class='nappi nappi-p' href='ohjelmani.php'>Hallinnoi</a>
@@ -41,7 +41,7 @@
 </section> <!-- END OMAT OHJELMAT -->
 
 <!-- VIIMEAIKAISET SUORITUKSET -->
-<section>
+<section id='viimeaikaiset-suoritukset'>
   <header>
     <h2>Viimeaikaiset suoritukset</h2>
     <a class='nappi nappi-p' href='suoritukset.php'>Hallinnoi</a>

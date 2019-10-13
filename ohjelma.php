@@ -36,7 +36,8 @@
         id='ohjelma' value=<?= $ohjelma->ohjelmaId; ?>
       />
       
-      <button type='submit' name='submit' id='laheta' class='nappi-p'>
+      <button type='submit' name='submit' id='laheta' class='flex nappi-m <?= $onkoLisatty ? 'nappi-d' : ''; ?>'>
+        <?= $onkoLisatty ? 'POISTA LISÄYS' : 'LISÄÄ' ?>
         <i class="material-icons">
           <?= $onkoLisatty ? 'remove' : 'add'; ?> 
         </i>

@@ -8,7 +8,8 @@ header("Access-Control-Allow-Origin: *");
 switch ($_SERVER['REQUEST_METHOD'])
 {
   case 'GET':
-    if (isset($_GET['id'])) haeVaihe();
+    if (isset($_GET['tr']) && $_GET['tr'] = true) haeVaiheTr();
+    elseif (isset($_GET['id'])) haeVaihe();
     else haeVaiheet();
     exit;
   case 'PUT':
@@ -67,6 +68,43 @@ function haeVaihe()
     echo(json_encode($ohjelma));
   }
 } // HAE_VAIHE_END
+
+
+// HAE_VAIHE_TR =======================================================
+function haeVaiheTr()
+/**
+ * Hakee tietokannassa olevan ykssittäisen vaiheen
+ * tr-elementin
+ * 
+ * TARVITTAVA DATA:
+ * - id
+ */
+{
+  header('Content-Type: text/plain; charset=UTF-8');
+  header("Access-Control-Allow-Headers: access");
+  header("Access-Control-Allow-Credentials: true");
+  header('Access-Control-Allow-Methods: GET');
+
+  $body = json_decode(file_get_contents('php://input'));
+
+  global $db;
+
+  $vaiheId = tarkistaId($_GET, 'vaiheId');
+
+  $vaihe = Vaiheet::hae($db, $vaiheId);
+
+  if (!isset($vaihe->harjoitusId))
+  {
+    http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Vaihetta ei löydetty.');
+  }
+  else
+  {
+    require_once(__DIR__.'/../Komponentit/Vaiheet/vaihe_tr_content.php');
+    echo(VaiheTRContent($vaihe, true));
+  }
+
+} // HAE_HARJOITUS_TR_END
 
 
 // HAE_VAIHEET ===============================================

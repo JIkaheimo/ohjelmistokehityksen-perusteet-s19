@@ -5,7 +5,11 @@
   };
 
   String.prototype.onkoSallitutMerkit = function () {
-    const sallittu = /[^a-z\däöüÄÖÜß,.:'"\s]/i;
+    const sallittu = /[^a-z\däöüÄÖÜß,.:\-'"\s]/i;
     return this.match(sallittu) == null;
+  }
+
+  Date.prototype.onkoSallittu = function () {
+    return this instanceof Date && !isNaN(this);
   }
 })();

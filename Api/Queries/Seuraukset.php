@@ -23,6 +23,23 @@ abstract class Seuraukset
   AND 
     seurattava = :seurattava';
 
+  
+  // HAE ==================================================
+  static function hae(
+    $db,
+    $seuraaja = null,
+    $seurattava = null
+  )
+  {
+    if ($seuraaja == null || $seurattava == null) return $db->query(Seuraukset::HAE_KAIKKI)->fetchAll(PDO::FETCH_OBJ);
+
+    $stmt = $db->prepare(Seuraukset::HAE_YKSI);
+    $stmt->bindValue(':seuraaja', $seuraaja);
+    $stmt->bindValue(':seurattava', $seurattava);
+    if ($stmt->execute()) return $stmt->fetch(PDO::FETCH_OBJ);
+    return false;
+  } // HAE_END 
+
 
   // LISAA ================================================
   static function lisaa(
@@ -58,8 +75,9 @@ abstract class Seuraukset
   ) 
   {
     $stmt = $db->prepare(Seuraukset::POISTA);
-    $stnt->bindValue(':seuraaja', $seuraaja);
+    $stmt->bindValue(':seuraaja', $seuraaja);
     $stmt->bindValue(':seurattava', $seurattava); 
+    return $stmt->execute();
   } // POISTA_END
 
 }

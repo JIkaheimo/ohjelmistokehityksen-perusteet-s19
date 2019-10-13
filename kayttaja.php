@@ -22,10 +22,10 @@ Headeri($kayttajatunnus);
 // Haetaan kyseisen käyttäjän tiedot
 $kayttajatiedot = Kayttajat::kayttaja($db, $kayttajatunnus);
 $ohjelmat = Ohjelmat::haeKayttajan($db, $kayttajatunnus);
+
 $onkoSeurattu = Kayttajat::onkoSeurattu($db, $kayttaja, $kayttajatunnus);
 
 ?>
-
 
 <header>
   <h1><?=$kayttajatiedot->kayttajatunnus?></h1>
@@ -33,12 +33,17 @@ $onkoSeurattu = Kayttajat::onkoSeurattu($db, $kayttaja, $kayttajatunnus);
   <form id='seurauslomake'>
     <input type='hidden' name='seuraaja' id='seuraaja' value=<?= $kayttaja; ?> />
     <input type='hidden' name='seurattava' id='seurattava' value=<?= $kayttajatunnus; ?> />
-    <button type='submit' id='laheta' class='nappi-p'><?= $onkoSeurattu ? 'Poista seuraus' : 'Seuraa +'; ?></button>
+     <button type='submit' name='submit' id='laheta' class='flex nappi-m <?= $onkoSeurattu ? 'nappi-d' : ''; ?>'>
+        <?= $onkoSeurattu ? 'POISTA SEURAUS' : 'SEURAA' ?>
+        <i class="material-icons">
+          <?= $onkoSeurattu ? 'remove' : 'add'; ?> 
+        </i>
+      </button> 
   </form>
 
 </header>
 
-<div class='sailio'>
+<div class='sailio nowrap'>
 <img class='img valia kayttaja-kuva' src=<?= './Assets/Kayttajat/' . $kayttajatiedot->kuva; ?> alt=<?= $kayttajatunnus; ?>>
 
 <section>

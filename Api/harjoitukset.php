@@ -8,8 +8,9 @@ header('Content-Type: application/json; charset=UTF-8');
 switch ($_SERVER['REQUEST_METHOD'])
 {
   case 'GET':
-    if (isset($_GET['id'])) haeHarjoitus();
-    else if (isset($_GET['ohjelma'])) haeOhjelmanHarjoitukset();
+    if (isset($_GET['tr']) && $_GET['tr'] = true) haeHarjoitusTr();
+    elseif (isset($_GET['id'])) haeHarjoitus();
+    elseif (isset($_GET['ohjelma'])) haeOhjelmanHarjoitukset();
     else haeHarjoitukset();
     exit;
   case 'POST':
@@ -30,7 +31,7 @@ switch ($_SERVER['REQUEST_METHOD'])
 // HAE_HARJOITUS =========================================================
 function haeHarjoitus()
 /**
- * Hakee tietokannassa olevan ykssittäisen harjoituksen
+ * Hakee tietokannassa olevan ykssttäisen harjoituksen
  * ja lähettää sen JSON-formaatissa.
  * 
  * TARVITTAVA DATA:
@@ -70,6 +71,43 @@ function haeHarjoitus()
   }
 
 } // HAE_HARJOITUS_END
+
+
+// HAE_HARJOITUS_TR =======================================================
+function haeHarjoitusTr()
+/**
+ * Hakee tietokannassa olevan ykssittäisen harjoituksen
+ * tr-elementin
+ * 
+ * TARVITTAVA DATA:
+ * - id
+ */
+{
+  header('Content-Type: text/plain; charset=UTF-8');
+  header("Access-Control-Allow-Headers: access");
+  header("Access-Control-Allow-Credentials: true");
+  header('Access-Control-Allow-Methods: GET');
+
+  $body = json_decode(file_get_contents('php://input'));
+
+  global $db;
+
+  $harjoitusId = tarkistaId($_GET, 'harjoitusId');
+
+  $harjoitus = Harjoitukset::hae($db, $harjoitusId);
+
+  if (!isset($harjoitus->ohjelmaId))
+  {
+    http_response_code(Status::NOT_FOUND);
+    lahetaViesti('Harjoitusta ei löydetty.');
+  }
+  else
+  {
+    require_once(__DIR__.'/../Komponentit/Harjoitukset/harjoitus_tr_content.php');
+    echo(HarjoitusTRContent($harjoitus));
+  }
+
+} // HAE_HARJOITUS_TR_END
 
 
 // HAE_HARJOITUKSET ========================================================

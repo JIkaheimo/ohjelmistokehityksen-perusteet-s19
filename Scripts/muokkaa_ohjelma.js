@@ -30,6 +30,7 @@
   $ohjelmalomake.addEventListener('submit', paivitaOhjelma);
   $harjoituslomake.addEventListener('submit', lisaaHarjoitus);
 
+  // Lisätään listenerit harjoitusten poistamiseksi.
   for (let i = 0; i < $poistolomakkeet.length; i++) {
     lisaaPoistaja($poistolomakkeet[i]);
   }
@@ -70,10 +71,10 @@
     // Lähetetään PUT-pyyntö Apille, joka suorittaa ohjelman päivittämisen.
     request('./Api/ohjelmat.php').put(
       body,
-      function onSuccess(res) {
+      function naytaOnnistunut(res) {
         ilmoitus.naytaOnnistunut('Ohjelma päivitettiin onnistuneesti!');
       },
-      function onFail(res) {
+      function naytaVirhel(res) {
         ilmoitus.naytaVirhe(res.viesti);
       }
     );
@@ -90,7 +91,6 @@
     event.preventDefault();
 
     // Haetaan ja muodostetaan tarvittava pyynnön runko harjoituksen lisäämiseksi.
-
     const body = {
       ohjelmaId: $harjoitusOhjelma.value,
       nimi: $harjoitusNimi.value
@@ -99,10 +99,7 @@
     // Lähetetään POST-pyyntö Apille harjoituksen lisäämiseksi.
     request('./Api/harjoitukset.php').post(
       body,
-      function lisaaSivulle(res) {
-        ilmoitus.naytaOnnistunut('Harjoituksen lisääminen onnistui!');
-        lisaaHarjoitusElementti(res);
-      },
+      haeHarjoituskomponentti,
       function naytaVirhe(res) {
         ilmoitus.naytaVirhe(res.viesti);
       }
@@ -110,57 +107,30 @@
   } // LISAA_HARJOITUS_END
 
 
-  // LISAA_HARJOITUS_ELEMENTTI =====================================================
-  function lisaaHarjoitusElementti(harjoitus) {
-    // Tämän olisi periaatteessa voinut hakea serveriltä siistimmässä muodossa.
+  // HAE_HARJOITUSKOMPONENTTI ======================================================
+  function haeHarjoituskomponentti(harjoitus) {
 
-    const $harjoitusTr = document.createElement('tr');
-    $harjoitusTr.id = 'harjoitus-' + harjoitus.harjoitusId;
-    $harjoitusTr.classList.add('harjoitus-tr');
+    ilmoitus.naytaOnnistunut('Harjoituksen lisääminen onnistui!');
 
-    const $nimiTd = document.createElement('td');
-    $nimiTd.textContent = harjoitus.nimi;
+    // Generoidaan harjoituksen tr-komponentti serverillä.
+    request('./Api/harjoitukset.php').get(
+      'tr=true&id=' + harjoitus.harjoitusId,
+      function lisaaHarjoituskomponentti($harjoitusTd) {
+        const $harjoitusTr = document.createElement('tr');
+        $harjoitusTr.id = 'harjoitus-' + harjoitus.harjoitusId;
+        $harjoitusTr.classList.add('harjoitus-tr');
+        $harjoitusTr.innerHTML = $harjoitusTd;
 
-    const $kontrollitTd = document.createElement('td');
+        $harjoitukset.appendChild($harjoitusTr);
 
-    const $kontrollitDiv = document.createElement('div');
-    $kontrollitDiv.classList.add('sailio', 'flex-oikea');
-
-    const $muokkauslinkki = document.createElement('a');
-    $muokkauslinkki.classList.add('nappi', 'nappi-p');
-    $muokkauslinkki.href = 'muokkaa_harjoitus.php?id=' + harjoitus.harjoitusId;
-
-    const $muokkausikoni = document.createElement('i');
-    $muokkausikoni.classList.add('material-icons');
-    $muokkausikoni.textContent = 'edit';
-
-    const $poistolomake = document.createElement('form');
-    $poistolomake.dataset.id = harjoitus.harjoitusId;
-    $poistolomake.classList.add('poista-harjoitus-lomake');
-    lisaaPoistaja($poistolomake);
-
-    const $poistonappi = document.createElement('button');
-    $poistonappi.type = 'submit';
-    $poistonappi.classList.add('nappi-r');
-
-    const $poistoikoni = document.createElement('i');
-    $poistoikoni.classList.add('material-icons');
-    $poistoikoni.textContent = 'delete_forever';
-
-    $poistonappi.appendChild($poistoikoni);
-    $poistolomake.appendChild($poistonappi)
-
-    $muokkauslinkki.appendChild($muokkausikoni);
-
-    $kontrollitDiv.appendChild($muokkauslinkki);
-    $kontrollitDiv.appendChild($poistolomake);
-    $kontrollitTd.appendChild($kontrollitDiv);
-
-    $harjoitusTr.appendChild($nimiTd);
-    $harjoitusTr.appendChild($kontrollitTd);
-
-    $harjoitukset.appendChild($harjoitusTr);
-  } // LISAA_HARJOITUS_ELEMENTTI_END
+        const $poistolomake = document.querySelector('form#poista-harjoitus-' + harjoitus.harjoitusId);
+        lisaaPoistaja($poistolomake);
+      },
+      function naytaVirhe(res) {
+        ilmoitus.naytaVirhe(res.viesti);
+      }
+    )
+  } // HAE_HARJOITUSKOMPONENTTI_END
 
 
   // HARJOITUSTEN POISTO ===========================================================

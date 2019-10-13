@@ -65,6 +65,7 @@ h1 {
 
 h2 {
   font-size: 2rem;
+
 }
 
 h2::before {
@@ -366,6 +367,7 @@ body > footer {
 .focus {
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
@@ -455,8 +457,18 @@ body > footer {
   background-color: #bd5916;
 }
 
+.nappi-d {
+  background-color: #d9534f !important;
+  border: none;
+}
+
+.nappi-m {
+  background-color: #4bb543;
+  border: none;
+}
+
 .nowrap {
-  flex-wrap: nowrap;
+  flex-wrap: nowrap !important;
 }
 
 .oikealle {
@@ -494,6 +506,7 @@ body > footer {
 section.ohjelma,
 section.kayttaja,
 section.harjoitus {
+  display: flex;
   min-width: 150px;
   width: 22%;
   margin: 0.5rem;
@@ -516,6 +529,9 @@ section.kayttaja > a > div {
 
 section.ohjelma > a,
 section.kayttaja > a {
+  flex: 1;
+  top: 0;
+  left: 0;
   text-decoration: none;
   color: inherit;
 }
@@ -598,4 +614,13 @@ select.virhe {
 #kaikki-kayttajat-container,
 #kaikki-ohjelmat-container {
   min-height: 20rem;
+}
+
+#omat-ohjelmat li {
+  margin-bottom: 0.7rem;
+}
+
+#omat-ohjelmat li a {
+  font-size: 1.1rem;
+  
 }

@@ -10,9 +10,11 @@ if ($kayttaja == null)
 
 Headeri('Käyttäjät');
 
-// TODO: Hae kaikistä käyttäjistä suosituimmat ja seuratut.
-$kayttajat = Kayttajat::hae($db);
-$kayttajat = array_slice($kayttajat, 0, 4);
+$kayttajat = array_filter(Kayttajat::hae($db));
+
+// Nämä voisi periaatteessa hakea myös usortin avulla.
+$suosituimmat = Kayttajat::suosituimmat($db);
+$seuratut = Kayttajat::seuratut($db, $kayttaja);
 
 ?>
 
@@ -27,7 +29,7 @@ $kayttajat = array_slice($kayttajat, 0, 4);
   </header>
   <div id='suosituimmat' class='sailio'> 
     <?php 
-      foreach ($kayttajat as $kayttaja) 
+      foreach ($suosituimmat as $kayttaja) 
       { 
         KayttajaSection($kayttaja);
       } 
@@ -35,20 +37,24 @@ $kayttajat = array_slice($kayttajat, 0, 4);
   </div>
 </section>
 
-<section>
-  <!-- SEURATUT KÄYTTÄJÄT KAIKKI -->
-  <header>
-    <h2>Seuratut</h2>
-  </header>
-  <div id='seuratut' class='sailio'>
-    <?php 
-      foreach ($kayttajat as $kayttaja) 
-      { 
-        KayttajaSection($kayttaja);
-      } 
-    ?>
-  </div>
-</section>
+<?php if (!empty($seuratut)): ?>
+  <section>
+    <!-- SEURATUT KÄYTTÄJÄT KAIKKI -->
+    <header>
+      <h2>Seuratut</h2>
+    </header>
+
+    
+    <div id='seuratut' class='sailio'>
+      <?php 
+        foreach ($seuratut as $kayttaja) 
+        { 
+          KayttajaSection($kayttaja);
+        } 
+      ?>
+    </div>
+  </section>
+<?php endif;?>
 
 <section id='kaikki-kayttajat'>
   <!-- LISTA KAIKISTA KÄYTTÄJISTÄ (HAE SKROLLATESSA LISÄÄ) -->
@@ -65,6 +71,12 @@ $kayttajat = array_slice($kayttajat, 0, 4);
   </form>
 
   <div id='kaikki-kayttajat-container' class='sailio valia'>
+    <?php 
+      foreach ($kayttajat as $kayttaja) 
+      { 
+        KayttajaSection($kayttaja);
+      } 
+    ?>  
   </div>
 </section>
 

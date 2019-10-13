@@ -10,18 +10,20 @@
 
   Headeri('Ohjelmat');
 
-  $suosituimmat = Ohjelmat::hae($db);
+  $ohjelmat = Ohjelmat::hae($db);
 
-  $uusimmat = $suosituimmat
+  // Nämä voisi periaatteessa selvittää myös PHP:n usortilla.
+  $suosituimmat = Ohjelmat::suosituimmat($db);
+  $uusimmat = Ohjelmat::uusimmat($db);
 ?>
-
 
 <header>
   <h1>Ohjelmat</h1>
-  <a class='nappi nappi-p' href='ohjelmani.php'>Omat ohjelmani</a>
+  <a class='nappi nappi-p' href='ohjelmani.php'>Ohjelmani</a>
   <a class='nappi nappi-p' href='lisaykset.php'>Lisäykset</a>
 </header>
 
+<!-- SUOSITUIMMAT OHJELMAT -->
 <section id='suosituimmat'>
   <header>
     <h2>Suosituimmat</h2>
@@ -35,9 +37,11 @@
     ?>
   </div>
 </section>
+<!-- SUOSITUIMMAT OHJELMAT END -->
 
+
+<!-- UUDET OHJELMAT -->
 <section id='uudet'>
-  
   <header>
     <h2>Uudet</h2>
   </header>
@@ -50,15 +54,17 @@
       } 
     ?>
   </div>
-</section>
+</section> 
+<!-- UUDET OHJELMAT END -->
 
+
+<!-- KAIKKI OHJELMAT -->
 <section id='kaikki-ohjelmat'>
   
   <header>
     <h2 class='keskita'>Hae ohjelmia</h2>
   </header>
   
-  <!-- TODO: Hae ohjelmat AJAXin avulla kun jokin kenttä muuttuu -->
   <form class='keskita'>
 
     <div>
@@ -68,9 +74,16 @@
 
   </form>
 
-  <div id='kaikki-ohjelmat-container' class='sailio'>
+  <div id='kaikki-ohjelmat-container' class='sailio valia'>
+    <?php 
+      foreach ($ohjelmat as $ohjelma) 
+      { 
+        OhjelmaSection($ohjelma);
+      } 
+    ?>
   </div>
 </section>
+<!-- KAIKKI OHJELMAT END -->
 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');

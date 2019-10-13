@@ -1,5 +1,7 @@
 const asetaPyynto = (function () {
   let pyyntotyyppi = 'post';
+
+  // DOM-ELEMENTIT ==================================================================
   const $suorituslomake = document.querySelector('form#suorituslomake');
   const $suoritus = document.querySelector('input#suoritus');
   const $kayttaja = document.querySelector('input#kayttaja');
@@ -24,11 +26,25 @@ const asetaPyynto = (function () {
     const harjoitus = $harjoitus.value;
     const suoritus = $suoritus ? $suoritus.value : null;
 
+    const paivaysD = new Date(paivays);
+
+
+    if (!paivaysD.onkoSallittu()) {
+      ilmoitus.naytaLomakevirhe($paivays);
+      ilmoitus.naytaVirhe('Päiväyksen pitää olla muodossa dd-mm-yyyy .');
+      return;
+    }
+
+    const paivaysStr = paivaysD.getUTCFullYear() +
+      '-' + (paivaysD.getUTCMonth() + 1) +
+      '-' + (paivaysD.getUTCDate() + 1)
+    console.log(paivaysStr);
+
     const body = {
       id: suoritus,
       kayttajatunnus: kayttajatunnus,
       kesto: kesto,
-      paivays: paivays,
+      paivays: paivaysStr,
       harjoitusId: harjoitus
     };
 

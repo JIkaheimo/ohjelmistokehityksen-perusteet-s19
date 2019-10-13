@@ -55,6 +55,7 @@
 </form>
 
 <script src='./Scripts/profiili.js'></script>
+<script>alustaLomake(<?= $onkoSeurattu; ?>);</script>
 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');

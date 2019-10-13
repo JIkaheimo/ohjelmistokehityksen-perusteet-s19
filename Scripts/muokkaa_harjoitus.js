@@ -8,8 +8,11 @@
   const $vaiheHarjoitus = document.querySelector('input#vaihe-harjoitus');
   const $vaiheNimi = document.querySelector('input#vaihe-nimi');
 
+  // Harjoitukset
+  const $vaiheet = document.querySelector('tbody#vaiheet-body');
+
   $harjoituslomake.addEventListener('submit', paivitaHarjoitus);
-  $vaihelomake.addEventListener('submit', uusiVaihe);
+  $vaihelomake.addEventListener('submit', lisaaVaihe);
 
   // Lisätään poistonappeihin poisto-funktionaalisuus.
   const $poistolomakkeet = document.querySelectorAll(
@@ -20,6 +23,7 @@
     lisaaPoistaja($poistolomakkeet[i]);
   }
 
+  // PAIVITA_HARJOITUS ====================================================
   function paivitaHarjoitus(event) {
     event.preventDefault();
 
@@ -37,39 +41,74 @@
         ilmoitus.naytaVirhe(res.viesti);
       }
     )
-  }
+  } // PAIVITA_HARJOITUS_END
 
 
-  function uusiVaihe(event) {
+  // LISAA_VAIHE ============================================================
+  function lisaaVaihe(event) {
+    /**
+     * lisaaHarjoitus - Huolehtii vaiheen lisäämisestä tietokantaan Apin kautta.
+     */
+
+    // Estetään lomakkeen submitointi.
     event.preventDefault();
 
+    // Haetaan ja muodostetaan tarvittava pyynnön runko vaiheen lisäämiseksi.
     const body = {
       harjoitusId: $vaiheHarjoitus.value,
       nimi: $vaiheNimi.value
     };
 
+    // Lähetetään POST-pyyntö Apille vaiheen lisäämiseksi.
     request('./Api/vaiheet.php').post(
       body,
-      function (res) {
-        console.log(res);
-      },
-      function (res) {
-        console.error(res);
+      haeVaihekomponentti,
+      function naytaVirhe(res) {
+        ilmoitus.naytaVirhe(res.viesti);
       }
     );
-  }
+
+  } // LISAA_VAIHE_END
 
 
-  // VAIHEIDEN POISTO ===========================================================
+  // HAE_HARJOITUSKOMPONENTTI ======================================================
+  function haeVaihekomponentti(vaihe) {
 
+    ilmoitus.naytaOnnistunut('Vaiheen lisääminen onnistui!');
+
+    // Generoidaan harjoituksen tr-komponentti serverillä.
+    request('./Api/vaiheet.php').get(
+      'tr=true&id=' + vaihe.vaiheId,
+      function lisaaVaihekomponentti($vaiheTd) {
+        const $vaiheTr = document.createElement('tr');
+        $vaiheTr.id = 'vaihe-' + vaihe.vaiheId;
+        $vaiheTr.classList.add('vaihe-tr');
+        $vaiheTr.innerHTML = $vaiheTd;
+
+        $vaiheet.appendChild($vaiheTr);
+
+        const $poistolomake = document.querySelector('form#poista-vaihe-' + vaihe.vaiheId);
+        lisaaPoistaja($poistolomake);
+      },
+      function naytaVirhe(res) {
+        ilmoitus.naytaVirhe(res.viesti);
+      }
+    )
+  } // HAE_HARJOITUSKOMPONENTTI_END
+
+
+  // LISAA_POISTAJA ============================================================
   function lisaaPoistaja($lomake) {
     $lomake.addEventListener('submit', poistaVaihe($lomake.dataset.id));
-  }
+  } // LISAA_POITAJA_END
 
+
+  // POISTA_VAIHE ================================================================
   function poistaVaihe(id) {
     /**
-     * poistaHarjoitus - Palauttaa 'räätälöidyn' funktion tietyn harjoituksen poistamiseksi.
+     * poistaVaihe - Palauttaa 'räätälöidyn' funktion tietyn vaiheen poistamiseksi.
      */
+
     return function (event) {
       // Estetään lomakkeen submitointi.
       event.preventDefault();
@@ -77,17 +116,18 @@
         id: id
       };
 
-      // Lähetetään DELETE-pyyntö Apille harjoituksen poistamiseksi.
+      // Lähetetään DELETE-pyyntö Apille vaiheen poistamiseksi.
       request('./Api/vaiheet.php').delete(
         body,
         function poistaSivulta(res) {
           ilmoitus.naytaOnnistunut('Vaihe poistettiin onnistuneesti.');
-
+          const $vaihe = document.querySelector('tr#vaihe-' + id);
+          $vaiheet.removeChild($vaihe);
         },
         function naytaVirhe(res) {
           ilmoitus.naytaVirhe(res.viesti);
         }
       );
     };
-  } // END
+  } // POISTA_VAIHE_END
 })();

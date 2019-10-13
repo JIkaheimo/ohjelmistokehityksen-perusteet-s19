@@ -60,9 +60,33 @@ abstract class Ohjelmat {
   GROUP BY 
     Harjoitukset.ohjelmaId';
 
-  const HAE_SUOSITUIMMAT = Ohjelmat::HAE_KAIKKI;
+  const HAE_SUOSITUIMMAT = '
+  SELECT
+    Ohjelmat.ohjelmaId,
+    Ohjelmat.nimi,
+    Ohjelmat.kuva,
+    Vaikeustasot.nimi AS vaikeustaso,
+    COUNT(Lisaykset.ohjelmaId) AS lisayksia
+  FROM
+    Ohjelmat
+  LEFT JOIN
+    Vaikeustasot
+  ON 
+    Ohjelmat.vaikeustasoId = Vaikeustasot.vaikeustasoId
+  LEFT JOIN
+    Lisaykset
+  ON
+    Ohjelmat.ohjelmaId = Lisaykset.ohjelmaId
+  GROUP BY 
+    Lisaykset.ohjelmaId
+  ORDER BY
+    lisayksia DESC
+  LIMIT 4';
 
-  const HAE_UUSIMMAT = Ohjelmat::HAE_KAIKKI;
+  const HAE_UUSIMMAT = Ohjelmat::HAE_KAIKKI . '
+  ORDER BY
+    luotu DESC
+  LIMIT 4';
 
 
   const LISAA_UUSI = '
@@ -97,10 +121,10 @@ abstract class Ohjelmat {
   // HAE ==================================================================================
   static function hae(
     $db,
-    $ohjelmaId = NULL
+    $ohjelmaId = null
   )
   {
-    if ($ohjelmaId == NULL)
+    if ($ohjelmaId == null)
     {
       return 
         $db->query(Ohjelmat::HAE_KAIKKI)
@@ -170,7 +194,7 @@ abstract class Ohjelmat {
 
 
   // HAE_UUSIMMAT ========================================================================
-  static function haeUusimmat(
+  static function uusimmat(
     $db
   ) 
   /**
@@ -190,7 +214,7 @@ abstract class Ohjelmat {
 
 
   // HAE_SUOSITUIMMAT ===================================================================
-  static function haeSuosituimmat(
+  static function suosituimmat(
     PDO $db
   ) 
   {

@@ -9,7 +9,11 @@ const request = (function () {
   };
 
   function ajax(method, url) {
-    return function (content, onSuccess, onFail, onkoJSON = true) {
+    return function (content, onSuccess, onFail, onkoJSON) {
+
+      onkoJSON = onkoJSON === undefined ? true : onkoJSON;
+      console.log(onkoJSON);
+
       if (method == 'GET') {
         if (content != null) {
           url = url + '?' + content;
@@ -35,9 +39,9 @@ const request = (function () {
           } catch (err) { }
 
           onSuccess && onSuccess(res);
-
           // Epäonnistuessa kutsu onFail-callbackia
         } else if (xhr.readyState == 4) {
+  
           onFail && onFail(JSON.parse(xhr.responseText));
         }
       };

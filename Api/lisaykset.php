@@ -10,6 +10,9 @@ switch ($_SERVER['REQUEST_METHOD'])
   case 'GET':
     haeLisaykset();
     exit;
+  case 'PUT':
+    // Lisäyksiä ei pysty päivittämään.
+    exit;
   case 'POST':
     lisaaLisays();  
     exit;
@@ -30,6 +33,7 @@ function haeLisaykset()
 
   $lisaykset = Lisaykset::hae($db);
 
+  // Tarkistetaan löytyikö lisäyksiä.
   if (empty($lisaykset))
   {
     http_response_code(Status::NOT_FOUND);
@@ -71,8 +75,10 @@ function lisaaLisays()
     exit;
   }
 
+  // Annetaan käyttäjän lisätä vain itselleen.
   tarkistaOikeus($body->kayttajatunnus);
 
+  // Tarkistetaan onnistuiko lisäyksen luonti.
   $onnistuiko = Lisaykset::uusi(
     $db,
     puhdistaTagit($body->kayttajatunnus),
@@ -98,7 +104,9 @@ function poistaLisays()
  * Hoitaa lisäyksen poiston tietokannasta annetun käyttäjätunnuksen 
  * ja ohjelman id:n perusteella.
  * 
- * TARVITTA
+ * TARVITTAVA DATA:
+ * - kayttajatunnus
+ * - ohjelmaId
  */
 {   
   header("Access-Control-Max-Age: 3600");

@@ -44,7 +44,7 @@
   <!-- PÄIVÄYKSEN VALINTA -->
   <div>
     <label for='paivays'>Päiväys</label>
-    <input type='date' name='paivays' id='paivays' value=<?=$suoritus->suoritusPvm?> required>
+    <input type='date' name='paivays' id='paivays' value=<?= $suoritus->suoritusPvm; ?> required>
   </div>
 
   <!-- OHJELMAN VALINTA -->
@@ -75,7 +75,7 @@
 
   <!-- 'ACTION'-NAPIT -->
   <button class='nappi-p' type='submit' name='submit'>Tallenna</button>
-  <a class='nappi nappi-s' href='suoritukset.php'>Peruuta</a>
+  <a class='nappi nappi-s' href='suoritukset.php'>Palaa</a>
 </form>
 
 

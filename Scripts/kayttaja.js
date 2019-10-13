@@ -1,9 +1,10 @@
-const alustaSeurauslomake = (function() {
+const alustaSeurauslomake = (function () {
   // DOM-ELEMENTIT =================================================
   const $seurauslomake = document.querySelector('form#seurauslomake');
   const $seuraaja = document.querySelector('input#seuraaja');
   const $seurattava = document.querySelector('input#seurattava');
   const $lomakenappi = document.querySelector('button#laheta');
+  const $lomakenappiTeksti = document.querySelector('button#laheta > i');
 
   // LISTENERIT ======================================================
   return function alustaLomake(onkoSeurattu) {
@@ -18,11 +19,10 @@ const alustaSeurauslomake = (function() {
     request('./Api/seuraukset.php').post(
       lomaketiedot(),
       function (res) {
-        console.log(res);
+        muokkaaLomake($seurauslomake, true);
       },
-      function(res)
-      {
-        console.error(res);
+      function (res) {
+        ilmoitus.naytaVirhe(res.viesti);
       }
     )
   }
@@ -33,10 +33,10 @@ const alustaSeurauslomake = (function() {
     request('./Api/seuraukset.php').delete(
       lomaketiedot(),
       function (res) {
-        console.log(res);
+        muokkaaLomake($seurauslomake);
       },
       function (res) {
-        console.error(res);
+        ilmoitus.naytaVirhe(res.viesti);
       }
     )
   }
@@ -47,18 +47,23 @@ const alustaSeurauslomake = (function() {
       seuraaja: $seuraaja.value,
       seurattava: $seurattava.value
     }
-    
-    function muokkaaLomake($lomake, poistava = false) {
-      if (poistava) {
-        $lomake.removeEventListener('submit', lisaaSeuraus);
-        $lomake.addEventListener('submit', poistaSeuraus);
-        $lomakenappi.textContent = 'Poista lisäys';
-      } else {
-        $lomake.removeEventListener('submit', poistaSeuraus);
-        $lomake.addEventListener('submit', lisaaSeuraus);
-        $lomakenappi.textContent = 'Lisää +';
-      }
-    }
   }
+
+  function muokkaaLomake($lomake, poistava = false) {
+    if (poistava) {
+      $lomake.removeEventListener('submit', lisaaSeuraus);
+      $lomake.addEventListener('submit', poistaSeuraus);
+      $lomakenappiTeksti.textContent = 'remove';
+      $lomakenappi.textContent = 'Poista seuraus';
+    } else {
+      $lomake.removeEventListener('submit', poistaSeuraus);
+      $lomake.addEventListener('submit', lisaaSeuraus);
+      $lomakenappi.textContent = 'Seuraa';
+      $lomakenappiTeksti.textContent = 'add';
+    }
+    $lomakenappi.classList.toggle('nappi-d');
+    $lomakenappi.appendChild($lomakenappiTeksti);
+  }
+
 })();
 

@@ -25,12 +25,19 @@ function haeSeuraukset()
 
   global $db;
 
-  echo(json_encode(array('lisäykset' => Seuraukset::hae($db))));
+  echo(json_encode(array('seuraukset' => Seuraukset::hae($db))));
 } // HAE_SEURAUKSET_END
 
 
 // LISAA_SEURAUS =============================================
 function lisaaSeuraus()
+/**
+ * Lisää seurauksen tietokantaan.
+ * 
+ * TARVITTAVA DATA:
+ * - seuraaja
+ * - seurattava
+ */
 {
   header('Access-Control-Allow-Methods: POST');
   header("Access-Control-Max-Age: 3600");
@@ -61,6 +68,13 @@ function lisaaSeuraus()
 
 // POISTA_SEURAUS ============================================
 function poistaSeuraus()
+/**
+ * Poistaa seurauksen tietokannasta.
+ * 
+ * TARVITTAVA DATA:
+ * - seuraaja
+ * - seurattava
+ */
 {
   header("Access-Control-Max-Age: 3600");
   header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
