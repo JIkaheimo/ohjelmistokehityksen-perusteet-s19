@@ -4,129 +4,90 @@
     header('Location: 404.php');
     exit;
   }
-  // TODO: Tähän kirjautumisen varmistus.
 
-  $ohjelmaID = $_GET['id'];
+  $ohjelmaId = (int) $_GET['id'];
 
-  // TODO: Tähän ohjelman, harjoitusten ja vaiheiden haku tietokannasta.
+  require_once(__DIR__.'/Komponentit/Header/header.php'); 
 
-  require_once(__DIR__.'/Komponentit/Header/header_kirjautunut.php'); 
-  HeaderKirjautunut('Ohjelmat');
+  if ($kayttaja == null)
+  {
+    header('Location: 401.php');
+  }
+
+  require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
+
+  $ohjelma = Ohjelmat::hae($db, $ohjelmaId);
+  Headeri($ohjelma->nimi);
+
+  $onkoLisatty = Ohjelmat::onkoLisatty($db, $kayttaja, $ohjelma->ohjelmaId);
 ?>
       
 <header>
-  <h1>4-jakoinen kuntosaliohjelma aloittelijoille</h1>
-  <form action="./Api/lisaa_ohjelma.php" method="POST">
-    <input type="hidden" name="ohjelma-id" id="ohjelma-id" value=<?=$ohjelmaID?>>
-    <button type="submit" class="nappi-p">Lisää+</button>
-  </form>
+  <h1><?= $ohjelma->nimi; ?></h1>
+
+    <!-- LISÄYS/POISTOLOMAKE -->
+    <form id='lisayslomake'>
+
+      <input type='hidden' name='kayttaja' 
+        id='kayttaja' value='<?= $kayttaja; ?>' 
+      />
+      
+      <input type='hidden' name='ohjelma' 
+        id='ohjelma' value=<?= $ohjelma->ohjelmaId; ?>
+      />
+      
+      <button type='submit' name='submit' id='laheta' class='flex nappi-m <?= $onkoLisatty ? 'nappi-d' : ''; ?>'>
+        <?= $onkoLisatty ? 'POISTA LISÄYS' : 'LISÄÄ' ?>
+        <i class="material-icons">
+          <?= $onkoLisatty ? 'remove' : 'add'; ?> 
+        </i>
+      </button>
+    </form>
+
 </header>
 
-<p>Tekijä: <a href="kayttaja.php?id=123">Testaaja123</a></p>
+<p>Tekijä: <a href='kayttaja.php?id=<?= $ohjelma->kayttajatunnus; ?>'><?= $ohjelma->kayttajatunnus; ?></a></p>
 
-<section>
-  <header>
-    <h2>Vatsa</h2>
-  </header>  
-  <table>
-    <thead>
-      <tr>
-        <th>Vaihe</th>
-        <th>Kuvaus</th>
-        <th>Ohjelinkki</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-        require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
+<!-- LISTATAAN OHJELMAN HARJOITUKSET -->
+<?php foreach ($ohjelma->harjoitukset as $harjoitus) : ?>
+  <section>
+    <header>
+      <h2><?= 'Harjoitus: '.$harjoitus->nimi; ?></h2>
+    </header>  
 
-        VaiheTR('Vatsalihaskone', 'Sed vitae purus nec nulla volutpat gravida vestibulum a purus.', null, 1, false);
-        VaiheTR('Vino vatsalihaspenkki', 'Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur ligula, in hendrerit est.', 'https://www.google.fi', 2,  false);
-        VaiheTR('Ilmapyörä', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 3, false);
-        VaiheTR('Jalannosto', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 4, false);
-        VaiheTR('Juoksu', 'Nulla nec quam et mi rhoncus gravida.  Quisque ac consectetur ligula, in hendrerit est.', null, 5, false);
-      ?>
-    </tbody>
-  </table>
-</section>
+    <?php if (!empty($harjoitus->vaiheet)) : ?>
 
-<section>
-  <header>
-    <h2>Rinta/Ojentajat</h2>
-  </header>   
-  <table>
-    <thead>
-      <tr>
-        <th>Vaihe</th>
-        <th>Kuvaus</th>
-        <th>Ohjelinkki</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-        require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
+      <table>
+        <thead>
+          <tr>
+            <th>Vaihe</th>
+            <th>Kuvaus</th>
+            <th>Ohjelinkki</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- HARJOITUKSEN VAIHEET -->
+          <?php 
+            foreach ($harjoitus->vaiheet as $vaihe)
+            {
+              VaiheTR($vaihe);
+            }
+          ?>
+        </tbody>
+      </table>
+    
+    <?php else: ?>
+    
+      <p>Tämä harjoitus ei sisällä tarkempia tietoja...</p>
+    
+    <?php endif; ?>
 
-        VaiheTR('Vatsalihaskone', 'Sed vitae purus nec nulla volutpat gravida vestibulum a purus.', null, 1, false);
-        VaiheTR('Vino vatsalihaspenkki', 'Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur ligula, in hendrerit est.', 'https://www.google.fi', 2,  false);
-        VaiheTR('Ilmapyörä', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 3, false);
-        VaiheTR('Jalannosto', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 4, false);
-        VaiheTR('Juoksu', 'Nulla nec quam et mi rhoncus gravida.  Quisque ac consectetur ligula, in hendrerit est.', null, 5, false);
-      ?>
-    </tbody>
-  </table>
-</section>
+  </section>
 
-<section>
-  <header>
-    <h2>Selkä/Hauis</h2>
-  </header>  
-  <table>
-    <thead>
-      <tr>
-        <th>Vaihe</th>
-        <th>Kuvaus</th>
-        <th>Ohjelinkki</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-        require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
+<?php endforeach; ?>
 
-        VaiheTR('Vatsalihaskone', 'Sed vitae purus nec nulla volutpat gravida vestibulum a purus.', null, 1, false);
-        VaiheTR('Vino vatsalihaspenkki', 'Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur ligula, in hendrerit est.', 'https://www.google.fi', 2,  false);
-        VaiheTR('Ilmapyörä', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 3, false);
-        VaiheTR('Jalannosto', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 4, false);
-        VaiheTR('Juoksu', 'Nulla nec quam et mi rhoncus gravida.  Quisque ac consectetur ligula, in hendrerit est.', null, 5, false);
-      ?>
-    </tbody>
-  </table>
-</section>
-
-<section>
-  <header>
-    <h2>Jalat/Olkapäät</h2>
-  </header>  
-  <table>
-    <thead>
-      <tr>
-        <th>Vaihe</th>
-        <th>Kuvaus</th>
-        <th>Ohjelinkki</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-        require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
-
-        VaiheTR('Vatsalihaskone', 'Sed vitae purus nec nulla volutpat gravida vestibulum a purus.', null, 1, false);
-        VaiheTR('Vino vatsalihaspenkki', 'Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur ligula, in hendrerit est.', 'https://www.google.fi', 2,  false);
-        VaiheTR('Ilmapyörä', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 3, false);
-        VaiheTR('Jalannosto', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 4, false);
-        VaiheTR('Juoksu', 'Nulla nec quam et mi rhoncus gravida.  Quisque ac consectetur ligula, in hendrerit est.', null, 5, false);
-      ?>
-    </tbody>
-  </table>
-</section>
+<script src='./Scripts/ohjelma.js'></script>
+<script>alustaLomake(<?= $onkoLisatty; ?>);</script>
 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');

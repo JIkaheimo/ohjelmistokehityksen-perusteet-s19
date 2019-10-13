@@ -1,6 +1,6 @@
 <?php 
-  require_once(__DIR__.'/Komponentit/Header/header_vieras.php'); 
-  HeaderVieras('Error 404');
+  require_once(__DIR__.'/Komponentit/Header/header.php'); 
+  Headeri('Error 404');
 ?>
 
 <h1>Virhe 404</h1>

@@ -1,17 +1,16 @@
-<?php function KayttajaSection($kayttajatunnus, $kuva=null, $id) { 
-  if ($kuva == null) {
-    $kuva = 'https://www.placehold.it/300x200/200';
-  }  
+<?php function KayttajaSection(stdClass $kayttaja) { 
+  $ktunnus = htmlspecialchars($kayttaja->kayttajatunnus);
+  
 ?>
 
-<section class="kayttaja">
-  <img class="img img-kehys" src=<?=$kuva?> alt=<?=$kayttajatunnus?> />
-  <div>
-    <h3><?=$kayttajatunnus?></h3>
-    <a class="nappi nappi-p" href="kayttaja.php?id=<?=$id?>">Profiili</a>
-  </div>
-  </header>
-</section>
+  <section class='kayttaja' id='<?= $ktunnus ?>'>
+    <a href='kayttaja.php?id=<?=$ktunnus?>'>
+      <img class='img' src=<?= './Assets/Kayttajat/' . $kayttaja->kuva ?: 'kayttaja-placeholder.png'?> alt='<?= $ktunnus ?>' />
+      <div>
+        <h3><?= htmlspecialchars($ktunnus); ?></h3>
+      </div>
+    </a>
+  </section>
 
 <?php } ?>
 

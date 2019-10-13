@@ -1,34 +1,37 @@
-<?php 
-  function HeaderVieras($otsikko) { 
-    require_once(__DIR__.'/header.php');
-    Header_($otsikko);
-?>
+<?php function HeaderVieras($otsikko) { ?>
 
 <header>
-  <nav class="kapea">
-    <a href="index.php">REENIKIRJA</a>
-    <form class="oikealle flex" action="./Api/kirjaudu.php" method="POST">
+  <nav class='kapea'>
+    <a href='index.php'>REENIKIRJA</a>
+
+    <!-- KIRJAUTUMISLOMAKE -->
+    <form id='kir-lomake' class='oikealle flex'>
+      
+      <!-- Käyttäjätunnus -->
       <div>
-        <label for="kayttajatunnus">Käyttäjätunnus:</label>
+        <label for='kir-kayttajatunnus'>Käyttäjätunnus:</label>
         <input
-          type="text"
-          name="kayttajatunnus"
-          id="kayttajatunnus"
+          type='text'
+          name='kayttajatunnus'
+          id='kir-kayttajatunnus'
           required
         />
       </div>
 
+      <!-- Salasana -->
       <div>
-        <label for="salasana">Salasana:</label>
-        <input type="password" name="salasana" id="salasana" required />
+        <label for='kir-salasana'>Salasana:</label>
+        <input type='password' name='salasana' id='kir-salasana' required />
       </div>
 
-      <button class="nappi-p" type="submit">Kirjaudu</button>
+      <button class='nappi-p' type='submit'>Kirjaudu</button>
     </form>
   </nav>
 </header>
 
-<main class="kapea">
+<main class='kapea'>
+
+<script src='./Scripts/header_vieras.js'></script>
 
 <?php } ?>
 

@@ -1,40 +1,61 @@
 <?php 
-  require_once(__DIR__.'/Komponentit/Header/header_kirjautunut.php'); 
-  HeaderKirjautunut('Oma profiili');
+  require_once(__DIR__.'/Komponentit/Header/header.php'); 
+  
+  if ($kayttaja == null)
+  {
+    header('Location: 401.php');
+  }
+  
+  Headeri('Oma profiili');
 
-  // TODO: Käyttäjän tietojen hakeminen tietokannasta.
+  $kayttaja = Kayttajat::kayttaja($db,$kayttaja);
 ?>
 
 <header>
-  <h1 class="keskella">Oma profiili</h1>
+  <h1 class='keskella'>Oma profiili</h1>
 </header>
 
-<form class="keskita" action="./Api/muokkaa_kayttaja.php" method="POST">
+<form id='kayttajalomake' class='keskita' 
+    action='./Api/kayttajat.php' method='POST'
+    enctype='multipart/form-data'>
+
+  <?php if (isset($kayttaja->kuva)): ?>
+    <input type='hidden' name='kuva-tal' id='kuva-tal' value=<?= $kayttaja->kuva; ?>>
+  <?php endif; ?>
+  
+  <input type='hidden' name='kayttajatunnus' id='kayttajatunnus' value=<?= $kayttaja->kayttajatunnus; ?>>
+
   <div>
-    <label for="etunimi">Etunimi</label>
-    <input type="text" name="etunimi" id="etunimi" placeholder="Jane">
+    <label for='etunimi'>Etunimi</label>
+    <input type='text' name='etunimi' id='etunimi' 
+      placeholder='Jane' value=<?= $kayttaja->etunimi; ?>>
   </div>
 
   <div>
-    <label for="sukunimi">Sukunimi</label>
-    <input type="text" name="sukunimi" id="sukunimi" placeholder="Doe">
+    <label for='sukunimi'>Sukunimi</label>
+    <input type='text' name='sukunimi' id='sukunimi' 
+      placeholder='Doe' value=<?= $kayttaja->sukunimi; ?>>
   </div>
 
   <div>
-    <label for="profiilikuva">Profiilikuva</label>
-    <input type="file" name="profiilikuva" id="profiilikuva">
+    <label for='kuva'>Profiilikuva</label>
+    <input type='file' name='kuva' id='kuva'> 
   </div>
 
   <div>
-    <label for="kuvaus">Kuvaus</label>
-    <textarea name="kuvaus" id="kuvaus" cols="30" rows="10" placeholder='Kuvaus itsestäsi...'></textarea>
+    <label for='kuvaus'>Kuvaus</label>
+    <textarea name='kuvaus' id='kuvaus' cols='30' rows='10' 
+      placeholder='Kuvaus itsestäsi...'><?= $kayttaja->kuvaus; ?></textarea>
   </div>
 
   <div>
-    <button class="nappi-p" type="submit">Tallenna</button>
-    <a class="nappi nappi-s" href="index_kirjautunut.php">Peruuta</a>
+    <button class='nappi-p' type='submit'>Tallenna</button>
+    <a class='nappi nappi-s' href='index.php'>Palaa</a>
   </div>
 </form>
+
+<script src='./Scripts/profiili.js'></script>
+<script>alustaLomake(<?= $onkoSeurattu; ?>);</script>
 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');

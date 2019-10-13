@@ -1,6 +1,10 @@
+<!--
+  Näkymä serverissä tapahtuneelle virheelle (ei käytetty)
+-->
+
 <?php 
-  require_once(__DIR__.'/Komponentit/Header/header_vieras.php'); 
-  HeaderVieras('Error 400');
+  require_once(__DIR__.'/Komponentit/Header/header.php'); 
+  Headeri('Error 400');
 ?>
 
 <h1>Virhe 400</h1>

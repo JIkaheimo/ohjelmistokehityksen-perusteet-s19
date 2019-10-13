@@ -1,72 +1,92 @@
-<?php 
-  require_once(__DIR__.'/Komponentit/Header/header_kirjautunut.php'); 
-  HeaderKirjautunut('Ohjelmat');
+<?php
 
-  // TODO: Käyttäjän kirjautumisen tarkistus
+  require_once(__DIR__.'/Komponentit/Header/header.php');
+  require_once(__DIR__.'/Komponentit/Ohjelmat/ohjelma_section.php');
+
+  if ($kayttaja == null)
+  {
+    header('Location: 401.php');
+  }
+
+  Headeri('Ohjelmat');
+
+  $ohjelmat = Ohjelmat::hae($db);
+
+  // Nämä voisi periaatteessa selvittää myös PHP:n usortilla.
+  $suosituimmat = Ohjelmat::suosituimmat($db);
+  $uusimmat = Ohjelmat::uusimmat($db);
 ?>
 
 <header>
   <h1>Ohjelmat</h1>
-  <a class="nappi nappi-p" href="ohjelmani.php">Omat ohjelmani</a>
+  <a class='nappi nappi-p' href='ohjelmani.php'>Ohjelmani</a>
+  <a class='nappi nappi-p' href='lisaykset.php'>Lisäykset</a>
 </header>
 
-<section id="suosituimmat">
+<!-- SUOSITUIMMAT OHJELMAT -->
+<section id='suosituimmat'>
   <header>
     <h2>Suosituimmat</h2>
   </header>
-  <div class="sailio">
-    <?php
-      require_once(__DIR__.'/Komponentit/Ohjelmat/ohjelma_section.php');
-
-      // TODO: Korvaa suosituimpien ohjelmien (4) haulla tietokannasta ja foreach-oopilla.
-      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
-      OhjelmaSection('4-jakoinen kuntosaliohjelma edistyneille', null, 'aloittelija', 12);
-      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
-      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
+  <div class='sailio'>
+    <?php 
+      foreach ($suosituimmat as $ohjelma) 
+      { 
+        OhjelmaSection($ohjelma);
+      } 
     ?>
   </div>
 </section>
+<!-- SUOSITUIMMAT OHJELMAT END -->
 
-<section id="uudet">
+
+<!-- UUDET OHJELMAT -->
+<section id='uudet'>
   <header>
     <h2>Uudet</h2>
   </header>
-  <div class="sailio">
-    <?php
-      require_once(__DIR__.'/Komponentit/Ohjelmat/ohjelma_section.php');
 
-      // TODO: Korvaa uusimpien ohjelmien (4) haulla tietokannasta ja foreach-loopilla.
-      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
-      OhjelmaSection('4-jakoinen kuntosaliohjelma edistyneille', null, 'aloittelija', 12);
-      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
-      OhjelmaSection('Reeniohjelma jokaiselle', null, 'aloittelija', 12);
+  <div class='sailio'>
+    <?php 
+      foreach ($uusimmat as $ohjelma) 
+      { 
+        OhjelmaSection($ohjelma);
+      } 
     ?>
   </div>
-</section>
+</section> 
+<!-- UUDET OHJELMAT END -->
 
-<section id="kaikki-ohjelmat">
+
+<!-- KAIKKI OHJELMAT -->
+<section id='kaikki-ohjelmat'>
+  
   <header>
-    <h2 class="keskita">Hae ohjelmia</h2>
+    <h2 class='keskita'>Hae ohjelmia</h2>
   </header>
   
-  <!-- TODO: Hae ohjelmat AJAXin avulla kun jokin kenttä muuttuu -->
-  <form class="keskita" action="#">
+  <form class='keskita'>
+
     <div>
-      <label for="ohjelma">Nimi</label>
-      <input type="text" name="ohjelma" id="ohjelma">
-    </div>
-    <div>
-      <label for="jarjestys">Järjestä</label>
-      <select name="jarjestys" id="jarjestys">
-        <option>lisäysten mukaan</option>
-        <option>vaikeustason mukaan</option>
-        <option>nimen mukaan</option>
-      </select>
+      <label for='ohjelma'>Nimi</label>
+      <input type='text' name='ohjelma' id='ohjelma-nimi'>
     </div>
 
   </form>
+
+  <div id='kaikki-ohjelmat-container' class='sailio valia'>
+    <?php 
+      foreach ($ohjelmat as $ohjelma) 
+      { 
+        OhjelmaSection($ohjelma);
+      } 
+    ?>
+  </div>
 </section>
-  
+<!-- KAIKKI OHJELMAT END -->
+
+<script src='./Scripts/ohjelmat.js'></script>
+
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');
   Footer();

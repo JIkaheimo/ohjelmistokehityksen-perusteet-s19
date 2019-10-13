@@ -14,11 +14,12 @@
 
 html {
   /* Käytetään selainten oletusfonttikokoa */
-  font-size: 100%;
+  font-size: 90%;
 
   /* Varmistetaan että täytetään vähintään koko ikkuna */
   position: relative;
   min-height: 100%;
+
 }
 
 body {
@@ -33,6 +34,7 @@ body {
   background-position: center;
   background-size: cover;
   background-color: #222222;
+  background-attachment: fixed;
 }
 
 footer,
@@ -58,10 +60,12 @@ h4 {
 
 h1 {
   font-size: 2.5rem;
+  max-width: 640px;
 }
 
 h2 {
   font-size: 2rem;
+
 }
 
 h2::before {
@@ -109,23 +113,26 @@ img:not([alt]) {
 /* TAULUKOT */
 
 table {
+  border-collapse: collapse;
+  font-size: 0.875rem;
   margin-top: 2rem;
   margin-bottom: 1rem;
   color: #ebebeb;
   background-color: #303030;
-  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5);
+ box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5);
 }
 
-table thead {
-  background-color: #df691a;
+table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.15);
 }
 
-table th,
-table td {
+table th, table td {
   padding: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  text-align: left;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+    text-align: left;
 }
+
 
 table tbody tr:nth-of-type(odd) {
   background-color: rgba(255, 255, 255, 0.05);
@@ -207,7 +214,7 @@ main input:focus,
 select:focus,
 textarea:focus {
   color: #000000;
-  background-color: #fff;
+  background-color: #ffffff;
   border-color: #df691a;
   outline: 0;
 }
@@ -353,9 +360,14 @@ body > footer {
   align-items: center;
 }
 
+.flex-oikea {
+  justify-content: flex-end !important;
+}
+
 .focus {
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
@@ -368,6 +380,10 @@ body > footer {
 .img {
   max-width: 100%;
   height: auto;
+}
+
+.piilotettu {
+  opacity: 0 !important;
 }
 
 .img-kehys {
@@ -399,6 +415,7 @@ body > footer {
 }
 
 @media (min-width: 800px) {
+
   .kapea {
     max-width: 760px;
   }
@@ -411,6 +428,9 @@ body > footer {
 }
 
 @media (min-width: 1200px) {
+  html {
+    font-size: 100%;
+  }
   .kapea {
     max-width: 1150px;
   }
@@ -437,8 +457,18 @@ body > footer {
   background-color: #bd5916;
 }
 
+.nappi-d {
+  background-color: #d9534f !important;
+  border: none;
+}
+
+.nappi-m {
+  background-color: #4bb543;
+  border: none;
+}
+
 .nowrap {
-  flex-wrap: nowrap;
+  flex-wrap: nowrap !important;
 }
 
 .oikealle {
@@ -450,7 +480,11 @@ body > footer {
   flex-wrap: wrap;
   margin-right: -10px;
   margin-left: -10px;
-  justify-content: space-around;
+  justify-content: flex-start;
+}
+
+.sailio-keskita {
+  justify-content: center;
 }
 
 .valittu {
@@ -462,20 +496,54 @@ body > footer {
   margin-bottom: 3rem;
 }
 
+.kayttaja-kuva {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-right: 2rem;
+  max-width: 400px;
+}
+
 /* KOMPONENTIT ========================================*/
 
 section.ohjelma,
-section.kayttaja {
-  width: 16.5rem;
+section.kayttaja,
+section.harjoitus {
+  display: flex;
+  min-width: 150px;
+  width: 22%;
   margin: 0.5rem;
   background-color: #303030;
-  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 1);
+  border-radius: 0.5rem 0.5rem 0.2rem 0.2rem;
+  overflow: hidden;
 }
 
-section.ohjelma > div,
-section.kayttaja > div {
+section.ohjelma:hover, 
+section.kayttaja:hover {
+  box-shadow: 0.1rem 0.1rem 1rem #000000;
+  background-color: rgb(59, 58, 58);
+}
+
+section.ohjelma > a > div,
+section.kayttaja > a > div {
   padding: 0.75rem;
 }
+
+section.ohjelma > a,
+section.kayttaja > a {
+  flex: 1;
+  top: 0;
+  left: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+section.ohjelma > a > div > h3 {
+  color: #df691a;
+}
+
+
 
 section.kayttaja > div > h3 {
   margin-bottom: 1rem;
@@ -485,27 +553,77 @@ section.ohjelma > div > p {
   color: #999999;
 }
 
+section.harjoitus div.controls {
+  padding: 0;
+  display: flex;
+}
+
+tr.ohjelma-tr,
+tr.suoritus-tr {
+  transition: opacity 1s;
+  opacity: 1;
+}
+
 .ohjelma-tr button,
 .ohjelma-tr .nappi,
 .suoritus-tr button,
 .suoritus-tr .nappi,
+.harjoitus-tr .nappi,
+.harjoitus-tr button,
 .vaihe-tr button,
 .vaihe-tr .nappi {
   margin: 0.25rem;
 }
 
-.harjoitus-section {
-  margin: 2rem;
-}
-
-.harjoitus-section img {
-  margin-bottom: -40px;
-  width: 100px;
-  height: 100px;
-}
-
-.harjoitus-section button,
-.harjoitus-section a {
+/* ID =================================================*/
+#ilmoittaja {
+  background-color: transparent;
+  position: fixed;
+  top: 20px;
   width: 100%;
-  margin-bottom: 0.5rem;
+  text-align: center;
+  z-index: 2;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.25rem;
+  transition: 0.5s all;
+  transition-property: top, background-color, color;
+}
+
+#harjoitukset {
+  min-width: 500px;
+}
+
+#ilmoittaja.onnistunut,
+#ilmoittaja.virhe {
+  visibility: visible;
+  top: 60px;
+}
+
+#ilmoittaja.onnistunut {
+  background-color: #4bb543 !important;
+}
+
+#ilmoittaja.virhe {
+  background-color: #b00020;
+}
+
+input.virhe,
+textarea.virhe,
+select.virhe {
+  border-color: #b00020 !important;
+}
+
+#kaikki-kayttajat-container,
+#kaikki-ohjelmat-container {
+  min-height: 20rem;
+}
+
+#omat-ohjelmat li {
+  margin-bottom: 0.7rem;
+}
+
+#omat-ohjelmat li a {
+  font-size: 1.1rem;
+  
 }

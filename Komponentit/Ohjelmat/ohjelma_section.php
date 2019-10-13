@@ -1,17 +1,14 @@
-<?php function OhjelmaSection($nimi, $kuva, $vaikeustaso, $id) { 
-  if ($kuva == null) {
-    $kuva = 'https://www.placehold.it/300x200/200';
-  }  
-?>
+<?php function OhjelmaSection(stdClass $ohjelma) { ?>
 
-<section class="ohjelma">
-  <img class="img img-kehys" src="<?=$kuva?>" alt="<?=$nimi?>" />
-  <div>
-    <h3><?=$nimi?></h3>
-    <p><?=$vaikeustaso?></p>
-    <a class="nappi nappi-p" href="ohjelma.php?id=<?=$id?>">Tarkastele</a>
-  </div>
-</section>
+  <section class='ohjelma' id=<?= $ohjelma->ohjelmaId; ?> data-ohjelma='<?= $ohjelma->nimi; ?>'>
+    <a href='ohjelma.php?id=<?= $ohjelma->ohjelmaId; ?>'>
+      <img class='img' src=<?= './Assets/Ohjelmat/' . $ohjelma->kuva ?: 'ohjelma-placeholder.png'; ?> alt=<?= htmlspecialchars($ohjelma->nimi); ?> />
+      <div>
+        <h3><?= htmlspecialchars($ohjelma->nimi); ?></h3>
+        <p><?= htmlspecialchars($ohjelma->vaikeustaso); ?></p>
+      </div>
+    </a>
+  </section>
 
 <?php } ?>
 

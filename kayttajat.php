@@ -1,8 +1,21 @@
 <?php 
-  require_once(__DIR__.'/Komponentit/Header/header_kirjautunut.php'); 
-  HeaderKirjautunut('Käyttäjät');
 
-  // TODO: Tarkista että käyttäjä on kirjautunut
+require_once(__DIR__.'/Komponentit/Kayttajat/kayttaja_section.php');
+require_once(__DIR__.'/Komponentit/Header/header.php'); 
+
+if ($kayttaja == null)
+{
+  header('Location: 401.php');
+}
+
+Headeri('Käyttäjät');
+
+$kayttajat = array_filter(Kayttajat::hae($db));
+
+// Nämä voisi periaatteessa hakea myös usortin avulla.
+$suosituimmat = Kayttajat::suosituimmat($db);
+$seuratut = Kayttajat::seuratut($db, $kayttaja);
+
 ?>
 
 <header>
@@ -10,61 +23,64 @@
 </header>
 
 <section>
+  <!-- SUOSITUIMMAT KÄYTTÄJÄT 4KPL (ENITEN SEURAAJIA) -->
   <header>
     <h2>Suosituimmat</h2>
   </header>
-  <div id="suosituimmat" class="sailio">
-    <?php
-      require_once(__DIR__.'/Komponentit/Kayttajat/kayttaja_section.php');
-
-      // TODO: Korvaa "suosituimpien" käyttäjien (4) haulla tietokannasta ja foreach-loopilla.
-      KayttajaSection('Testaaja123', null, 1);
-      KayttajaSection('Salihirmu88', null, 2);
-      KayttajaSection('Juoksujäbä', null, 3);
-      KayttajaSection('Tennistyttö', null, 4);
+  <div id='suosituimmat' class='sailio'> 
+    <?php 
+      foreach ($suosituimmat as $kayttaja) 
+      { 
+        KayttajaSection($kayttaja);
+      } 
     ?>
   </div>
 </section>
 
-<section>
-  <header>
-    <h2>Seuratut</h2>
-  </header>
-  <div id="seuratut" class="sailio">
-    <?php
-      require_once(__DIR__.'/Komponentit/Kayttajat/kayttaja_section.php');
+<?php if (!empty($seuratut)): ?>
+  <section>
+    <!-- SEURATUT KÄYTTÄJÄT KAIKKI -->
+    <header>
+      <h2>Seuratut</h2>
+    </header>
 
-      // TODO: Korvaa seurattujen käyttäjien (oman ID perusteella) haulla tietokannasta ja foreach-loopilla.
-      KayttajaSection('Testaaja123', null, 1);
-      KayttajaSection('Salihirmu88', null, 2);
-      KayttajaSection('Juoksujäbä', null, 3);
-      KayttajaSection('Tennistyttö', null, 4);
-    ?>
-  </div>
-</section>
-
-<section id="kaikki-kayttajat">
-  <header>
-    <h2 class="keskella">Hae käyttäjiä</h2>
-  </header>
-  
-  <!-- TODO: Hae käyttäjät AJAXin avulla kun jokin kenttä muuttuu -->
-  <form class="keskita" action="#">
-    <div>
-      <label for="kayttaja">Nimi</label>
-      <input type="text" name="kayttaja" id="kayttaja">
+    
+    <div id='seuratut' class='sailio'>
+      <?php 
+        foreach ($seuratut as $kayttaja) 
+        { 
+          KayttajaSection($kayttaja);
+        } 
+      ?>
     </div>
+  </section>
+<?php endif;?>
+
+<section id='kaikki-kayttajat'>
+  <!-- LISTA KAIKISTA KÄYTTÄJISTÄ (HAE SKROLLATESSA LISÄÄ) -->
+  <header>
+    <h2 class='keskella'>Hae käyttäjiä</h2>
+  </header>
+
+  <form id='kayttaja-lomake' class='keskita' action='#'>
     <div>
-      <label for="jarjestys">Järjestä</label>
-      <select name="jarjestys" id="jarjestys">
-        <option>seurausten mukaan</option>
-        <option>ohjelmien lisäysten mukaan</option>
-        <option>nimen mukaan</option>
-      </select>
+      <label for='kayttaja'>Nimi</label>
+      <input type='text' name='nimi' id='kayttaja-nimi'>
     </div>
 
   </form>
+
+  <div id='kaikki-kayttajat-container' class='sailio valia'>
+    <?php 
+      foreach ($kayttajat as $kayttaja) 
+      { 
+        KayttajaSection($kayttaja);
+      } 
+    ?>  
+  </div>
 </section>
+
+<script src='./Scripts/kayttajat.js'></script>
 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');

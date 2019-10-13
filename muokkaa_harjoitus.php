@@ -4,66 +4,83 @@
     header('Location: 404.php');
     exit;
   }
-  // TODO: Tähän kirjautumisen varmistus.
-  /*
-   if (!kirjautunut) {
-     header('Loca)
-   }
-  */
 
-  $harjoitusID = $_GET['id'];
+  $harjoitusId = $_GET['id'];
 
-  // TODO: Tähän ohjelman, harjoitusten ja vaiheiden haku tietokannasta.
-  require_once(__DIR__.'/Komponentit/Header/header_kirjautunut.php'); 
-  HeaderKirjautunut('Muokkaa harjoitusta');
+  require_once(__DIR__.'/Komponentit/Header/header.php'); 
+
+  if ($kayttaja == null)
+  {
+    header('Location: 401.php');
+  }
+
+  require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
+
+  Headeri('Muokkaa harjoitusta');
+
+  $harjoitus = Harjoitukset::hae($db, $harjoitusId);
 ?>
 
 <header>
-  <h1 class="keskella">Muokkaa harjoitusta</h1>
+  <h1 class='keskella'>Muokkaa harjoitusta</h1>
 </header>
 
 <!-- ITSE OHJELMAN TIETOJEN MUOKKAUSLOMAKE -->
-<form class="keskita" action="./Api/muokkaa_harjoitus.php" method="POST">
-  <input type="hidden" name="harjoitus-id" id="harjoitus-id" value=<?=$harjoitusID?>>
+<form id='harjoituslomake' class='keskita'>
+  <input type='hidden' name='id' 
+    id='harjoitus-id' value=<?= $harjoitus->harjoitusId; ?>
+  />
+
   <div>
-    <label for="harjoitus-nimi">Harjoituksen nimi</label>
-    <input type="text" name="harjoitus-nimi" id="harjoitus-nimi" value="Vatsa">
+    <label for='harjoitus-nimi'>Harjoituksen nimi</label>
+    <input type='text' name='nimi' 
+      id='harjoitus-nimi' value='<?= htmlspecialchars($harjoitus->nimi); ?>'
+    />
   </div>
 
-  <button type="submit" class="nappi-p">Päivitä tiedot</button>
-  <a href="muokkaa_ohjelma.php?id=123" class="nappi nappi-s">Peruuta</a>
+  <button type='submit' class='nappi-p'>Päivitä tiedot</button>
+  <a href='muokkaa_ohjelma.php?id=<?= $harjoitus->ohjelmaId ?>' class='nappi nappi-s'>Takaisin</a>
 </form>
 
-<form class="valia keskita" action="./Api/uusi_vaihe.php" method="POST">
-  <div>
-    <label for="uusi-vaihe">Vaiheen nimi</label>
-    <input type="text" name="uusi-vaihe" id="uusi-vaihe">
+
+<section>
+  <header>
+    <h2 class="keskita">Vaiheet</h2>
+  </header>
+
+  <!-- VAIHEIDEN LISÄYSLOMAKE -->
+
+  <form id='vaihelomake' class='keskita'>
+    <input type='hidden' id="vaihe-harjoitus" value=<?= $harjoitus->harjoitusId ?> name='harjoitusId'>
+    <div>
+      <label for='vaihe-nimi'>Vaiheen nimi</label>
+      <input type='text' name='nimi' id='vaihe-nimi'>
+    </div>
+    <button type='submit' class='nappi-p'>Lisää vaihe +</button>
+  </form>
+  <div id='vaiheet' class='sailio sailio-keskita'>
+    <table>   
+    <thead>
+      <tr>
+        <th>Vaihe</th>
+        <th>Kuvaus</th>
+        <th>Ohjelinkki</th>
+        <th></th>
+      </tr>
+    </thead>
+      <tbody id='vaiheet-body'>
+        <?php 
+          foreach ($harjoitus->vaiheet as $vaihe)
+          {
+            VaiheTR($vaihe, true);
+          }
+        ?>
+      </tbody>
+    </table>
   </div>
-  <button type="submit" class="nappi-p">Lisää vaihe +</button>
-</form>
+</section>
 
-<table>   
- <thead>
-  <tr>
-    <th>Vaihe</th>
-    <th>Kuvaus</th>
-    <th>Ohjelinkki</th>
-    <th></th>
-  </tr>
-</thead>
-  <tbody>
-    <?php
-      require_once(__DIR__.'/Komponentit/Vaiheet/vaihe_tr.php');
-
-      VaiheTR('Vatsalihaskone', 'Sed vitae purus nec nulla volutpat gravida vestibulum a purus.', null, 1);
-      VaiheTR('Vino vatsalihaspenkki', 'Nulla nec quam et mi rhoncus gravida. Quisque ac consectetur ligula, in hendrerit est.', 'https://www.google.fi', 2);
-      VaiheTR('Ilmapyörä', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 3);
-      VaiheTR('Jalannosto', 'Nulla nec quam et mi rhoncus gravida. Sed vitae purus nec nulla volutpat gravida vestibulum a purus. Quisque ac consectetur ligula, in hendrerit est.', null, 4);
-      VaiheTR('Juoksu', 'Nulla nec quam et mi rhoncus gravida.  Quisque ac consectetur ligula, in hendrerit est.', null, 5);
-    ?>
-  </tbody>
-</table>
-
+<script src='./Scripts/muokkaa_harjoitus.js'></script>
  
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');
