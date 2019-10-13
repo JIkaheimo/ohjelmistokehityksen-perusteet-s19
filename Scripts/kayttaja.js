@@ -19,13 +19,15 @@ const alustaSeurauslomake = (function () {
     request('./Api/seuraukset.php').post(
       lomaketiedot(),
       function (res) {
+        ilmoitus.naytaOnnistunut('Käyttäjää seurattiin onnistuneesti!')
         muokkaaLomake($seurauslomake, true);
       },
       function (res) {
+        ilmoitus.naytaVirhe('Käyttäjää ei pystytty seuraamaan')
         ilmoitus.naytaVirhe(res.viesti);
       }
     )
-  }
+  } // LISAA_SEURAUS_END
 
   function poistaSeuraus(event) {
     event.preventDefault();
@@ -33,10 +35,11 @@ const alustaSeurauslomake = (function () {
     request('./Api/seuraukset.php').delete(
       lomaketiedot(),
       function (res) {
+        ilmoitus.naytaOnnistunut('Käyttäjän seuraus poistettiin onnistuneesti!')
         muokkaaLomake($seurauslomake);
       },
       function (res) {
-        ilmoitus.naytaVirhe(res.viesti);
+        ilmoitus.naytaVirhe('Seurausta ei pystytty poistamaan...');
       }
     )
   }
@@ -49,7 +52,9 @@ const alustaSeurauslomake = (function () {
     }
   }
 
-  function muokkaaLomake($lomake, poistava = false) {
+  function muokkaaLomake($lomake, poistava) {
+    poistava = poistava === undefined ? true : poistava;
+
     if (poistava) {
       $lomake.removeEventListener('submit', lisaaSeuraus);
       $lomake.addEventListener('submit', poistaSeuraus);

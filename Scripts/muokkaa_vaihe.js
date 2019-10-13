@@ -20,10 +20,10 @@
     request('./Api/vaiheet.php').put(
       body,
       function ilmoitaOnnistuminen(res) {
-        console.log(res);
+        ilmoitus.naytaOnnistunut('Vaihe päivitettiin onnistuneesti!');
       },
       function ilmoitaVirhe(res) {
-        console.error(res);
+        ilmoitus.naytaVirhe('Vaihetta ei pystytty päivittämään...');
       }
     )
   }

@@ -44,7 +44,6 @@ function lisaaSeuraus()
   header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
   $body = json_decode(file_get_contents('php://input'));
-  
   global $db;
 
   $id = Seuraukset::uusi(

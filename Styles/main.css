@@ -497,6 +497,9 @@ body > footer {
 }
 
 .kayttaja-kuva {
+  width: 100%;
+  height: auto;
+  display: block;
   margin-right: 2rem;
   max-width: 400px;
 }

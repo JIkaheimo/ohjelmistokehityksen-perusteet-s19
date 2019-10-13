@@ -39,6 +39,7 @@
     }
   }
 
+  // Haetaan tarvittavat tiedot yhteyden muotostamiseen.
   require_once('config.php');
   
   $database = new Database(HOSTNAME, DBNAME, KAYTTAJA, SALASANA);

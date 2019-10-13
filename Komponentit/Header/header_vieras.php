@@ -7,7 +7,7 @@
     <!-- KIRJAUTUMISLOMAKE -->
     <form id='kir-lomake' class='oikealle flex'>
       
-      <!-- Käyttäjötunnus -->
+      <!-- Käyttäjätunnus -->
       <div>
         <label for='kir-kayttajatunnus'>Käyttäjätunnus:</label>
         <input

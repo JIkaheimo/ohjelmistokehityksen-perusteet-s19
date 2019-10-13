@@ -3,11 +3,11 @@
   
 ?>
 
-  <section class='kayttaja' id=<?= $ktunnus ?>>
+  <section class='kayttaja' id='<?= $ktunnus ?>'>
     <a href='kayttaja.php?id=<?=$ktunnus?>'>
-      <img class='img' src=<?= './Assets/Kayttajat/' . $kayttaja->kuva ?: 'kayttaja-placeholder.png'?> alt=<?= $ktunnus ?> />
+      <img class='img' src=<?= './Assets/Kayttajat/' . $kayttaja->kuva ?: 'kayttaja-placeholder.png'?> alt='<?= $ktunnus ?>' />
       <div>
-        <h3><?=$ktunnus?></h3>
+        <h3><?= htmlspecialchars($ktunnus); ?></h3>
       </div>
     </a>
   </section>

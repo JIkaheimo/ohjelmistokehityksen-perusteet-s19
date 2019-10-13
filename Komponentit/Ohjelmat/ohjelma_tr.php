@@ -5,7 +5,7 @@
   <tr id='ohjelma-<?= $ohjelma->ohjelmaId; ?>' class='ohjelma-tr'>
     <th><a href="ohjelma.php?id=<?= $ohjelma->ohjelmaId; ?>"><?= htmlspecialchars($ohjelma->nimi); ?></a></th>
     <td><?= $ohjelma->harjoituksia; ?></td>
-    <td><?= $ohjelma->vaikeustaso; ?></td>
+    <td><?= htmlspecialchars($ohjelma->vaikeustaso); ?></td>
 
     <?php if ($kontrollit): ?>
       <td>

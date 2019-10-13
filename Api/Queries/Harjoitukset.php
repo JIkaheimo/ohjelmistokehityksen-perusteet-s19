@@ -59,6 +59,7 @@ abstract class Harjoitukset
    * - $harjoitusId (int) haettavan harjoituksen id
    */
   {
+    // Haetaan kaikki jos harjoituksen id:tä ei anneta.
     if ($harjoitusId == NULL) {
       $stmt = $db->prepare(Harjoitukset::HAE_KAIKKI);
       
@@ -158,6 +159,9 @@ abstract class Harjoitukset
    * - $db (PDO)
    * - $nimi (string) harjoituksen nimi
    * - $ohjelmaId (int) harjoituksen ohjelman id
+   * 
+   * RETURNS:
+   * - onnistuessa lisätyn harjoituksen id, epäoonnistuessa false
    */
   {
     return Harjoitukset::uusi($db, $nimi, $ohjelmaId);
@@ -166,11 +170,20 @@ abstract class Harjoitukset
   
   // PAIVITA =====================================================
   static function paivita(
-    $db,
-    $harjoitusId,
-    $nimi,
-    $ohjelmaId
+    $db, // (PDO)
+    $harjoitusId, // (int)
+    $nimi, // (string)
+    $ohjelmaId // (int)
   )
+  /**
+   * Päivittää harjoituksen tiedot tietokannassa.
+   * 
+   * PARAMS:
+   * - $db (PDO)
+   * - $harjoitusId (int) päivitettävän harjoituksen id
+   * - $nimi (string) harjoituksen nimi
+   * - $ohjelmaId (int) harjoituksen ohjelman id
+   */
   {
     $stmt = $db->prepare(Harjoitukset::PAIVITA);
     $stmt->bindValue(':nimi', $nimi);

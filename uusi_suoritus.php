@@ -32,7 +32,7 @@
   <form id='suorituslomake' class='keskita'>
 
     <input type='hidden' name='kayttaja' 
-      id='kayttaja' value=<?= $kayttaja; ?>
+      id='kayttaja' value='<?= $kayttaja; ?>'
     />
 
     <!-- PÄIVÄYKSEN VALINTA -->
@@ -46,7 +46,7 @@
       <label for='ohjelma'>Reeniohjelma</label>
       <select name='ohjelma' id='ohjelma'>   
         <?php foreach ($ohjelmat as $ohjelma) : ?>
-          <option value='<?= $ohjelma->ohjelmaId; ?>'>
+          <option value=<?= $ohjelma->ohjelmaId; ?>>
             <?= htmlspecialchars($ohjelma->nimi); ?>
           </option>
         <?php endforeach; ?>

@@ -69,7 +69,7 @@
 
     <div>
       <label for='ohjelma'>Nimi</label>
-      <input type='text' name='ohjelma' id='ohjelma'>
+      <input type='text' name='ohjelma' id='ohjelma-nimi'>
     </div>
 
   </form>
@@ -84,6 +84,8 @@
   </div>
 </section>
 <!-- KAIKKI OHJELMAT END -->
+
+<script src='./Scripts/ohjelmat.js'></script>
 
 <?php 
   require_once(__DIR__.'/Komponentit/footer.php');

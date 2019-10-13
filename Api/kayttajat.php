@@ -102,10 +102,10 @@ function paivitaKayttaja()
   // Suoritetaan päivitys.
   $onnistuiko = Kayttajat::paivita(
     $db,
-    $kayttaja->kayttajatunnus,
+    puhdistaTagit($kayttaja->kayttajatunnus),
     puhdistaTagit($kayttaja->etunimi),
     puhdistaTagit($kayttaja->sukunimi),
-    $kayttaja->kuva,
+    puhdistaTagit($kayttaja->kuva),
     puhdistaTagit($kayttaja->kuvaus)
   );
 

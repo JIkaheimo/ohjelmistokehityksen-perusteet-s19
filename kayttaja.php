@@ -31,8 +31,8 @@ $onkoSeurattu = Kayttajat::onkoSeurattu($db, $kayttaja, $kayttajatunnus);
   <h1><?=$kayttajatiedot->kayttajatunnus?></h1>
   
   <form id='seurauslomake'>
-    <input type='hidden' name='seuraaja' id='seuraaja' value=<?= $kayttaja; ?> />
-    <input type='hidden' name='seurattava' id='seurattava' value=<?= $kayttajatunnus; ?> />
+    <input type='hidden' name='seuraaja' id='seuraaja' value='<?= $kayttaja; ?>' />
+    <input type='hidden' name='seurattava' id='seurattava' value='<?= $kayttajatunnus; ?>' />
      <button type='submit' name='submit' id='laheta' class='flex nappi-m <?= $onkoSeurattu ? 'nappi-d' : ''; ?>'>
         <?= $onkoSeurattu ? 'POISTA SEURAUS' : 'SEURAA' ?>
         <i class="material-icons">
@@ -43,15 +43,15 @@ $onkoSeurattu = Kayttajat::onkoSeurattu($db, $kayttaja, $kayttajatunnus);
 
 </header>
 
-<div class='sailio nowrap'>
-<img class='img valia kayttaja-kuva' src=<?= './Assets/Kayttajat/' . $kayttajatiedot->kuva; ?> alt=<?= $kayttajatunnus; ?>>
+<div class='sailio'>
+  <img class='img valia kayttaja-kuva' src=<?= './Assets/Kayttajat/' . $kayttajatiedot->kuva; ?> alt=<?= $kayttajatunnus; ?>>
 
-<section>
-  <header>
-    <h2>Kuvaus</h2>
-  </header>
-  <p><?=$kayttajatiedot->kuvaus ?: 'Tämä käyttäjä ei ole vielä kirjoittanut kuvausta...'?></p>
-</section>
+  <section>
+    <header>
+      <h2>Kuvaus</h2>
+    </header>
+    <p><?=$kayttajatiedot->kuvaus ?: 'Tämä käyttäjä ei ole vielä kirjoittanut kuvausta...'?></p>
+  </section>
 </div>
 
 
