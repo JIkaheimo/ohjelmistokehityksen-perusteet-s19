@@ -36,7 +36,7 @@ const alustaSeurauslomake = (function () {
       lomaketiedot(),
       function (res) {
         ilmoitus.naytaOnnistunut('Käyttäjän seuraus poistettiin onnistuneesti!')
-        muokkaaLomake($seurauslomake);
+        muokkaaLomake($seurauslomake, false);
       },
       function (res) {
         ilmoitus.naytaVirhe('Seurausta ei pystytty poistamaan...');
