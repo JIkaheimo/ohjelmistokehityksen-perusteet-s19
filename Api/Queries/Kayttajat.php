@@ -18,6 +18,14 @@ abstract class Kayttajat
   GROUP BY
     Kayttajat.kayttajatunnus';
 
+  const HAE_SALASANALLA = '
+  SELECT 
+    * 
+  FROM 
+    Kayttajat 
+  WHERE 
+    kayttajatunnus = :kayttajatunnus';
+
   const HAE_SUOSITUIMMAT = Kayttajat::HAE_KAIKKI_JULKINEN . '
   ORDER BY 
     seurauksia DESC
@@ -97,7 +105,7 @@ abstract class Kayttajat
    * Hakee käyttäjän tiedot tietokannasta salasanan kera.
    */
   {
-    $stmt = $db->prepare('SELECT * FROM Kayttajat WHERE kayttajatunnus = :kayttajatunnus');
+    $stmt = $db->prepare(Kayttajat::HAE_SALASANALLA);
     $stmt->bindValue(':kayttajatunnus', $kayttajatunnus);
 
     if ($stmt->execute()) return $stmt->fetch(PDO::FETCH_OBJ);
